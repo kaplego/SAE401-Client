@@ -21,10 +21,10 @@ export default defineConfigWithVueTs(
 	pluginVue.configs['flat/essential'],
 	vueTsConfigs.recommended,
 	skipFormatting,
+
 	{
 		rules: {
 			indent: ['error', 'tab'],
-			semi: ['error', 'always'],
 		},
 	},
 );
