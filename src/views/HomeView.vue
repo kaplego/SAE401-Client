@@ -71,7 +71,6 @@ import '@/assets/sass/home.scss';
 			</span>
 			<div class="menu" id="menu-11"></div>
 		</nav>
-		<video src=".src/assets/imageshome_mars_2025.mp4"></video>
 	</main>
 </template>
 <style scoped></style>
