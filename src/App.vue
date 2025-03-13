@@ -4,7 +4,8 @@ import { RouterLink, RouterView } from 'vue-router';
 
 <template>
 	<header>
-		<h1></h1>
+		<img src="/logo.svg" alt="Miliboo" class="logo" />
+		<h1>aaa</h1>
 	</header>
 
 	<nav>

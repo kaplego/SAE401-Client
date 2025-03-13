@@ -1,5 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-	<main class="home"></main>
+	<main class="home">
+		<h1>Miliboo</h1>
+	</main>
 </template>
