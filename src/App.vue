@@ -4,7 +4,7 @@ import { ref, useTemplateRef } from 'vue';
 
 const navContainer = useTemplateRef('navContainer');
 
-const currentNavItem = ref(null);
+const currentNavItem = ref<HTMLElement | null>(null);
 
 const underlineLeft = ref(16);
 const underlineWidth = ref(0);
@@ -21,9 +21,9 @@ function resetUnderline() {
 }
 
 const router = useRouter();
-router.afterEach(async() => {
+router.afterEach(async () => {
 	await new Promise((r) => setTimeout(r, 5));
-	currentNavItem.value = navContainer.value.querySelector('.router-link-active');
+	currentNavItem.value = navContainer.value?.querySelector('.router-link-active') ?? null;
 	resetUnderline();
 });
 </script>
