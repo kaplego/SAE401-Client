@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView, useRouter } from 'vue-router';
 import { ref, useTemplateRef } from 'vue';
+import { THEME, useThemeStore } from './stores/theme';
+import { Moon, Sun } from 'lucide-vue-next';
 
 const navContainer = useTemplateRef('navContainer');
 
@@ -26,6 +28,8 @@ router.afterEach(async () => {
 	currentNavItem.value = navContainer.value?.querySelector('.router-link-active') ?? null;
 	resetUnderline();
 });
+
+const theme = useThemeStore();
 </script>
 
 <template>
@@ -34,6 +38,18 @@ router.afterEach(async () => {
 			<img src="/logo.svg" alt="Miliboo" class="logo" />
 			<div class="icones">
 				<h1>aaa</h1>
+				<div
+					@click="theme.switchTheme(theme.currentTheme == THEME.Light ? THEME.Dark : THEME.Light)"
+					id="theme-switch"
+				>
+					<input type="checkbox" id="theme-cb" :checked="theme.currentTheme === THEME.Dark" />
+					<div id="theme-track">
+						<div id="theme-knob">
+							<Sun v-if="theme.currentTheme === THEME.Light" />
+							<Moon v-if="theme.currentTheme === THEME.Dark" />
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</header>
