@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import '@/assets/sass/home.scss';
-
 </script>
-
 
 <template>
 	<main class="home">
 		<nav id="productCategory">
 			<label for="button-menu-1">Canapé & Fauteuil</label>
 			<input type="checkbox" class="drop-down" id="button-menu-1" />
-
 
 			<label for="button-menu-2">Chaise & Tabouret</label>
 			<input type="checkbox" class="drop-down" id="button-menu-2" />
@@ -41,10 +38,8 @@ import '@/assets/sass/home.scss';
 			<label for="button-menu-11">Meubles reconditionnés</label>
 			<input type="checkbox" class="drop-down" id="button-menu-11" />
 			<div class="menu" id="menu-1"></div>
-
 		</nav>
 		<div class="content">
-
 			<div class="menu" id="menu-2"></div>
 
 			<div class="menu" id="menu-3"></div>
@@ -65,9 +60,6 @@ import '@/assets/sass/home.scss';
 
 			<div class="menu" id="menu-11"></div>
 		</div>
-		<video id="animatedBackground" ref="video" autoplay preload="auto" >
-			<source  src='@/assets/images/home_mars_2025.mp4' type="video/mp4" />
-		</video>
 	</main>
 </template>
 <style scoped></style>
