@@ -1,6 +1,6 @@
-@use "./colors.scss";
-@use "./containers.scss";
-@use "./fonts.scss";
+@use './colors.scss';
+@use './containers.scss';
+@use './fonts.scss';
 
 * {
 	box-sizing: border-box;
@@ -9,7 +9,7 @@
 }
 
 body {
-	font-family: "Lato", Arial, Helvetica, sans-serif;
+	font-family: 'Lato', Arial, Helvetica, sans-serif;
 }
 
 h1,
@@ -20,7 +20,7 @@ h5,
 h6 {
 	transform: scaleY(80%);
 	font-weight: 300;
-	font-family: "Rubik", Arial, Helvetica, sans-serif;
+	font-family: 'Rubik', Arial, Helvetica, sans-serif;
 	letter-spacing: 2px;
 }
 
@@ -43,6 +43,66 @@ header {
 			align-items: center;
 			margin-left: auto;
 			height: 100%;
+
+			#theme-switch {
+				cursor: pointer;
+
+				#theme-cb {
+					width: 0;
+					height: 0;
+					visibility: hidden;
+					position: absolute;
+
+					&:checked {
+						+ #theme-track {
+							background-color: var(--c-gray-700);
+							border: 1px solid var(--c-gray-600);
+
+							&:hover {
+								border-color: var(--c-blue-700);
+								box-shadow: 0 0 1rem var(--c-blue-600);
+							}
+
+							#theme-knob {
+								margin-left: calc(46px - 21px);
+								background-color: var(--c-gray-900);
+							}
+						}
+					}
+				}
+
+				#theme-track {
+					width: 50px;
+					height: 25px;
+					background-color: var(--c-gray-200);
+					border-radius: 100vw;
+					padding: 2px;
+					transition: all 200ms;
+					border: 1px solid var(--c-gray-400);
+
+					&:hover {
+						border-color: var(--c-yellow-300);
+						box-shadow: 0 0 1rem var(--c-yellow-100);
+					}
+
+					#theme-knob {
+						height: 100%;
+						aspect-ratio: 1 / 1;
+						background-color: var(--c-gray-50);
+						border-radius: 100vw;
+						margin-left: 0px;
+						transition: all 200ms;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+
+						.lucide {
+							height: 15px;
+							width: 15px;
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -73,6 +133,38 @@ nav {
 			&.router-link-active,
 			&.router-link-exact-active {
 				color: var(--c-accent-500);
+			}
+		}
+	}
+}
+
+body.theme-dark {
+	background-color: black;
+	color: white;
+
+	header {
+		background-color: var(--c-gray-950);
+
+		.logo {
+			filter: invert(1);
+		}
+	}
+
+	nav {
+		background-color: var(--c-gray-950);
+
+		.container {
+			.underline {
+				background-color: var(--c-accent-500);
+			}
+
+			.item {
+				color: white;
+
+				&.router-link-active,
+				&.router-link-exact-active {
+					color: var(--c-accent-400);
+				}
 			}
 		}
 	}

@@ -25,10 +25,6 @@ export default defineConfigWithVueTs(
 	{
 		rules: {
 			indent: ['error', 'tab'],
-			'no-unused-vars': [
-				'error',
-				{ varsIgnorePattern: '^_', argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
-			],
 			'@typescript-eslint/no-unused-vars': [
 				'error',
 				{ varsIgnorePattern: '^_', argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
