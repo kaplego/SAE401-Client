@@ -5,61 +5,47 @@ import '@/assets/sass/home.scss';
 <template>
 	<main class="home">
 		<nav id="productCategory">
-			<label for="button-menu-1">Canapé & Fauteuil</label>
-			<input type="checkbox" class="drop-down" id="button-menu-1" />
+			<div class="container">
+				<div class="item">
+					<p class="item-name">Canapés & Fauteuils</p>
+					<div class="dropdown dropdown-columns">
+						<div class="column">
+							<p class="column-title">Titre</p>
+							<p class="column-item">Item</p>
+							<p class="column-item">Item</p>
+						</div>
+						<div class="column">
+							<p class="column-title">Titre</p>
+							<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
+							<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
+							<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
+							<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
+							<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
+						</div>
+					</div>
+				</div>
 
-			<label for="button-menu-2">Chaise & Tabouret</label>
-			<input type="checkbox" class="drop-down" id="button-menu-2" />
+				<p class="item">Chaise & Tabouret</p>
 
-			<label for="button-menu-3">Bureau</label>
-			<input type="checkbox" class="drop-down" id="button-menu-3" />
+				<p class="item">Bureau</p>
 
-			<label for="button-menu-4">Table</label>
-			<input type="checkbox" class="drop-down" id="button-menu-4" />
+				<p class="item">Table</p>
 
-			<label for="button-menu-5">Rangement</label>
-			<input type="checkbox" class="drop-down" id="button-menu-5" />
+				<p class="item">Rangement</p>
 
-			<label for="button-menu-6">Chambre</label>
-			<input type="checkbox" class="drop-down" id="button-menu-6" />
+				<p class="item">Chambre</p>
 
-			<label for="button-menu-7">Enfant</label>
-			<input type="checkbox" class="drop-down" id="button-menu-7" />
+				<p class="item">Enfant</p>
 
-			<label for="button-menu-8">Jardin</label>
-			<input type="checkbox" class="drop-down" id="button-menu-8" />
+				<p class="item">Jardin</p>
 
-			<label for="button-menu-9">Luminaire</label>
-			<input type="checkbox" class="drop-down" id="button-menu-9" />
+				<p class="item">Luminaire</p>
 
-			<label for="button-menu-10">Déco</label>
-			<input type="checkbox" class="drop-down" id="button-menu-10" />
+				<p class="item">Déco</p>
 
-			<label for="button-menu-11">Meubles reconditionnés</label>
-			<input type="checkbox" class="drop-down" id="button-menu-11" />
-			<div class="menu" id="menu-1"></div>
+				<p class="item">Meubles reconditionnés</p>
+			</div>
 		</nav>
-		<div class="content">
-			<div class="menu" id="menu-2"></div>
-
-			<div class="menu" id="menu-3"></div>
-
-			<div class="menu" id="menu-4"></div>
-
-			<div class="menu" id="menu-5"></div>
-
-			<div class="menu" id="menu-6"></div>
-
-			<div class="menu" id="menu-7"></div>
-
-			<div class="menu" id="menu-8"></div>
-
-			<div class="menu" id="menu-9"></div>
-
-			<div class="menu" id="menu-10"></div>
-
-			<div class="menu" id="menu-11"></div>
-		</div>
 	</main>
 </template>
 <style scoped></style>
