@@ -44,10 +44,9 @@ const theme = useThemeStore();
 				>
 					<input type="checkbox" id="theme-cb" :checked="theme.currentTheme === THEME.Dark" />
 					<div id="theme-track">
-						<div id="theme-knob">
-							<Sun v-if="theme.currentTheme === THEME.Light" />
-							<Moon v-if="theme.currentTheme === THEME.Dark" />
-						</div>
+						<Sun />
+						<Moon />
+						<div id="theme-knob"></div>
 					</div>
 				</div>
 			</div>
