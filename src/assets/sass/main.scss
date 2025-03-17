@@ -1,6 +1,6 @@
-@use './colors.scss';
 @use './containers.scss';
 @use './fonts.scss';
+@import 'variables';
 
 * {
 	box-sizing: border-box;
@@ -9,8 +9,8 @@
 }
 
 body {
-	background-color: var(--c-white);
-	color: var(--c-black);
+	background-color: var(--t-background1);
+	color: var(--t-foreground1);
 	font-family: 'Lato', Arial, Helvetica, sans-serif;
 }
 
@@ -31,7 +31,7 @@ h6 {
 }
 
 header {
-	background-color: var(--c-gray-50);
+	background-color: var(--t-background2);
 
 	.container {
 		display: grid;
@@ -124,7 +124,7 @@ header {
 }
 
 nav {
-	background-color: var(--c-gray-50);
+	background-color: var(--t-background2);
 	padding: 1rem 0;
 
 	.container {
@@ -142,7 +142,6 @@ nav {
 		}
 
 		.item {
-			color: var(--c-black);
 			font-size: 1.1rem;
 			text-decoration: none;
 
