@@ -37,7 +37,6 @@ const theme = useThemeStore();
 		<div class="container">
 			<img src="/logo.svg" alt="Miliboo" class="logo" />
 			<div class="icones">
-				<h1>aaa</h1>
 				<div
 					@click="theme.switchTheme(theme.currentTheme == THEME.Light ? THEME.Dark : THEME.Light)"
 					id="theme-switch"

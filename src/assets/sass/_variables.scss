@@ -162,15 +162,19 @@
 :root {
 	--t-background1: white;
 	--t-background2: var(--c-gray-50);
-	--t-background3: var(--c-accent-50);
+	--t-background3: var(--c-gray-200);
+	--t-background1-accent: var(--c-accent-50);
 
 	--t-foreground1: black;
+	--t-foreground2: var(--c-gray-800);
 }
 
 body.theme-dark {
 	--t-background1: black;
 	--t-background2: var(--c-gray-900);
-	--t-background3: var(--c-gray-800);
+	--t-background3: var(--c-gray-700);
+	--t-background1-accent: var(--c-gray-800);
 
 	--t-foreground1: white;
+	--t-foreground2: var(--c-gray-200);
 }
