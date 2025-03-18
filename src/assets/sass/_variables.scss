@@ -163,18 +163,36 @@
 	--t-background1: white;
 	--t-background2: var(--c-gray-50);
 	--t-background3: var(--c-gray-200);
+	--t-background4: var(--c-gray-400);
+	--t-background5: var(--c-gray-600);
 	--t-background1-accent: var(--c-accent-50);
 
 	--t-foreground1: black;
 	--t-foreground2: var(--c-gray-800);
+	--t-foreground3: var(--c-gray-600);
+	--t-foreground4: var(--c-gray-400);
+	--t-foreground5: var(--c-gray-100);
+	--t-foreground1-accent: var(--c-accent-500);
+
+	--t-border1: var(--c-gray-300);
+	--t-border1-accent: var(--c-accent-300);
 }
 
 body.theme-dark {
 	--t-background1: black;
 	--t-background2: var(--c-gray-900);
 	--t-background3: var(--c-gray-700);
+	--t-background4: var(--c-gray-500);
+	--t-background5: var(--c-gray-300);
 	--t-background1-accent: var(--c-gray-800);
 
 	--t-foreground1: white;
 	--t-foreground2: var(--c-gray-200);
+	--t-foreground3: var(--c-gray-400);
+	--t-foreground4: var(--c-gray-600);
+	--t-foreground5: var(--c-gray-900);
+	--t-foreground1-accent: var(--c-accent-400);
+
+	--t-border1: var(--c-gray-600);
+	--t-border1-accent: var(--c-accent-700);
 }

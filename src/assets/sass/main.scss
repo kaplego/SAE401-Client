@@ -24,7 +24,7 @@ h3,
 h4,
 h5,
 h6 {
-	transform: scaleY(80%);
+	margin: 0.5em 0 1em 0;
 	font-weight: 300;
 	font-family: 'Rubik', Arial, Helvetica, sans-serif;
 	letter-spacing: 2px;
@@ -158,5 +158,174 @@ body.theme-dark {
 		.logo {
 			filter: invert(1);
 		}
+	}
+}
+
+.card-produit {
+	--ratio: 1.5;
+	aspect-ratio: 1 / var(--ratio);
+	background-color: var(--t-background2);
+	border-radius: 8px;
+	width: 100%;
+	border: 2px solid var(--t-background1);
+	cursor: pointer;
+	transition: all 100ms;
+	position: relative;
+
+	display: grid;
+	grid-template-rows: calc(100% / var(--ratio)) auto;
+
+	&:hover {
+		background-color: var(--t-background1-accent);
+		border-color: var(--t-border1-accent);
+	}
+
+	.banniere-soldes-container {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		overflow: hidden;
+
+		.banniere-soldes {
+			position: absolute;
+			width: 100%;
+			background-color: var(--c-red-500);
+			color: var(--c-gray-50);
+			transform: rotateZ(45deg) translateY(50px);
+			transform-origin: center center;
+			right: -50%;
+			text-align: center;
+			z-index: 50;
+			text-transform: uppercase;
+			font-weight: bold;
+			letter-spacing: 2px;
+			user-select: none;
+		}
+	}
+
+	.photo {
+		aspect-ratio: 1;
+		width: 100%;
+		border-radius: 6px 6px 0 0;
+	}
+
+	.content {
+		padding: 0.5rem 1rem;
+		height: 100%;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 0.5rem;
+
+		.nom {
+			font-family: 'Rubik';
+			overflow: hidden;
+		}
+
+		.prix {
+			margin-bottom: 0.5rem;
+
+			.prixsolde {
+				color: var(--c-red-500);
+				font-weight: bold;
+				margin-right: 6px;
+			}
+
+			.prixvente-solde {
+				text-decoration: line-through;
+				font-weight: normal;
+				color: var(--t-foreground3);
+			}
+		}
+
+		.colorations {
+			display: flex;
+			height: 20px;
+			gap: 0.5rem;
+
+			.coloration {
+				aspect-ratio: 1;
+				height: 100%;
+				border: 1px solid var(--t-foreground1);
+				background-color: var(--couleur);
+				border-radius: 100vw;
+			}
+		}
+	}
+}
+
+#loading {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100dvw;
+	height: 100vh;
+	background-color: var(--t-background1);
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	@keyframes spinner {
+		from {
+			transform: rotateZ(0deg);
+		}
+		to {
+			transform: rotateZ(360deg);
+		}
+	}
+
+	.loading-spinner {
+		height: 10%;
+		aspect-ratio: 1;
+		border-radius: 100vw;
+		border: 2px solid black;
+		border-top-color: transparent;
+		animation: spinner 1s linear 0s infinite normal forwards;
+	}
+}
+
+body:has(#loading) {
+	overflow: hidden;
+}
+
+*[data-tooltip] {
+	position: relative;
+
+	&::before {
+		content: attr(data-tooltip);
+		position: absolute;
+		bottom: calc(100% + 0.5rem);
+		width: max-content;
+		max-width: 150px;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: var(--t-background5);
+		z-index: 150;
+		display: none;
+		padding: 0.25rem 0.5rem;
+		color: var(--t-foreground5);
+		border-radius: 4px;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		display: none;
+		height: 8px;
+		width: 8px;
+		left: calc(50% - 4px);
+		bottom: calc(100% + 0.5rem - 4px);
+		transform: rotateZ(45deg);
+		background-color: var(--t-background5);
+		z-index: 149;
+	}
+
+	&:hover::before,
+	&:hover::after {
+		display: block;
 	}
 }

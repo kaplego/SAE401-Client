@@ -1,10 +1,10 @@
-#productCategory {
+#navigationProduits {
 	display: flex;
 	gap: 1rem;
 	padding-bottom: 0;
 }
 
-#productCategory .item {
+#navigationProduits .item {
 	user-select: none;
 	cursor: pointer;
 	transition: color 100ms;
@@ -38,6 +38,7 @@
 		cursor: auto;
 		padding: 0rem 2rem;
 		max-height: 300px;
+		z-index: 100;
 
 		&.dropdown-columns {
 			display: grid;
@@ -66,4 +67,14 @@
 			}
 		}
 	}
+}
+
+main {
+	padding: 1rem 0;
+}
+
+.grille-produits {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 1rem;
 }

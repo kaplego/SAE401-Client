@@ -24,7 +24,13 @@ export default defineConfigWithVueTs(
 
 	{
 		rules: {
-			indent: ['error', 'tab'],
+			indent: [
+				'error',
+				'tab',
+				{
+					SwitchCase: 1,
+				},
+			],
 			'@typescript-eslint/no-unused-vars': [
 				'error',
 				{ varsIgnorePattern: '^_', argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
