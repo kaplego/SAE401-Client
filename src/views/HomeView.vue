@@ -1,18 +1,11 @@
 <script setup lang="ts">
 import '@/assets/sass/home.scss';
 import CardProduit from '@/components/CardProduit.vue';
-import { useLoadingStore } from '@/stores/loading';
-import axios from 'axios';
-import { ref } from 'vue';
+import { useProductsStore } from '@/stores/api/products';
 
-const loading = useLoadingStore();
+const products = useProductsStore();
+console.log(products.list);
 
-const produits = ref<Produit[] | null>(null);
-
-axios.get('https://api.miliboo.lou-magnenat.tech/api/produits/getallproduit').then((res) => {
-	produits.value = res.data;
-	loading.switchLoading(false);
-});
 </script>
 
 <template>
@@ -60,8 +53,13 @@ axios.get('https://api.miliboo.lou-magnenat.tech/api/produits/getallproduit').th
 	</nav>
 	<main class="home container">
 		<h1>Produits</h1>
-		<div v-if="produits !== null" class="grille-produits">
-			<CardProduit v-for="produit in produits" v-bind:key="produit.idproduit" :produit="produit" />
+		<div v-if="products.list !== null" class="grille-produits">
+			<CardProduit v-for="produit in products.list" v-bind:key="produit.idproduit" :produit="produit" />
+		</div>
+		<div v-else>
+			<div class="loading loading-lg">
+				<div class="loading-spinner"></div>
+			</div>
 		</div>
 	</main>
 </template>
