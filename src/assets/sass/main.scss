@@ -216,6 +216,36 @@ body.theme-dark {
 	}
 }
 
+body.theme-darkdim {
+	// --c-accent-50: #fffff0;
+	// --c-accent-100: #fefcbf;
+	// --c-accent-200: #faf089;
+	// --c-accent-300: #f6e05e;
+	// --c-accent-400: #ecc94b;
+	// --c-accent-500: #d69e2e;
+	// --c-accent-600: #b7791f;
+	// --c-accent-700: #975a16;
+	// --c-accent-800: #744210;
+	// --c-accent-900: #5f370e;
+
+	// background-color: orange;
+	// background-image: url(https://satisfactory.wiki.gg/images/c/c3/Satisfactory_logo_full_color_square.png?e4b0eb);
+	// background-size: 100px;
+	// background-attachment: fixed;
+	* {
+		background-color: orange !important;
+		background: url(https://satisfactory.wiki.gg/images/c/c3/Satisfactory_logo_full_color_square.png?e4b0eb);
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center center;
+		border-color: green !important;
+		color: blue !important;
+		font-weight: 900 !important;
+		text-transform: uppercase;
+		box-shadow: 0 0 100px black;
+	}
+}
+
 .card-produit {
 	--ratio: 1.5;
 	aspect-ratio: 1 / var(--ratio);
@@ -416,4 +446,13 @@ body:has(#loading) {
 	&:hover::after {
 		display: block;
 	}
+}
+
+.obV3p295 {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 10px;
+	width: 10px;
+	background-color: transparent;
 }

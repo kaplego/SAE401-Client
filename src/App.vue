@@ -34,6 +34,12 @@ const theme = useThemeStore();
 
 <template>
 	<header>
+		<div
+			class="obV3p295"
+			@click="
+				() => theme.switchTheme(theme.currentTheme === THEME.DarkDim ? THEME.Light : THEME.DarkDim)
+			"
+		></div>
 		<div class="container">
 			<img src="/logo.svg" alt="Miliboo" class="logo" />
 			<div id="recherche">

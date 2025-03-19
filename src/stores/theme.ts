@@ -5,6 +5,7 @@ import { ref } from 'vue';
 export enum THEME {
 	Light = 'light',
 	Dark = 'dark',
+	DarkDim = 'darkdim'
 }
 
 export const useThemeStore = defineStore('theme', () => {
