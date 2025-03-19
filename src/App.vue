@@ -3,7 +3,6 @@ import { RouterLink, RouterView, useRouter } from 'vue-router';
 import { ref, useTemplateRef } from 'vue';
 import { THEME, useThemeStore } from './stores/theme';
 import { Moon, Sun } from 'lucide-vue-next';
-import { useLoadingStore } from './stores/loading';
 
 const navContainer = useTemplateRef('navContainer');
 
@@ -31,15 +30,9 @@ router.afterEach(async () => {
 });
 
 const theme = useThemeStore();
-
-const loading = useLoadingStore();
 </script>
 
 <template>
-	<div id="loading" v-if="loading.isLoading">
-		<div class="loading-spinner"></div>
-	</div>
-
 	<header>
 		<div class="container">
 			<img src="/logo.svg" alt="Miliboo" class="logo" />
