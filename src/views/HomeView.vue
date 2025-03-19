@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import '@/assets/sass/home.scss';
 import CardProduit from '@/components/CardProduit.vue';
 import { useProductsStore } from '@/stores/api/products';
 
 const products = useProductsStore();
-console.log(products.list);
 </script>
 
 <template>

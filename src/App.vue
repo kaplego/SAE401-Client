@@ -2,7 +2,7 @@
 import { RouterLink, RouterView, useRouter } from 'vue-router';
 import { ref, useTemplateRef } from 'vue';
 import { THEME, useThemeStore } from './stores/theme';
-import { Moon, Sun } from 'lucide-vue-next';
+import { Moon, Search, Sun } from 'lucide-vue-next';
 
 const navContainer = useTemplateRef('navContainer');
 
@@ -36,6 +36,12 @@ const theme = useThemeStore();
 	<header>
 		<div class="container">
 			<img src="/logo.svg" alt="Miliboo" class="logo" />
+			<div id="recherche">
+				<input type="text" placeholder="Rechercher un produit..." />
+				<button>
+					<Search />
+				</button>
+			</div>
 			<div class="icones">
 				<div
 					@click="theme.switchTheme(theme.currentTheme == THEME.Light ? THEME.Dark : THEME.Light)"
