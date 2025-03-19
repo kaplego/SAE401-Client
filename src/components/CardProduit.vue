@@ -17,31 +17,33 @@ props.produit.colorationsNavigation.sort((a, b) => (a == colorationLaMoinsChere 
 </script>
 
 <template>
-	<div class="card-produit">
-		<div class="banniere-soldes-container">
-			<div class="banniere-soldes" v-if="colorationLaMoinsChere?.prixsolde !== null">Soldes</div>
-		</div>
-		<img src="https://placehold.co/800x800/PNG" :alt="props.produit.nomproduit" class="photo" />
-		<div class="content">
-			<p class="nom">{{ props.produit.nomproduit }}</p>
-			<div>
-				<p class="prix">
-					<template v-if="colorationLaMoinsChere?.prixsolde !== null">
-						<span class="prixsolde">{{ colorationLaMoinsChere.prixsolde }} €</span>
-						<span class="prixvente-solde">{{ colorationLaMoinsChere.prixvente }} €</span>
-					</template>
-					<template v-else>{{ colorationLaMoinsChere?.prixvente }} €</template>
-				</p>
-				<div class="colorations">
-					<div
-						class="coloration"
-						v-for="coloration in props.produit.colorationsNavigation"
-						v-bind:key="coloration.idcouleur"
-						:style="`--couleur: #${coloration.couleurNavigation.rgbcouleur};`"
-						:data-tooltip="coloration.couleurNavigation.nomcouleur"
-					></div>
+	<RouterLink :to="'/produits/'+props.produit.idproduit">
+		<div class="card-produit">
+			<div class="banniere-soldes-container">
+				<div class="banniere-soldes" v-if="colorationLaMoinsChere?.prixsolde !== null">Soldes</div>
+			</div>
+			<img src="https://placehold.co/800x800/PNG" :alt="props.produit.nomproduit" class="photo" />
+			<div class="content">
+				<p class="nom">{{ props.produit.nomproduit }}</p>
+				<div>
+					<p class="prix">
+						<template v-if="colorationLaMoinsChere?.prixsolde !== null">
+							<span class="prixsolde">{{ colorationLaMoinsChere.prixsolde }} €</span>
+							<span class="prixvente-solde">{{ colorationLaMoinsChere.prixvente }} €</span>
+						</template>
+						<template v-else>{{ colorationLaMoinsChere?.prixvente }} €</template>
+					</p>
+					<div class="colorations">
+						<div
+							class="coloration"
+							v-for="coloration in props.produit.colorationsNavigation"
+							v-bind:key="coloration.idcouleur"
+							:style="`--couleur: #${coloration.couleurNavigation.rgbcouleur};`"
+							:data-tooltip="coloration.couleurNavigation.nomcouleur"
+						></div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</RouterLink>
 </template>
