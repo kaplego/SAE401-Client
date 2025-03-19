@@ -26,7 +26,7 @@ declare type Produit = {
 	coutlivraison: number;
 	nbpaiementmax: number;
 	avisproduits: unknown[];
-	colorations: Coloration[];
+	colorationsNavigation: Coloration[];
 	historiqueconsultations: unknown[];
 	idpaysNavigation: number | null;
 	idtypeproduitNavigation: number | null;

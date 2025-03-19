@@ -8,67 +8,12 @@ const props = defineProps({
 	produit: Produit;
 };
 
-let randomcolorations = [
-	{
-		idproduit: props.produit.idproduit,
-		idcouleur: 0,
-		prixvente: 18999.99,
-		prixsolde: 899.99,
-		estvisible: true,
-		descriptioncoloration: 'La coloration la moins chère.',
-		quantitestock: 10000,
-		couleurNavigation: {
-			idcouleur: 0,
-			nomcouleur: 'Noir',
-			rgbcouleur: '000000',
-		},
-	},
-	{
-		idproduit: props.produit.idproduit,
-		idcouleur: 1,
-		prixvente: 12999.99,
-		prixsolde: null,
-		estvisible: true,
-		descriptioncoloration: 'La coloration la moins chère.',
-		quantitestock: 10000,
-		couleurNavigation: {
-			idcouleur: 1,
-			nomcouleur: 'Blanc',
-			rgbcouleur: 'FFFFFF',
-		},
-	},
-	{
-		idproduit: props.produit.idproduit,
-		idcouleur: 2,
-		prixvente: 999.99,
-		prixsolde: null,
-		estvisible: true,
-		descriptioncoloration: 'La coloration la moins chère.',
-		quantitestock: 100,
-		couleurNavigation: {
-			idcouleur: 2,
-			nomcouleur: 'Vert',
-			rgbcouleur: '55AA88',
-		},
-	},
-] as Coloration[];
-
-props.produit.colorations = [];
-
-for (let i = 0; i < 3; i++) {
-	if (i > 0 && Math.random() >= 0.5) continue;
-	const random = Math.floor(Math.random() * randomcolorations.length);
-	const element = randomcolorations[random];
-	props.produit.colorations.push({ ...element, couleurNavigation: { ...element.couleurNavigation } });
-	randomcolorations = randomcolorations.filter((e) => e != element);
-}
-
-const colorationLaMoinsChere = props.produit.colorations.reduce(
+const colorationLaMoinsChere = props.produit.colorationsNavigation.reduce(
 	(prev, curr) => ((curr.prixsolde ?? curr.prixvente) < (prev?.prixsolde ?? prev?.prixvente) ? curr : prev),
-	props.produit.colorations[0],
+	props.produit.colorationsNavigation[0],
 );
 
-props.produit.colorations.sort((a, b) => (a == colorationLaMoinsChere ? -1 : b == colorationLaMoinsChere ? 1 : 0));
+props.produit.colorationsNavigation.sort((a, b) => (a == colorationLaMoinsChere ? -1 : b == colorationLaMoinsChere ? 1 : 0));
 </script>
 
 <template>
@@ -90,7 +35,7 @@ props.produit.colorations.sort((a, b) => (a == colorationLaMoinsChere ? -1 : b =
 				<div class="colorations">
 					<div
 						class="coloration"
-						v-for="coloration in props.produit.colorations"
+						v-for="coloration in props.produit.colorationsNavigation"
 						v-bind:key="coloration.idcouleur"
 						:style="`--couleur: #${coloration.couleurNavigation.rgbcouleur};`"
 						:data-tooltip="coloration.couleurNavigation.nomcouleur"
