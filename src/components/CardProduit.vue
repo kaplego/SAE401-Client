@@ -57,8 +57,6 @@ props.produit.colorations = [];
 
 for (let i = 0; i < 3; i++) {
 	if (i > 0 && Math.random() >= 0.5) continue;
-	console.log(randomcolorations, randomcolorations.length);
-
 	const random = Math.floor(Math.random() * randomcolorations.length);
 	const element = randomcolorations[random];
 	props.produit.colorations.push({ ...element, couleurNavigation: { ...element.couleurNavigation } });
