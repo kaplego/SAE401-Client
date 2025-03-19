@@ -1,6 +1,6 @@
+@use './colors.scss';
 @use './containers.scss';
 @use './fonts.scss';
-@import 'variables';
 
 * {
 	box-sizing: border-box;
@@ -261,14 +261,9 @@ body.theme-dark {
 	}
 }
 
-#loading {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100dvw;
-	height: 100vh;
-	background-color: var(--t-background1);
-	z-index: 1000;
+.loading {
+	width: 100%;
+	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -283,12 +278,50 @@ body.theme-dark {
 	}
 
 	.loading-spinner {
-		height: 10%;
+		height: 25px;
 		aspect-ratio: 1;
 		border-radius: 100vw;
 		border: 2px solid black;
 		border-top-color: transparent;
 		animation: spinner 1s linear 0s infinite normal forwards;
+	}
+
+	&.loading-sm .loading-spinner {
+		height: 15px;
+	}
+
+	&.loading-lg .loading-spinner {
+		height: 40px;
+	}
+}
+
+.button {
+	background-color: var(--t-background3-accent);
+	color: white;
+	padding: 0.5rem 1rem;
+	border-radius: 4px;
+	cursor: pointer;
+	border: none;
+	transition: all 100ms;
+	display: block;
+	font-size: 1rem;
+	width: max-content;
+	text-decoration: none;
+
+	&:hover {
+		background-color: var(--t-background2-accent);
+	}
+
+	&.button-sm {
+		padding: 0.3rem 0.6rem;
+		font-size: 0.9rem;
+		border-radius: 3px;
+	}
+
+	&.button-lg {
+		padding: 0.7rem 1.2rem;
+		font-size: 1.1rem;
+		border-radius: 5px;
 	}
 }
 

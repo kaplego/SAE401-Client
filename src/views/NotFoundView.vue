@@ -10,7 +10,7 @@ isLoading.switchLoading(false);
 		<div class="container">
 			<h1>Erreur 404</h1>
 			<p>La page demandée n'a pas été trouvée...</p>
-			<RouterLink to="/">Aller à la page d'accueil</RouterLink>
+			<RouterLink class="button" to="/">Aller à la page d'accueil</RouterLink>
 		</div>
 	</main>
 </template>
