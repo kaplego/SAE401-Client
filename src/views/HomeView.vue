@@ -9,7 +9,7 @@ const loading = useLoadingStore();
 
 const produits = ref<Produit[] | null>(null);
 
-axios.get('https://api.miliboo.lou-magnenat.tech/api/produits').then((res) => {
+axios.get('https://api.miliboo.lou-magnenat.tech/api/produits/getallproduit').then((res) => {
 	produits.value = res.data;
 	loading.switchLoading(false);
 });
