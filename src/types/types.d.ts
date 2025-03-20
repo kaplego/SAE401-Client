@@ -95,5 +95,5 @@ declare type Client = {
 	paniersCompositionNavigation: unknown[];
 	historiquesNavigation: unknown[];
 	messagesNavigation: unknown[];
-	professionelNavigation: unknown;
+	professionelNavigation: unknown | null;
 }
