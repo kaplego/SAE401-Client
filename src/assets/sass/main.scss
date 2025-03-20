@@ -271,7 +271,7 @@ body.theme-darkdim {
 		height: 25px;
 		aspect-ratio: 1;
 		border-radius: 100vw;
-		border: 2px solid black;
+		border: 2px solid var(--t-foreground1);
 		border-top-color: transparent;
 		animation: spinner 1s linear 0s infinite normal forwards;
 	}
