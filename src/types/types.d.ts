@@ -25,7 +25,7 @@ declare type Produit = {
 	delailivraison: number;
 	coutlivraison: number;
 	nbpaiementmax: number;
-	avisproduits: unknown[];
+	avisNavigation: unknown[];
 	colorationsNavigation: Coloration[];
 	historiqueconsultations: unknown[];
 	idpaysNavigation: number | null;
