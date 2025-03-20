@@ -4,6 +4,8 @@ import AboutView from '@/views/AboutView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
 import AccountView from '@/views/AccountView.vue';
 import ProductView from '@/views/ProductView.vue';
+import CategoryView from '@/views/CategoryView.vue';
+import HomeBaseView from '@/views/HomeBaseView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,7 +13,19 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'home',
-			component: HomeView,
+			component: HomeBaseView,
+			children: [
+				{
+					path: '/',
+					name: 'home_home',
+					component: HomeView,
+				},
+				{
+					path: '/category/:id',
+					name: 'home_category',
+					component: CategoryView,
+				},
+			]
 		},
 		{
 			path: '/about',
