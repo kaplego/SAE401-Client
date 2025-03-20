@@ -95,14 +95,34 @@ header {
 			}
 		}
 
-		.icones {
+		.icons {
 			display: flex;
 			align-items: center;
 			margin-left: auto;
 			height: 100%;
+			gap: 0.5rem;
+
+			.icon-button {
+				border-radius: 100vw;
+				padding: 0.4rem;
+				border: 2px solid transparent;
+				aspect-ratio: 1;
+				line-height: 0;
+				transition: all 100ms;
+
+				&:hover {
+					background-color: var(--t-background3);
+				}
+
+				&.router-link-active {
+					background-color: var(--t-background1-accent);
+					color: var(--t-foreground2-accent);
+				}
+			}
 
 			#theme-switch {
 				cursor: pointer;
+				margin-left: 1rem;
 
 				#theme-cb {
 					width: 0;
@@ -217,21 +237,6 @@ body.theme-dark {
 }
 
 body.theme-darkdim {
-	// --c-accent-50: #fffff0;
-	// --c-accent-100: #fefcbf;
-	// --c-accent-200: #faf089;
-	// --c-accent-300: #f6e05e;
-	// --c-accent-400: #ecc94b;
-	// --c-accent-500: #d69e2e;
-	// --c-accent-600: #b7791f;
-	// --c-accent-700: #975a16;
-	// --c-accent-800: #744210;
-	// --c-accent-900: #5f370e;
-
-	// background-color: orange;
-	// background-image: url(https://satisfactory.wiki.gg/images/c/c3/Satisfactory_logo_full_color_square.png?e4b0eb);
-	// background-size: 100px;
-	// background-attachment: fixed;
 	* {
 		background-color: orange !important;
 		background: url(https://satisfactory.wiki.gg/images/c/c3/Satisfactory_logo_full_color_square.png?e4b0eb);
@@ -410,11 +415,11 @@ body:has(#loading) {
 	overflow: hidden;
 }
 
-*[data-tooltip] {
+@mixin tooltip-base($content) {
 	position: relative;
 
 	&::before {
-		content: attr(data-tooltip);
+		content: $content;
 		position: absolute;
 		bottom: calc(100% + 0.5rem);
 		width: max-content;
@@ -427,6 +432,7 @@ body:has(#loading) {
 		padding: 0.25rem 0.5rem;
 		color: var(--t-foreground5);
 		border-radius: 4px;
+		line-height: 1;
 	}
 
 	&::after {
@@ -445,6 +451,23 @@ body:has(#loading) {
 	&:hover::before,
 	&:hover::after {
 		display: block;
+	}
+}
+
+*[data-tooltip] {
+	@include tooltip-base(attr(data-tooltip));
+}
+*[data-tooltip-down] {
+	@include tooltip-base(attr(data-tooltip-down));
+
+	&::before {
+		bottom: unset;
+		top: calc(100% + 0.5rem);
+	}
+
+	&::after {
+		bottom: unset;
+		top: calc(100% + 0.5rem - 4px);
 	}
 }
 

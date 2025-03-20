@@ -2,7 +2,7 @@
 import { RouterLink, RouterView, useRouter } from 'vue-router';
 import { ref, useTemplateRef } from 'vue';
 import { THEME, useThemeStore } from './stores/theme';
-import { Moon, Search, Sun } from 'lucide-vue-next';
+import { Moon, Search, ShoppingCart, Sun, User } from 'lucide-vue-next';
 
 const navContainer = useTemplateRef('navContainer');
 
@@ -36,9 +36,7 @@ const theme = useThemeStore();
 	<header>
 		<div
 			class="obV3p295"
-			@click="
-				() => theme.switchTheme(theme.currentTheme === THEME.DarkDim ? THEME.Light : THEME.DarkDim)
-			"
+			@click="() => theme.switchTheme(theme.currentTheme === THEME.DarkDim ? THEME.Light : THEME.DarkDim)"
 		></div>
 		<div class="container">
 			<img src="/logo.svg" alt="Miliboo" class="logo" />
@@ -48,7 +46,9 @@ const theme = useThemeStore();
 					<Search />
 				</button>
 			</div>
-			<div class="icones">
+			<div class="icons">
+				<RouterLink to="/account" data-tooltip-down="Mon compte" class="icon-button"><User /></RouterLink>
+				<RouterLink to="/cart" data-tooltip-down="Mon panier" class="icon-button"><ShoppingCart /></RouterLink>
 				<div
 					@click="theme.switchTheme(theme.currentTheme == THEME.Light ? THEME.Dark : THEME.Light)"
 					id="theme-switch"
