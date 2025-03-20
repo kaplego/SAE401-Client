@@ -5,12 +5,18 @@ import { ref } from 'vue';
 export enum THEME {
 	Light = 'light',
 	Dark = 'dark',
-	DarkDim = 'darkdim'
+	DarkDim = 'darkdim',
 }
 
 export const useThemeStore = defineStore('theme', () => {
 	const storedTheme = localStorage.getItem('theme');
-	const currentTheme = ref(isInEnum(THEME, storedTheme) ? storedTheme : THEME.Light);
+	const currentTheme = ref(
+		isInEnum(THEME, storedTheme)
+			? storedTheme
+			: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+				? THEME.Dark
+				: THEME.Light,
+	);
 	document.body.classList.add(`theme-${currentTheme.value}`);
 
 	function switchTheme(newTheme: THEME) {
