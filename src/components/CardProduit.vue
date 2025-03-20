@@ -19,7 +19,7 @@ props.produit.colorationsNavigation.sort((a, b) =>
 </script>
 
 <template>
-	<RouterLink :to="'/produits/' + props.produit.idproduit">
+	<RouterLink :to="'/produits/' + props.produit.idproduit" class="card-produit-link">
 		<div class="card-produit">
 			<div class="banniere-soldes-container">
 				<div class="banniere-soldes" v-if="colorationLaMoinsChere?.prixsolde !== null">Soldes</div>
@@ -51,6 +51,9 @@ props.produit.colorationsNavigation.sort((a, b) =>
 </template>
 
 <style lang="scss">
+.card-produit-link {
+	text-decoration: none;
+}
 .card-produit {
 	--ratio: 1.5;
 	aspect-ratio: 1 / var(--ratio);
