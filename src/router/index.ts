@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import AboutView from '@/views/AboutView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
-import CardProduit from '@/components/CardProduit.vue';
+import AccountView from '@/views/AccountView.vue';
 import ProductView from '@/views/ProductView.vue';
 
 const router = createRouter({
@@ -19,7 +19,24 @@ const router = createRouter({
 			component: AboutView,
 		},
 		{
+			path: '/account',
+			name: 'account',
+			children: [
+				{
+					path: '/account',
+					name: 'account_dashboard',
+					component: AccountView,
+				},
+				{
+					path: '/account/personnal-details',
+					name: 'account_personnal',
+					component: NotFoundView,
+				},
+			],
+		},
+		{
 			path: '/produits/:id',
+			name: 'produit',
 			component: ProductView,
 		},
 		{ path: '/:catchAll(.*)', component: NotFoundView },

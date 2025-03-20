@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import CardProduit from '@/components/CardProduit.vue';
 import { useProductsStore } from '@/stores/api/products';
+import { useCategoriesStore } from '@/stores/api/categories';
 
 const products = useProductsStore();
+const categories = useCategoriesStore();
 </script>
 
 <template>
 	<nav id="navigationProduits">
 		<div class="container">
-			<div class="item">
+			<!-- <div class="item">
 				<p class="item-name">Canapés & Fauteuils</p>
 				<div class="dropdown dropdown-columns">
 					<div class="column">
@@ -25,9 +27,30 @@ const products = useProductsStore();
 						<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
-			<p class="item">Chaise & Tabouret</p>
+			<template v-for="categorie in categories.list" v-bind:key="categorie.idcategorie">
+				<div class="item" v-if="categorie.idcategorieParent === null">
+					<p class="item-name">{{ categorie.nomcategorie }}</p>
+					<div class="dropdown dropdown-columns">
+						<div class="column" >
+							<p class="column-item" v-for="enfante in categorie.categorieEnfanteNavigation" v-bind:key="enfante.idcategorie">
+								<RouterLink :to="`/products/${ categorie.idcategorie }`"></RouterLink>
+								{{ enfante.nomcategorie }}
+							</p>
+						</div>
+						<!-- <div class="column">
+							<p class="column-title">Titre</p>
+							<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
+							<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
+							<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
+							<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
+							<p class="column-item"><RouterLink to="/test">Item</RouterLink></p>
+						</div> -->
+					</div>
+				</div>
+			</template>
+			<!-- <p class="item">Chaise & Tabouret</p>
 
 			<p class="item">Bureau</p>
 
@@ -45,7 +68,7 @@ const products = useProductsStore();
 
 			<p class="item">Déco</p>
 
-			<p class="item">Meubles reconditionnés</p>
+			<p class="item">Meubles reconditionnés</p> -->
 		</div>
 	</nav>
 	<main class="home container">

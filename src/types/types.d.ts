@@ -40,8 +40,8 @@ declare type ValeurAttribut = {
 	idattribut: number;
 	idproduit: number;
 	valeur: string;
-	attributNavigation: Attribut;
-	produitNavigation: Produit;
+	attributNavigation: Attribut | null;
+	produitNavigation: Produit | null;
 }
 
 declare type Attribut = {
@@ -61,13 +61,39 @@ declare type TypeProduit = {
 
 declare type Categorie = {
 	idcategorie: number;
-	idcategorieParent: number;
-	idphoto : number;
+	idcategorieParent: number | null;
+	idphoto : number | null;
 	nomcategorie: string;
 	descriptioncategorie: string;
 	estfiltrable: boolean;
-	categorieParenteNavigation: Categorie;
-	photoNavigation: string;
-	categorieEnfanteNavigation: Categorie;
+	categorieParenteNavigation: Categorie | null;
+	photoNavigation: string | null;
+	categorieEnfanteNavigation: Categorie[];
 	typesNavigation: TypeProduit[];
+}
+
+declare type Client = {
+	idclient: number;
+	nomclient: string;
+	prenomclient: string;
+	civiliteclient: string | null;
+	emailclient: string | null;
+	telfixeclient: string | null;
+	telportableclient: string;
+	datecreationcompte: string | Date;
+	hashmdp: string;
+	pointfideliteclient: number;
+	newslettermiliboo: boolean;
+	newsletterpartenaires: boolean;
+	adressesNavigation: unknown[];
+	avisNavigation: unknown[];
+	cartesNavigation: unknown[];
+	codesNavigation: unknown[];
+	commandesNavigation: unknown[];
+	paniersProduitNavigation: unknown[];
+	aimesNavigation: unknown[];
+	paniersCompositionNavigation: unknown[];
+	historiquesNavigation: unknown[];
+	messagesNavigation: unknown[];
+	professionelNavigation: unknown | null;
 }
