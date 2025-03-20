@@ -13,11 +13,9 @@ const categories = useCategoriesStore();
 					<p class="item-name">{{ category.nomcategorie }}</p>
 					<div class="dropdown dropdown-columns">
 						<div class="column" >
-							<p class="column-item" v-for="children in category.categorieEnfanteNavigation" v-bind:key="children.idcategorie">
-								<RouterLink :to="`/category/${ children.idcategorie }`">
+								<RouterLink :to="`/category/${ children.idcategorie }`" class="column-item" v-for="children in category.categorieEnfanteNavigation" v-bind:key="children.idcategorie">
 									{{ children.nomcategorie }}
 								</RouterLink>
-							</p>
 						</div>
 					</div>
 				</div>
@@ -82,6 +80,8 @@ const categories = useCategoriesStore();
 				cursor: pointer;
 				width: max-content;
 				transition: color 100ms;
+				display: block;
+				text-decoration: none;
 
 				&:hover {
 					color: var(--c-accent-400);
