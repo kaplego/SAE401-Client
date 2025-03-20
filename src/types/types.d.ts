@@ -30,8 +30,44 @@ declare type Produit = {
 	historiqueconsultations: unknown[];
 	idpaysNavigation: number | null;
 	idtypeproduitNavigation: number | null;
-	valeurattributs: unknown[];
+	valeurattributs: ValeurAttribut[];
 	idproduitsimilaire: number[];
 	idproduitsimilaire2: number[];
 	aimes: unknown[];
 };
+
+declare type ValeurAttribut = {
+	idattribut: number;
+	idproduit: number;
+	valeur: string;
+	attributNavigation: Attribut;
+	produitNavigation: Produit;
+}
+
+declare type Attribut = {
+	idattribut: number;
+	idtypeproduit: number;
+	nomattribut: string;
+	typeproduitNavigation: TypeProduit;
+	valeursNavigation: ValeurAttribut[];
+}
+
+declare type TypeProduit = {
+	idtypeproduit: number;
+	idcategorie: number;
+	nomtypeproduit: string;
+	attributsNavigation: Attribut[];
+}
+
+declare type Categorie = {
+	idcategorie: number;
+	idcategorieParent: number;
+	idphoto : number;
+	nomcategorie: string;
+	descriptioncategorie: string;
+	estfiltrable: boolean;
+	categorieParenteNavigation: Categorie;
+	photoNavigation: string;
+	categorieEnfanteNavigation: Categorie;
+	typesNavigation: TypeProduit[];
+}
