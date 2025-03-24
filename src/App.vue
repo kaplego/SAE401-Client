@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView, useRouter } from 'vue-router';
-import { ref, useTemplateRef } from 'vue';
+import { ref, useTemplateRef, watchEffect } from 'vue';
 import { THEME, useThemeStore } from './stores/theme';
 import { Moon, Search, ShoppingCart, Sun, User } from 'lucide-vue-next';
+import { useCategoriesStore } from './stores/api/categories';
 
 const navContainer = useTemplateRef('navContainer');
 
@@ -30,6 +31,12 @@ router.afterEach(async () => {
 });
 
 const theme = useThemeStore();
+
+const categories = useCategoriesStore();
+const idCategory = ref<string | null>();
+watchEffect(() => {
+	idCategory.value = router.currentRoute.value.params.id as string;
+});
 </script>
 
 <template>
@@ -69,6 +76,37 @@ const theme = useThemeStore();
 			<div class="underline" :style="`left: ${underlineLeft}px;width: ${underlineWidth}px;`"></div>
 			<RouterLink class="item" @mouseover="moveUnderline" to="/">Accueil</RouterLink>
 			<RouterLink class="item" @mouseover="moveUnderline" to="/about">À propos de nous</RouterLink>
+		</div>
+	</nav>
+
+	<nav id="navigationProduits">
+		<div class="container">
+			<template v-for="category in categories.list" v-bind:key="category.idcategorie">
+				<template v-if="category.idcategorieParent === null">
+					<div class="item" v-if="category.categorieEnfanteNavigation.length > 0">
+						<RouterLink
+							:to="`/category/${category.idcategorie}`"
+							:class="`item-name ${category.categorieEnfanteNavigation.find((child) => child.idcategorie == Number(idCategory)) != null ? 'router-link-active' : ''}`"
+							>{{ category.nomcategorie }}</RouterLink
+						>
+						<div class="dropdown dropdown-columns">
+							<div class="column">
+								<RouterLink
+									:to="`/category/${children.idcategorie}`"
+									class="column-item"
+									v-for="children in category.categorieEnfanteNavigation"
+									v-bind:key="children.idcategorie"
+								>
+									{{ children.nomcategorie }}
+								</RouterLink>
+							</div>
+						</div>
+					</div>
+					<RouterLink :to="`/category/${category.idcategorie}`" class="item" v-else>{{
+						category.nomcategorie
+					}}</RouterLink>
+				</template>
+			</template>
 		</div>
 	</nav>
 
