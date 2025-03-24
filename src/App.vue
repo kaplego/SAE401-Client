@@ -84,11 +84,9 @@ watchEffect(() => {
 			<template v-for="category in categories.list" v-bind:key="category.idcategorie">
 				<template v-if="category.idcategorieParent === null">
 					<div class="item" v-if="category.categorieEnfanteNavigation.length > 0">
-						<RouterLink
-							:to="`/category/${category.idcategorie}`"
-							:class="`item-name ${category.categorieEnfanteNavigation.find((child) => child.idcategorie == Number(idCategory)) != null ? 'router-link-active' : ''}`"
-							>{{ category.nomcategorie }}</RouterLink
-						>
+						<RouterLink :to="`/category/${category.idcategorie}`" class="item-name">{{
+							category.nomcategorie
+						}}</RouterLink>
 						<div class="dropdown dropdown-columns">
 							<div class="column">
 								<RouterLink

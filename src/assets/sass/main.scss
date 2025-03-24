@@ -249,23 +249,29 @@ nav {
 			padding: 1rem 2rem;
 		}
 	}
+	border-bottom: 1px solid transparent;
+
+	&.router-link-active {
+		color: var(--c-accent-500);
+		border-bottom-color: var(--c-accent-500);
+	}
+
+	&:has(.router-link-active) {
+		border-bottom-color: var(--c-accent-500);
+
+		.item-name.router-link-active {
+			color: var(--c-accent-500);
+		}
+	}
 
 	.item-name {
 		text-decoration: none;
-
-		&.router-link-active {
-			color: var(--c-accent-500);
-		}
-
-		&.router-link-exact-active {
-			border-bottom: 1px solid var(--c-accent-500);
-		}
 	}
 
 	.dropdown {
 		transition: all 200ms;
 		position: absolute;
-		top: 100%;
+		top: calc(100% + 1px);
 		left: -2rem;
 		opacity: 0;
 		scale: 1 0;
@@ -295,6 +301,10 @@ nav {
 
 				&:hover {
 					color: var(--c-accent-400);
+				}
+
+				&.router-link-active {
+					color: var(--c-accent-500);
 				}
 
 				a {
