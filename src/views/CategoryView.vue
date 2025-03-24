@@ -3,7 +3,7 @@ import { useCategoriesStore } from '@/stores/api/categories';
 import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import CardProduit from '@/components/CardProduit.vue';
-import { getProduitsByCategorie } from '@/assets/ts/api/produits';
+import { getProductsByCategory } from '@/assets/ts/api/produits';
 
 const list = ref<Produit[] | null>(null);
 const category = ref<Categorie>();
@@ -11,7 +11,7 @@ const router = useRouter();
 
 watchEffect(() => {
 	const idCategory = router.currentRoute.value.params.id as string;
-	getProduitsByCategorie(idCategory).then((produits) => (list.value = produits));
+	getProductsByCategory(idCategory).then((produits) => (list.value = produits));
 	const categories = useCategoriesStore();
 	category.value = categories.list?.find((c) => c.idcategorie == +idCategory);
 });
