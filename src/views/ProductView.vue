@@ -2,13 +2,13 @@
 import { useLoadingStore } from '@/stores/loading';
 import { useRouter } from 'vue-router';
 import router from '@/router';
-import { getProduct } from '@/assets/ts/api/produits';
 import { ref } from 'vue';
+import API from '@/assets/ts/api';
 const isLoading = useLoadingStore();
 isLoading.switchLoading(false);
 const product = ref<Produit | null>(null);
 
-getProduct(useRouter().currentRoute.value.params.id as string).then((p) => {
+API.products.get(useRouter().currentRoute.value.params.id as string).then((p) => {
 	if (!p) router.push('/');
 	product.value = p;
 });

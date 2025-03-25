@@ -65,7 +65,7 @@ declare type CarteBancaire = {
 declare type Categorie = {
 	idcategorie: number;
 	idcategorieParent: number | null;
-	idphoto : number | null;
+	idphoto: number | null;
 	nomcategorie: string;
 	descriptioncategorie: string;
 	estfiltrable: boolean;
@@ -378,3 +378,5 @@ declare type Ville = {
 	nomville: string | null;
 	adressesNavigation: Adresse[];
 };
+
+declare type ID = string | number;
