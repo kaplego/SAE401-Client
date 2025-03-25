@@ -151,7 +151,7 @@ declare type CommandeComposition = {
 	idcommande: number;
 	quantitecompositioncommande: number;
 	commandeNavigation: Commande;
-	compositionNavigation: Composition
+	compositionNavigation: Composition;
 };
 
 declare type CompositionProduit = {
