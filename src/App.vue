@@ -37,6 +37,12 @@ const idCategory = ref<string | null>();
 watchEffect(() => {
 	idCategory.value = router.currentRoute.value.params.id as string;
 });
+
+function searchProduct() {
+	const searchQuery: HTMLInputElement = document.querySelector("#searchbar")!;
+	router.replace("/search?q=" + searchQuery.value);
+}
+
 </script>
 
 <template>
@@ -48,8 +54,8 @@ watchEffect(() => {
 		<div class="container">
 			<img src="/logo.svg" alt="Miliboo" class="logo" />
 			<div id="recherche">
-				<input type="text" placeholder="Rechercher un produit..." />
-				<button>
+				<input id="searchbar" type="text" placeholder="Rechercher un produit..." v-on:keydown.enter="searchProduct()" />
+				<button @click="searchProduct()">
 					<Search />
 				</button>
 			</div>
