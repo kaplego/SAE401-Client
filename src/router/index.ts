@@ -4,11 +4,8 @@ import AboutView from '@/views/AboutView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
 import AccountView from '@/views/AccountView.vue';
 import ProductView from '@/views/ProductView.vue';
-<<<<<<< Updated upstream
-=======
 import CategoryView from '@/views/CategoryView.vue';
-// import CartView from '@/views/CartView.vue';
->>>>>>> Stashed changes
+import CartView from '@/views/CartView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +14,11 @@ const router = createRouter({
 			path: '/',
 			name: 'home',
 			component: HomeView,
+		},
+		{
+			path: '/category/:id',
+			name: 'category',
+			component: CategoryView,
 		},
 		{
 			path: '/about',
@@ -39,14 +41,11 @@ const router = createRouter({
 				},
 			],
 		},
-<<<<<<< Updated upstream
-=======
-		// {
-		// 	path: '/cart',
-		// 	name: 'cart',
-		// 	component: CartView,
-		// },
->>>>>>> Stashed changes
+		{
+			path: '/cart',
+			name: 'cart',
+			component: CartView,
+		},
 		{
 			path: '/produits/:id',
 			name: 'produit',
