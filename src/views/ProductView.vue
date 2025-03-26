@@ -4,18 +4,23 @@ import { useRouter } from 'vue-router';
 import { Star } from 'lucide-vue-next';
 import { ref, watchEffect } from 'vue';
 import API from '@/assets/ts/api';
+import axios from 'axios';
+
 const isLoading = useLoadingStore();
 isLoading.switchLoading(false);
 const router = useRouter();
 const product = ref<Produit | null>(null);
 const chosenColoration = ref<Coloration>();
-
+const aspectTechnique = ref<string>();
 watchEffect(() => {
 	API.products.get(router.currentRoute.value.params.id as string)
 		.then((produit) => {
-			product.value = produit;
-			if (product.value)
-				chosenColoration.value = product.value.colorationsNavigation[0]!;
+			if (produit)
+				axios.get(`/files/AspectTechnique/produit${produit.idproduit}.txt`).then((res) => {
+					product.value = produit;
+					chosenColoration.value = product.value.colorationsNavigation[0]!;
+					aspectTechnique.value = res.data
+				});
 		})
 
 });
@@ -77,7 +82,7 @@ watchEffect(() => {
 
 			</div>
 			<div id="description">
-				<p></p>
+				<p style="white-space: pre;">{{ aspectTechnique }}</p>
 			</div>
 
 			<p>{{ product }}</p>
