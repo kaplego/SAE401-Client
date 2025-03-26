@@ -1,88 +1,98 @@
 <script setup lang="ts">
 import CardAccount from '@/components/CardAccount.vue';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import { useLoggedInStore } from '@/stores/login';
 import { Heart, IdCard, Landmark, MapPinHouse, MessageSquareQuote, ReceiptText } from 'lucide-vue-next';
+import { watchEffect } from 'vue';
+import { useRouter } from 'vue-router';
 
-const client: Client = {
-	idclient: 0,
-	nomclient: 'JEAN',
-	prenomclient: 'Michel',
-	emailclient: 'michel.jean@www.impots.gouv.fr',
-	civiliteclient: 'X',
-	datecreationcompte: new Date(2025, 2, 21),
-	telportableclient: '33696969690',
-	telfixeclient: null,
-	hashmdp: 'fniezlorghlezksnd',
-	pointfideliteclient: 0,
-	newslettermiliboo: true,
-	newsletterpartenaires: true,
-	adressesNavigation: [],
-	avisNavigation: [],
-	cartesNavigation: [],
-	codesNavigation: [],
-	commandesNavigation: [],
-	paniersProduitNavigation: [],
-	aimesNavigation: [],
-	paniersCompositionNavigation: [],
-	historiquesNavigation: [],
-	messagesNavigation: [],
-	professionelNavigation: null,
-};
+const router = useRouter();
+const login = useLoggedInStore();
+
+if (!login.isLoggedIn) router.push('/login');
+
+watchEffect(() => {
+	if (login.clientReady && login.client === null) router.push('/login');
+});
 </script>
 
 <template>
 	<main class="container">
-		<h1>Bienvenue, {{ client.prenomclient }}</h1>
-		<div id="cards-account">
-			<CardAccount
-				title="Informations personelles"
-				subtitle="Nom, prénom, email..."
-				link="/account/personnal-details"
+		<template v-if="login.client !== null">
+			<h1>Bienvenue, {{ login.client.prenomclient }}</h1>
+			<button
+				id="logout"
+				class="button button-sm"
+				@click="
+					() => {
+						login.logout();
+						router.push('/');
+					}
+				"
 			>
-				<IdCard :stroke-width="1.5" />
-			</CardAccount>
-			<CardAccount
-				title="Informations bancaires"
-				:subtitle="`Vous avez ${client.cartesNavigation.length} carte${client.cartesNavigation.length === 1 ? '' : 's'} bancaire.`"
-				link="/account/bank-details"
-			>
-				<Landmark :stroke-width="1.5" />
-			</CardAccount>
-			<CardAccount
-				title="Adresses"
-				:subtitle="`Vous avez enregistré ${client.adressesNavigation.length} adresse${client.adressesNavigation.length === 1 ? '' : 's'}`"
-				link="/account/addresses"
-			>
-				<MapPinHouse :stroke-width="1.5" />
-			</CardAccount>
-			<CardAccount
-				title="Favoris"
-				:subtitle="`Vous avez ajouté ${client.aimesNavigation.length} favoris`"
-				link="/account/likes"
-			>
-				<Heart :stroke-width="1.5" />
-			</CardAccount>
-			<CardAccount
-				title="Avis"
-				:subtitle="`Vous avez posté ${client.avisNavigation.length} avis`"
-				link="/account/reviews"
-			>
-				<MessageSquareQuote :stroke-width="1.5" />
-			</CardAccount>
-			<CardAccount
-				title="Commandes"
-				:subtitle="`Vous avez ${client.commandesNavigation.length} commande${client.commandesNavigation.length === 1 ? '' : 's'}`"
-				link="/account/orders"
-			>
-				<ReceiptText :stroke-width="1.5" />
-			</CardAccount>
-		</div>
+				Me déconnecter
+			</button>
+			<div id="cards-account">
+				<CardAccount
+					title="Informations personelles"
+					subtitle="Nom, prénom, email..."
+					link="/account/personnal-details"
+				>
+					<IdCard :stroke-width="1.5" />
+				</CardAccount>
+				<CardAccount
+					title="Informations bancaires"
+					:subtitle="`Vous avez ${login.client.cartesNavigation.length} carte${login.client.cartesNavigation.length === 1 ? '' : 's'} bancaire.`"
+					link="/account/bank-details"
+				>
+					<Landmark :stroke-width="1.5" />
+				</CardAccount>
+				<CardAccount
+					title="Adresses"
+					:subtitle="`Vous avez enregistré ${login.client.adressesNavigation.length} adresse${login.client.adressesNavigation.length === 1 ? '' : 's'}`"
+					link="/account/addresses"
+				>
+					<MapPinHouse :stroke-width="1.5" />
+				</CardAccount>
+				<CardAccount
+					title="Favoris"
+					:subtitle="`Vous avez ajouté ${login.client.aimesNavigation.length} favoris`"
+					link="/account/likes"
+				>
+					<Heart :stroke-width="1.5" />
+				</CardAccount>
+				<CardAccount
+					title="Avis"
+					:subtitle="`Vous avez posté ${login.client.avisNavigation.length} avis`"
+					link="/account/reviews"
+				>
+					<MessageSquareQuote :stroke-width="1.5" />
+				</CardAccount>
+				<CardAccount
+					title="Commandes"
+					:subtitle="`Vous avez ${login.client.commandesNavigation.length} commande${login.client.commandesNavigation.length === 1 ? '' : 's'}`"
+					link="/account/orders"
+				>
+					<ReceiptText :stroke-width="1.5" />
+				</CardAccount>
+			</div>
+		</template>
+		<LoadingSpinner v-else />
 	</main>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #cards-account {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 1rem;
+}
+
+h1 {
+	margin-bottom: 0.5rem;
+}
+
+#logout {
+	margin-bottom: 1rem;
 }
 </style>

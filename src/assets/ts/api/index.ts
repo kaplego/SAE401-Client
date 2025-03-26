@@ -1,3 +1,4 @@
+import { useLoggedInStore } from '@/stores/login';
 import axios, { type AxiosResponse } from 'axios';
 
 async function dataOrNull<T>(cb: () => Promise<AxiosResponse<T>>): Promise<T | null> {
@@ -49,24 +50,25 @@ class APIManager {
 			token: string;
 			client: Client;
 		} | null> => {
+			const login = useLoggedInStore();
 			const result = await dataOrNull<{
 				token: string;
 				client: Client;
 			}>(() =>
-				axios.post(`${this.endpoint}/clients/GetClientByLogin`, {
+				axios.post(`${this.endpoint}/client/GetClientByLogin`, {
 					email,
 					password,
 				}),
 			);
 			if (result && result.token) {
-				localStorage.setItem('jwt', result.token);
+				login.login(result.token, result.client.idclient);
 			}
 			return result;
 		},
 		get: async (id: ID): Promise<Client | null> => {
 			const jwt = localStorage.getItem('jwt');
 			return dataOrNull(() =>
-				axios.get(`${this.endpoint}/clients/GetClientById/${id}`, {
+				axios.get(`${this.endpoint}/client/GetClientById/${id}`, {
 					headers: {
 						Authorization: `Bearer ${jwt}`,
 					},
