@@ -19,7 +19,7 @@ console.log(list);
 <template>
 	<main class="container">
 		<h1 id="search-title">Recherche : {{ router.currentRoute.value.query.q }}</h1>
-		<p>{{ list?.length }} {{ list?.length == 1 ? "résultat" : "résultats" }}</p>
+		<p id="search-count">{{ list?.length }} {{ list?.length == 1 ? "résultat" : "résultats" }}</p>
 		<div v-if="list !== null" class="grille-produits">
 			<CardProduit v-for="produit in list" v-bind:key="produit.idproduit" :produit="produit" />
 		</div>
@@ -42,6 +42,11 @@ console.log(list);
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	margin-bottom: 0.5em;
+	margin-bottom: 4px;
+}
+
+#search-count {
+	margin-bottom: 1rem;
+	font-size: 1.25rem;
 }
 </style>
