@@ -28,7 +28,7 @@ watchEffect((clean) => {
 					if (!result) error.value = "L'adresse email ou le mot de passe est incorrect.";
 					else {
 						login.login(result.token, result.client.idclient);
-						router.push('/account');
+						router.replace('/account');
 					}
 				});
 			}

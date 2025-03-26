@@ -117,6 +117,7 @@ header {
 				&.router-link-active {
 					background-color: var(--t-background1-accent);
 					color: var(--t-foreground2-accent);
+					border-color: rgb(from var(--t-foreground1-accent) r g b / 0.5);
 				}
 			}
 
@@ -409,6 +410,44 @@ body.theme-darkdim {
 
 	&:focus {
 		outline-width: 2px;
+	}
+}
+
+.input-control {
+	position: relative;
+
+	label {
+		position: absolute;
+		left: calc(1rem - 4px);
+		top: 50%;
+		transform: translateY(-50%);
+		transition: all 100ms;
+		background-color: var(--t-background1);
+		padding: 0 4px;
+	}
+
+	input {
+		width: 100%;
+		padding: 0.5rem 1rem;
+		border-radius: 4px;
+		border: 1px solid var(--c-accent-500);
+		outline: 0px solid var(--c-accent-500);
+		font-size: 1rem;
+		transition: outline 100ms;
+
+		&:focus {
+			border-color: var(--t-border1-accent);
+			outline: 2px solid var(--t-border1-accent);
+		}
+	}
+
+	&:focus-within,
+	&:has(input:not(:placeholder-shown)) {
+		label {
+			top: 0;
+			font-size: 0.9rem;
+			color: rgb(from var(--t-foreground1) r g b / 1);
+		}
 	}
 }
 
