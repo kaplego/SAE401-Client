@@ -40,7 +40,7 @@ watchEffect(() => {
 
 function searchProduct() {
 	const searchQuery: HTMLInputElement = document.querySelector("#searchbar")!;
-	router.replace("/search?q=" + searchQuery.value);
+	router.push("/search?q=" + encodeURIComponent(searchQuery.value));
 }
 
 </script>

@@ -6,6 +6,7 @@ import AccountView from '@/views/AccountView.vue';
 import ProductView from '@/views/ProductView.vue';
 import CategoryView from '@/views/CategoryView.vue';
 import CartView from '@/views/CartView.vue';
+import SearchView from '@/views/SearchView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +51,11 @@ const router = createRouter({
 			path: '/produits/:id',
 			name: 'produit',
 			component: ProductView,
+		},
+		{
+			path: '/search',
+			name: 'search',
+			component: SearchView,
 		},
 		{ path: '/:catchAll(.*)', component: NotFoundView },
 	],
