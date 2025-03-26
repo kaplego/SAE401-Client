@@ -82,19 +82,19 @@ class APIManager {
 
 	public products = {
 		get: async (id: ID): Promise<Produit | null> =>
-			dataOrNull(() => axios.get(`${this.endpoint}/produits/GetProduitById/${id}`)),
+			dataOrNull(() => axios.get(`${this.endpoint}/produit/GetProduitById/${id}`)),
 		list: async (): Promise<Produit[]> =>
-			dataOrDefault([], () => axios.get(`${this.endpoint}/api/categorie/GetAllCategorie`)),
+			dataOrDefault([], () => axios.get(`${this.endpoint}/produit/GetAllProduit`)),
 		search: async (query: string): Promise<Produit[]> =>
-			dataOrDefault([], () => axios.get(`${this.endpoint}/produits/GetAllProduitByRecherche/${query}`)),
+			dataOrDefault([], () => axios.get(`${this.endpoint}/produit/GetAllProduitByRecherche/${query}`)),
 		byRegroupement: async (idregroupement: ID): Promise<Produit[]> =>
 			dataOrDefault([], () =>
-				axios.get(`${this.endpoint}/produits/GetAllProduitByRegroupement/${idregroupement}`),
+				axios.get(`${this.endpoint}/produit/GetAllProduitByRegroupement/${idregroupement}`),
 			),
 		byCategorie: async (idcategorie: ID): Promise<Produit[]> =>
-			dataOrDefault([], () => axios.get(`${this.endpoint}/produits/GetAllProduitByCategorie/${idcategorie}`)),
+			dataOrDefault([], () => axios.get(`${this.endpoint}/produit/GetAllProduitByCategorie/${idcategorie}`)),
 		byType: async (idtype: ID): Promise<Produit[]> =>
-			dataOrDefault([], () => axios.get(`${this.endpoint}/produits/GetAllProduitByType/${idtype}`)),
+			dataOrDefault([], () => axios.get(`${this.endpoint}/produit/GetAllProduitByType/${idtype}`)),
 		create: async (
 			produit: Pick<
 				Produit,
@@ -107,7 +107,7 @@ class APIManager {
 				| 'coutlivraison'
 				| 'nbpaiementmax'
 			>,
-		): Promise<boolean> => boolData(() => axios.post(`${this.endpoint}/produits`, produit)),
+		): Promise<boolean> => boolData(() => axios.post(`${this.endpoint}/produit`, produit)),
 		update: async (
 			produit: Pick<
 				Produit,
@@ -122,8 +122,8 @@ class APIManager {
 				| 'nbpaiementmax'
 			>,
 		): Promise<Produit | null> =>
-			dataOrNull(() => axios.put(`${this.endpoint}/produits/${produit.idproduit}`, produit)),
-		delete: async (id: ID): Promise<boolean> => boolData(() => axios.delete(`${this.endpoint}/produits/${id}`)),
+			dataOrNull(() => axios.put(`${this.endpoint}/produit/${produit.idproduit}`, produit)),
+		delete: async (id: ID): Promise<boolean> => boolData(() => axios.delete(`${this.endpoint}/produit/${id}`)),
 	};
 }
 
