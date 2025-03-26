@@ -18,7 +18,7 @@ console.log(list);
 
 <template>
 	<main class="container">
-		<h1>{{ list?.length }} {{ list?.length == 1 ? "Résultat" : "Résultats" }} de recherche pour : {{ router.currentRoute.value.query.q }}</h1>
+		<h1 style="word-wrap: break-word;">{{ list?.length }} {{ list?.length == 1 ? "Résultat" : "Résultats" }} de recherche pour : {{ router.currentRoute.value.query.q }}</h1>
 		<div v-if="list !== null" class="grille-produits">
 			<CardProduit v-for="produit in list" v-bind:key="produit.idproduit" :produit="produit" />
 		</div>
