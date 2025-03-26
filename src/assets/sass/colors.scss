@@ -179,6 +179,8 @@ body {
 
 	--t-border1: var(--c-gray-300);
 	--t-border1-accent: var(--c-accent-300);
+	--t-border2: var(--c-gray-500);
+	--t-border2-accent: var(--c-accent-500);
 }
 
 body.theme-dark {
@@ -201,4 +203,6 @@ body.theme-dark {
 
 	--t-border1: var(--c-gray-600);
 	--t-border1-accent: var(--c-accent-700);
+	--t-border2: var(--c-gray-500);
+	--t-border2-accent: var(--c-accent-500);
 }

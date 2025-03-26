@@ -9,6 +9,7 @@ import CartView from '@/views/CartView.vue';
 import SearchView from '@/views/SearchView.vue';
 import LoginView from '@/views/LoginView.vue';
 import PersoDetailsView from '@/views/account/PersoDetailsView.vue';
+import AdressesView from '@/views/account/AdressesView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,6 +42,11 @@ const router = createRouter({
 					path: '/account/personnal-details',
 					name: 'account_personnal',
 					component: PersoDetailsView,
+				},
+				{
+					path: '/account/addresses',
+					name: 'account_addresses',
+					component: AdressesView,
 				},
 				{
 					path: '/login',
