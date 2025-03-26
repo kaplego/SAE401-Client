@@ -3,8 +3,9 @@ import axios, { type AxiosResponse } from 'axios';
 async function dataOrNull<T>(cb: () => Promise<AxiosResponse<T>>): Promise<T | null> {
 	try {
 		const data = await cb();
-		if (data.data) return data.data as T;
-	} finally {
+		if (!!data.data) return data.data as T;
+		return null;
+	} catch {
 		return null;
 	}
 }
@@ -12,8 +13,9 @@ async function dataOrNull<T>(cb: () => Promise<AxiosResponse<T>>): Promise<T | n
 async function dataOrDefault<T, D>(defaultValue: D, cb: () => Promise<AxiosResponse<T>>): Promise<T | D> {
 	try {
 		const data = await cb();
-		if (data.data) return data.data as T;
-	} finally {
+		if (!!data.data) return data.data as T;
+		return defaultValue;
+	} catch {
 		return defaultValue;
 	}
 }
