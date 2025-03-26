@@ -2,12 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import AboutView from '@/views/AboutView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
-import AccountView from '@/views/AccountView.vue';
+import AccountView from '@/views/account/AccountView.vue';
 import ProductView from '@/views/ProductView.vue';
 import CategoryView from '@/views/CategoryView.vue';
 import CartView from '@/views/CartView.vue';
 import SearchView from '@/views/SearchView.vue';
 import LoginView from '@/views/LoginView.vue';
+import PersoDetailsView from '@/views/account/PersoDetailsView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,14 +40,14 @@ const router = createRouter({
 				{
 					path: '/account/personnal-details',
 					name: 'account_personnal',
-					component: NotFoundView,
+					component: PersoDetailsView,
+				},
+				{
+					path: '/login',
+					name: 'login',
+					component: LoginView,
 				},
 			],
-		},
-		{
-			path: '/login',
-			name: 'login',
-			component: LoginView,
 		},
 		{
 			path: '/cart',
