@@ -26,7 +26,10 @@ watchEffect((clean) => {
 				isLoading.value = true;
 				API.clients.login(email, pass).then((result) => {
 					if (!result) error.value = "L'adresse email ou le mot de passe est incorrect.";
-					else router.push('/account');
+					else {
+						login.login(result.token, result.client.idclient);
+						router.push('/account');
+					}
 				});
 			}
 		}

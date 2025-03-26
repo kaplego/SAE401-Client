@@ -18,9 +18,15 @@ watchEffect(() => {
 	<main class="container">
 		<template v-if="login.client !== null">
 			<h1>Mes informations personnelles</h1>
+			<div class="grille-infos"></div>
 		</template>
 		<LoadingSpinner v-else />
 	</main>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.grille-infos {
+	display: grid;
+
+}
+</style>
