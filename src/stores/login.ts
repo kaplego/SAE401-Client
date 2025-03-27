@@ -37,5 +37,14 @@ export const useLoggedInStore = defineStore('loggedin', () => {
 		clientId.value = null;
 	}
 
-	return { JWT, isLoggedIn, login, logout, client, clientReady };
+	async function removeBankCard(id: ID) {
+		if (!client.value) return false;
+		const ok = await API.cartes.delete(id);
+		console.log(ok);
+
+		if (ok) client.value.cartesNavigation = client.value.cartesNavigation.filter((c) => c.idcartebancaire !== id);
+		return ok;
+	}
+
+	return { JWT, isLoggedIn, login, logout, client, clientReady, removeBankCard };
 });

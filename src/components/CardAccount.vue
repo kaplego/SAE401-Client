@@ -11,7 +11,7 @@ defineProps<{
 <template>
 	<RouterLink :to="link" class="card-account-link">
 		<div class="card-account">
-			<slot class="icon">
+			<slot>
 				<OctagonAlert />
 			</slot>
 			<h2 class="title">{{ title }}</h2>
@@ -40,13 +40,43 @@ defineProps<{
 		border-color: var(--t-border1-accent);
 	}
 
+	.badge {
+		position: absolute;
+		top: 0;
+		right: 0;
+		transform: translate(30%, -30%);
+		background-color: black;
+		color: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 30px;
+		width: 30px;
+		padding: 0.5rem;
+		border-radius: 100vw;
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
+
+		&.error {
+			background-color: var(--c-red-500);
+		}
+
+		&.warning {
+			background-color: var(--c-yellow-500);
+		}
+
+		.lucide {
+			font-size: 1.5rem;
+		}
+	}
+
 	.title {
 		margin: 0;
 		margin-bottom: 0.5em;
 	}
 
 	.subtitle {
-		opacity: .4;
+		opacity: 0.4;
 	}
 
 	.lucide {

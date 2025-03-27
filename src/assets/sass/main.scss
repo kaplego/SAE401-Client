@@ -526,6 +526,7 @@ body.theme-darkdim {
 
 @mixin tooltip-base($content) {
 	position: relative;
+	z-index: 1000;
 
 	&::before {
 		content: $content;

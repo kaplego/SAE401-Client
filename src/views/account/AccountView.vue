@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { CARD_EXPIRATION_WARNING } from '@/assets/ts/utils';
 import CardAccount from '@/components/CardAccount.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { useLoggedInStore } from '@/stores/login';
 import { Heart, IdCard, Landmark, MapPinHouse, MessageSquareQuote, ReceiptText } from 'lucide-vue-next';
-import { watchEffect } from 'vue';
+import { computed, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -13,6 +14,29 @@ if (!login.isLoggedIn) router.push('/login');
 
 watchEffect(() => {
 	if (login.clientReady && login.client === null) router.push('/login');
+});
+
+const cardsExpiration = computed<['warning' | 'error', number]>(() => {
+	if (login.client === null) return ['warning', 0];
+
+	let status: 'warning' | 'error' = 'warning',
+		count = 0;
+	const now = new Date();
+	now.setDate(0);
+	now.setHours(0, 0, 0, 0);
+
+	login.client.cartesNavigation.forEach((card) => {
+		const expiration = new Date(card.dateexpirationcarte);
+		expiration.setDate(0);
+		expiration.setHours(0, 0, 0, 0);
+		const expirationDiff = expiration.valueOf() - now.valueOf();
+		if (expirationDiff < CARD_EXPIRATION_WARNING) {
+			count++;
+			if (expirationDiff < 0) status = 'error';
+		}
+	});
+
+	return [status, count];
 });
 </script>
 
@@ -45,6 +69,9 @@ watchEffect(() => {
 					:subtitle="`Vous avez ${login.client.cartesNavigation.length} carte${login.client.cartesNavigation.length === 1 ? '' : 's'} bancaire.`"
 					link="/account/bank-details"
 				>
+					<div v-if="cardsExpiration[1] > 0" :class="`badge ${cardsExpiration[0]}`">
+						{{ cardsExpiration[1] }}
+					</div>
 					<Landmark :stroke-width="1.5" />
 				</CardAccount>
 				<CardAccount

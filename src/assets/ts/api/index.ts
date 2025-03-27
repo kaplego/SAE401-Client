@@ -36,7 +36,7 @@ async function boolData(cb: () => Promise<AxiosResponse>): Promise<boolean> {
 	try {
 		await cb();
 		return true;
-	} finally {
+	} catch {
 		return false;
 	}
 }
@@ -60,6 +60,10 @@ class APIManager {
 			return dataOrDefault([], () =>
 				axios.get(`${this.endpoint}/cartebancaire/GetAllCarteBancaireByClient/${idclient}`, AuthHeader(jwt)),
 			);
+		},
+		delete: (idcarte: ID): Promise<boolean> => {
+			const jwt = localStorage.getItem('jwt');
+			return boolData(() => axios.delete(`${this.endpoint}/cartebancaire/${idcarte}`, AuthHeader(jwt)));
 		},
 	};
 

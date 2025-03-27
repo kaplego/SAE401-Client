@@ -10,6 +10,7 @@ import SearchView from '@/views/SearchView.vue';
 import LoginView from '@/views/LoginView.vue';
 import PersoDetailsView from '@/views/account/PersoDetailsView.vue';
 import AdressesView from '@/views/account/AdressesView.vue';
+import BankDetailsView from '@/views/account/BankDetailsView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +43,11 @@ const router = createRouter({
 					path: '/account/personnal-details',
 					name: 'account_personnal',
 					component: PersoDetailsView,
+				},
+				{
+					path: '/account/bank-details',
+					name: 'account_bank',
+					component: BankDetailsView,
 				},
 				{
 					path: '/account/addresses',
