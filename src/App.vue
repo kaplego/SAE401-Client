@@ -95,6 +95,7 @@ const cart = useCartStore();
 		<div class="container" @mouseleave="resetUnderline" ref="navContainer">
 			<div class="underline" :style="`left: ${underlineLeft}px;width: ${underlineWidth}px;`"></div>
 			<RouterLink class="item" @mouseover="moveUnderline" to="/">Accueil</RouterLink>
+			<RouterLink class="item" @mouseover="moveUnderline" to="/search">Recherche</RouterLink>
 			<RouterLink class="item" @mouseover="moveUnderline" to="/about">À propos de nous</RouterLink>
 		</div>
 	</nav>
