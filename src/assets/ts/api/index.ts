@@ -41,12 +41,27 @@ async function boolData(cb: () => Promise<AxiosResponse>): Promise<boolean> {
 	}
 }
 
+const AuthHeader = (jwt: string | null) => ({
+	headers: {
+		Authorization: `Bearer ${jwt}`,
+	},
+});
+
 class APIManager {
 	public readonly endpoint: string;
 
 	constructor(endpoint: string) {
 		this.endpoint = endpoint;
 	}
+
+	public cartes = {
+		byClient: async (idclient: ID): Promise<CarteBancaire[]> => {
+			const jwt = localStorage.getItem('jwt');
+			return dataOrDefault([], () =>
+				axios.get(`${this.endpoint}/cartebancaire/GetAllCarteBancaireByClient/${idclient}`, AuthHeader(jwt)),
+			);
+		},
+	};
 
 	public categories = {
 		list: async (): Promise<Categorie[]> =>
@@ -70,32 +85,25 @@ class APIManager {
 					password,
 				}),
 			);
+			if (result?.client) result.client.cartesNavigation = await this.cartes.byClient(result.client.idclient);
 			return result;
 		},
 		get: async (id: ID): Promise<Client | null> => {
 			const jwt = localStorage.getItem('jwt');
-			return dataOrNull(() =>
-				axios.get(`${this.endpoint}/client/GetClientById/${id}`, {
-					headers: {
-						Authorization: `Bearer ${jwt}`,
-					},
-				}),
+			const result = await dataOrNull<Client>(() =>
+				axios.get(`${this.endpoint}/client/GetClientById/${id}`, AuthHeader(jwt)),
 			);
+			if (result) result.cartesNavigation = await this.cartes.byClient(result.idclient);
+			return result;
 		},
 		update: async (client: Client): Promise<[true, ''] | [false, unknown]> => {
 			const jwt = localStorage.getItem('jwt');
 			return dataOrError<''>(() =>
-				axios.put(`${this.endpoint}/client/${client.idclient}`, client, {
-					headers: {
-						Authorization: `Bearer ${jwt}`,
-					},
-				}),
+				axios.put(`${this.endpoint}/client/${client.idclient}`, client, AuthHeader(jwt)),
 			);
 		},
 		create: async (client: Client): Promise<[true, ''] | [false, unknown]> => {
-			return dataOrError<''>(() =>
-				axios.post(`${this.endpoint}/client`, client),
-			);
+			return dataOrError<''>(() => axios.post(`${this.endpoint}/client`, client));
 		},
 	};
 
