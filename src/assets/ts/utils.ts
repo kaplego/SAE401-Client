@@ -17,6 +17,7 @@ export function phoneFormat(phone: string) {
 	return res.join(' ');
 }
 
-export function formattedToPhone(formatted: string) {
-	return `33${formatted.substring(1).replace(' ', '')}`;
+export function phoneReverseFormat(formatted: string) {
+	if (/^0[0-9]( [0-9]{2}){4}$/.test(formatted)) return `33${formatted.substring(1).replace(/ /g, '')}`;
+	return formatted;
 }

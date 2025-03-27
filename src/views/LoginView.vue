@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import API from '@/assets/ts/api';
+import InputControl from '@/components/inputs/InputControl.vue';
 import { useLoggedInStore } from '@/stores/login';
 import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
@@ -43,8 +44,8 @@ watchEffect((clean) => {
 	<main class="container">
 		<form ref="form" class="frame">
 			<h2>Connexion</h2>
-			<input class="input" type="email" placeholder="Email" required name="email" />
-			<input class="input" type="password" placeholder="Mot de passe" required name="password" />
+			<InputControl type="email" label="Email" name="email" required />
+			<InputControl type="password" label="Mot de passe" name="password" required />
 			<button class="button" :disabled="isLoading">
 				<div class="loading-spinner" v-if="isLoading"></div>
 				<template v-else>Se connecter</template>
@@ -60,12 +61,13 @@ main {
 	justify-content: center;
 }
 .frame {
-	background-color: var(--t-background3);
+	// background-color: var(--t-background3);
+	border: 2px solid var(--t-background3);
 	padding: 2rem;
-	border-radius: 4px;
+	border-radius: 6px;
 	display: flex;
 	flex-direction: column;
-	gap: 0.5rem;
+	gap: 1rem;
 
 	& > * {
 		width: 100%;

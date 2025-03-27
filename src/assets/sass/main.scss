@@ -30,6 +30,11 @@ h6 {
 	letter-spacing: 2px;
 }
 
+.lucide {
+	height: 1em;
+	width: 1em;
+}
+
 header {
 	background-color: var(--t-background2);
 
@@ -118,6 +123,11 @@ header {
 					background-color: var(--t-background1-accent);
 					color: var(--t-foreground2-accent);
 					border-color: rgb(from var(--t-foreground1-accent) r g b / 0.5);
+				}
+
+				.lucide {
+					height: 20px;
+					width: 20px;
 				}
 			}
 
@@ -400,23 +410,26 @@ body.theme-darkdim {
 	}
 }
 
-.input {
-	padding: 0.5rem 1rem;
-	border-radius: 4px;
-	border: 1px solid var(--c-accent-500);
-	outline: 0px solid var(--c-accent-500);
-	font-size: 1rem;
-	transition: outline 100ms;
+.button-text {
+	color: var(--c-blue-500);
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 1em;
+	display: inline-flex;
+	align-items: center;
+	text-decoration: underline 1px transparent;
+	transition: all 100ms;
 
-	&:focus {
-		outline-width: 2px;
+	&:hover {
+		text-decoration-color: currentColor;
 	}
 }
 
-.input-control {
+@mixin input() {
 	position: relative;
 
-	label {
+	.label {
 		position: absolute;
 		left: calc(1rem - 4px);
 		top: 50%;
@@ -424,9 +437,10 @@ body.theme-darkdim {
 		transition: all 100ms;
 		background-color: var(--t-background1);
 		padding: 0 4px;
+		cursor: text;
 	}
 
-	input {
+	.input {
 		width: 100%;
 		padding: 0.5rem 1rem;
 		border-radius: 4px;
@@ -440,15 +454,74 @@ body.theme-darkdim {
 			outline: 2px solid var(--t-border1-accent);
 		}
 	}
+}
+
+.input-control {
+	@include input();
+
+	.input::placeholder {
+		display: none;
+	}
 
 	&:focus-within,
-	&:has(input:not(:placeholder-shown)) {
-		label {
+	&:has(.input:not(:placeholder-shown)) {
+		.label {
 			top: 0;
 			font-size: 0.9rem;
 			color: rgb(from var(--t-foreground1) r g b / 1);
 		}
+
+		.input::placeholder {
+			display: unset;
+		}
 	}
+
+	&:has(.input:invalid) {
+		.label {
+			color: var(--c-red-500);
+		}
+
+		.input {
+			border-color: var(--c-red-500);
+			outline-color: var(--c-red-500);
+		}
+	}
+}
+
+.select-control {
+	@include input();
+
+	.label {
+		top: 0;
+		font-size: 0.9rem;
+		color: rgb(from var(--t-foreground1) r g b / 1);
+		cursor: pointer;
+
+		&::after {
+			display: none;
+		}
+	}
+
+	.input {
+		background-color: var(--t-background1);
+		cursor: pointer;
+	}
+
+	&:has(.input:invalid) {
+		.label {
+			color: var(--c-red-500);
+		}
+
+		.input {
+			border-color: var(--c-red-500);
+		}
+	}
+}
+
+.required {
+	color: var(--c-red-500);
+	height: 1em;
+	width: 1em;
 }
 
 @mixin tooltip-base($content) {

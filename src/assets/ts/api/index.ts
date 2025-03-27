@@ -20,6 +20,18 @@ async function dataOrDefault<T, D>(defaultValue: D, cb: () => Promise<AxiosRespo
 	}
 }
 
+async function dataOrError<T, E = any>(cb: () => Promise<AxiosResponse<T>>): Promise<[true, T] | [false, E]> {
+	return new Promise<[true, T] | [false, E]>((r) => {
+		cb()
+			.then((res) => {
+				r([true, res.data]);
+			})
+			.catch((err) => {
+				r([false, err.data as E]);
+			});
+	});
+}
+
 async function boolData(cb: () => Promise<AxiosResponse>): Promise<boolean> {
 	try {
 		await cb();
@@ -68,6 +80,21 @@ class APIManager {
 						Authorization: `Bearer ${jwt}`,
 					},
 				}),
+			);
+		},
+		update: async (client: Client): Promise<[true, ''] | [false, unknown]> => {
+			const jwt = localStorage.getItem('jwt');
+			return dataOrError<''>(() =>
+				axios.put(`${this.endpoint}/client/${client.idclient}`, client, {
+					headers: {
+						Authorization: `Bearer ${jwt}`,
+					},
+				}),
+			);
+		},
+		create: async (client: Client): Promise<[true, ''] | [false, unknown]> => {
+			return dataOrError<''>(() =>
+				axios.post(`${this.endpoint}/client`, client),
 			);
 		},
 	};
