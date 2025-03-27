@@ -27,7 +27,6 @@ async function remove(event: MouseEvent) {
 	isLoading.value = true;
 	event.preventDefault();
 	event.stopPropagation();
-	// if (await login.removeBankCard(props.card.idcartebancaire)) cardElement.value?.remove();
 	await login.removeBankCard(props.card.idcartebancaire)
 	isLoading.value = false;
 }

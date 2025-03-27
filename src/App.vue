@@ -2,8 +2,9 @@
 import { RouterLink, RouterView, useRouter } from 'vue-router';
 import { ref, useTemplateRef, watchEffect } from 'vue';
 import { THEME, useThemeStore } from './stores/theme';
-import { Moon, Search, ShoppingCart, Sun, User } from 'lucide-vue-next';
+import { Asterisk, Moon, Search, ShoppingCart, Sun, User } from 'lucide-vue-next';
 import { useCategoriesStore } from './stores/api/categories';
+import { useCartStore } from './stores/cart';
 
 const navContainer = useTemplateRef('navContainer');
 
@@ -39,10 +40,11 @@ watchEffect(() => {
 });
 
 function searchProduct() {
-	const searchQuery: HTMLInputElement = document.querySelector("#searchbar")!;
-	router.push("/search?q=" + encodeURIComponent(searchQuery.value));
+	const searchQuery: HTMLInputElement = document.querySelector('#searchbar')!;
+	router.push('/search?q=' + encodeURIComponent(searchQuery.value));
 }
 
+const cart = useCartStore();
 </script>
 
 <template>
@@ -54,14 +56,26 @@ function searchProduct() {
 		<div class="container">
 			<img src="/logo.svg" alt="Miliboo" class="logo" />
 			<div id="recherche">
-				<input id="searchbar" type="text" placeholder="Rechercher un produit..." v-on:keydown.enter="searchProduct()" />
+				<input
+					id="searchbar"
+					type="text"
+					placeholder="Rechercher un produit..."
+					v-on:keydown.enter="searchProduct()"
+				/>
 				<button @click="searchProduct()">
 					<Search />
 				</button>
 			</div>
 			<div class="icons">
 				<RouterLink to="/account" data-tooltip-down="Mon compte" class="icon-button"><User /></RouterLink>
-				<RouterLink to="/cart" data-tooltip-down="Mon panier" class="icon-button"><ShoppingCart /></RouterLink>
+				<RouterLink to="/cart" data-tooltip-down="Mon panier" class="icon-button"
+					><div v-if="cart.count > 0" class="badge">
+						<template v-if="cart.count < 100">{{ cart.count }}</template>
+						<!-- <div v-else class="circle"></div> -->
+						<Asterisk v-else />
+					</div>
+					<ShoppingCart
+				/></RouterLink>
 				<div
 					@click="theme.switchTheme(theme.currentTheme == THEME.Light ? THEME.Dark : THEME.Light)"
 					id="theme-switch"
