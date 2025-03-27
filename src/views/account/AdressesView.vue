@@ -27,14 +27,6 @@ function showAddAddressMenu() {
 <template>
 	<main class="container">
 		<template v-if="login.client !== null">
-
-			<!-- <div id="add-address-menu">
-				<div id="add-address-menu-back" @click="hideAddAddressMenu()"><ArrowLeft /> Retour</div>
-				<div id="add-address-form">
-					<input type="text" />
-					<input type="text" />
-				</div>
-			</div> -->
 			<PopupWindow id="add-address-menu">
 				<div id="add-address-form">
 					<input type="text" />
