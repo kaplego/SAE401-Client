@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { useLoggedInStore } from '@/stores/login';
-import { watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import PopupWindow from '@/components/PopupWindow.vue';
+import InputControl from '@/components/inputs/InputControl.vue';
+import SelectControl from '@/components/inputs/SelectControl.vue';
 
 const router = useRouter();
 const login = useLoggedInStore();
+let selectedNomAdresse: string | null = "";
+let selectedNumRue: string | null = "";
+let selectedNomRue: string | null = "";
+let selectedCodePostal: string | null = "";
+
 
 if (!login.isLoggedIn) router.push('/login');
 
@@ -18,6 +25,14 @@ function showAddAddressMenu() {
 	const addAddressMenu: HTMLDivElement = document.querySelector('#add-address-menu')!;
 	addAddressMenu.style.display = 'flex';
 }
+function showModifyAddressMenu(address: Adresse) {
+	selectedNomAdresse = address.nomadresse;
+	selectedNumRue = address.numerorue;
+	selectedNomRue = address.nomrue;
+	selectedCodePostal = address.codepostaladresse;
+	const addAddressMenu: HTMLDivElement = document.querySelector('#modify-address-menu')!;
+	addAddressMenu.style.display = 'flex';
+}
 // function hideAddAddressMenu() {
 // 	const addAddressMenu: HTMLDivElement = document.querySelector('#add-address-menu')!;
 // 	addAddressMenu.style.display = 'none';
@@ -27,10 +42,34 @@ function showAddAddressMenu() {
 <template>
 	<main class="container">
 		<template v-if="login.client !== null">
+			<!-- ADD ADDRESS -->
 			<PopupWindow id="add-address-menu">
 				<div id="add-address-form">
-					<input type="text" />
-					<input type="text" />
+					<div id="add-inputs-div">
+						<!-- <SelectControl :name="'paysadresse'" :label="'Nom de l\'adresse'" /> -->
+						<InputControl :name="'nomadresse'" :label="'Nom de l\'adresse'" />
+						<InputControl :name="'numerorue'" :label="'Numéro de la rue'" />
+						<InputControl :name="'nomrue'" :label="'Nom de la rue'" />
+						<InputControl :name="'codepostal'" :label="'Code postal de l\'adresse'" />
+					</div>
+					<div id="button-add-address-div">
+						<button class="button button-sm add-address-validate">Valider</button>
+					</div>
+				</div>
+			</PopupWindow>
+			<!-- MODIFY ADDRESS -->
+			<PopupWindow id="modify-address-menu">
+				<div id="modify-address-form">
+					<div id="modify-inputs-div">
+						<!-- <SelectControl :name="'paysadresse'" :label="'Nom de l\'adresse'" /> -->
+						<InputControl :name="'nomadresse'" :label="'Nom de l\'adresse'" :value="`${selectedNomAdresse}`"/>
+						<InputControl :name="'numerorue'" :label="'Numéro de la rue'" />
+						<InputControl :name="'nomrue'" :label="'Nom de la rue'" />
+						<InputControl :name="'codepostal'" :label="'Code postal de l\'adresse'" />
+					</div>
+					<div id="button-modify-address-div">
+						<button class="button button-sm modify-address-validate">Valider</button>
+					</div>
 				</div>
 			</PopupWindow>
 			<h1>Mes adresses</h1>
@@ -48,7 +87,7 @@ function showAddAddressMenu() {
 				</div>
 				<div class="div-button-suppr-modif">
 					<button class="button button-sm button-suppr">Supprimer l'adresse</button>
-					<button class="button button-sm button-modif">Modifier l'adresse</button>
+					<button class="button button-sm button-modif" @click="showModifyAddressMenu(address)">Modifier l'adresse</button>
 				</div>
 			</div>
 			<div></div>
@@ -68,7 +107,7 @@ h1 {
 	display: inline-block;
 	border-color: var(--t-border2);
 	border-radius: 1rem;
-	background-color: var(--t-background2);
+	background-color: var(--t-background1);
 }
 .title-address {
 	font-weight: 1000;
@@ -88,5 +127,24 @@ h1 {
 }
 #add-address-menu {
 	display: none;
+}
+#add-address-form {
+	margin-top: 1rem;
+	display: flex;
+	flex-direction: column;
+	// align-items: ;
+	justify-content: space-around;
+	height: 100%;
+	padding: 2rem;
+}
+#add-inputs-div {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 80%;
+}
+#button-add-address-div {
+	display: flex;
+	justify-content: center;
 }
 </style>
