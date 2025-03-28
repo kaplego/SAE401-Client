@@ -8,6 +8,7 @@ import CategoryView from '@/views/CategoryView.vue';
 import CartView from '@/views/CartView.vue';
 import SearchView from '@/views/SearchView.vue';
 import LoginView from '@/views/LoginView.vue';
+import ReviewView from '@/views/ReviewView.vue';
 import PersoDetailsView from '@/views/account/PersoDetailsView.vue';
 import AdressesView from '@/views/account/AdressesView.vue';
 import BankDetailsView from '@/views/account/BankDetailsView.vue';
@@ -75,6 +76,11 @@ const router = createRouter({
 			path: '/search',
 			name: 'search',
 			component: SearchView,
+		},
+		{
+			path: '/account/reviews',
+			name: 'reviews',
+			component: ReviewView,
 		},
 		{ path: '/:catchAll(.*)', component: NotFoundView },
 	],
