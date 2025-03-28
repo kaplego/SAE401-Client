@@ -15,16 +15,16 @@ const imagesColorationProduct = ref<Record<string, string[]>>({});
 let photoIndexOutOfBounds = false;
 const maxIteration = 10;
 
-async function isPhotoAvailable(url: string): Promise<boolean> {
+function isPhotoAvailable(url: string): boolean {
 	try {
 		// console.log(url)
-		const content = await axios.get(url);
-		console.log(content)
+		const content = axios.get(url);
+		//console.log(content)
 		const found = content.data.substr(0, 9) != "<!doctype"
-		console.log(found)
+		//console.log(found)
 		return found;
 	} catch (_) {
-
+		return false;
 	}
 }
 watchEffect(() => {
@@ -43,26 +43,27 @@ watchEffect(() => {
 				//console.log(url)
 
 
-				isPhotoAvailable(url).then(isAvaliable => {
-					if(isAvaliable){
-						console.log("URL : "+url)
-						console.log(imagesColorationProduct.value![color.idcouleur][i])
-						if (!(color.idcouleur)){
-							imagesColorationProduct.value![color.idcouleur][i] =
-							`/img/imagesProduit/produit${produit!.idproduit}_couleur${color.idcouleur}_photo${i}.jpg`;
-							console.log("AAAAAAAAA "+imagesColorationProduct.value)
-						}
+				const isAvaliable=isPhotoAvailable(url)
+				if(isAvaliable){
 
+					console.log("URL : "+url)
+					if (!(color.idcouleur)){
+						imagesColorationProduct.value![color.idcouleur][i] =
+						`/img/imagesProduit/produit${produit!.idproduit}_couleur${color.idcouleur}_photo${i}.jpg`;
+						console.log("AAAAAAAAA "+imagesColorationProduct.value)
 					}
-					else {
-						photoIndexOutOfBounds = true;
-						console.log("out")
-					}
+					console.log(imagesColorationProduct.value![color.idcouleur][i])
+
+				}
+				else {
+					photoIndexOutOfBounds = true;
+					console.log("out")
+					console.log("URL : "+url)
+				}
 
 
-				})
+
 				i++;
-				console.log(i)
 
 			}
 		});
@@ -115,9 +116,13 @@ watchEffect(() => {
 								%
 							</p>
 							<div class="prix-container">
-								<p class="prix-solde">{{ chosenColoration!.prixsolde }}€</p>
-								<p v-if="chosenColoration!.prixvente != null" class="prix-base">
-									{{ chosenColoration!.prixvente }}€
+
+								<p v-if="chosenColoration!.prixsolde" class="prix-solde">{{ chosenColoration!.prixsolde }}€</p>
+								<p v-if="chosenColoration!.prixsolde" class="prix-base">
+									{{ chosenColoration!.prixvente+'€' }}
+								</p>
+								<p v-if="!chosenColoration!.prixsolde" class="prix-solde">
+									{{ chosenColoration!.prixvente+'€' }}
 								</p>
 							</div>
 							<div class="achat-component">
@@ -195,6 +200,8 @@ main {
 	display: flex;
 	padding-left: 1rem;
 	padding-right: 1rem;
+	padding-bottom: 2rem;
+	box-shadow: 5px 5px 5px 5px black;
 }
 
 .images-card {
@@ -226,10 +233,10 @@ main {
 	background-color: var(--c-gray-100);
 }
 .prix-solde {
+	margin-right: 15px;
 }
 
 .prix-base {
-	margin-left: 15px;
 	text-decoration: line-through;
 }
 
