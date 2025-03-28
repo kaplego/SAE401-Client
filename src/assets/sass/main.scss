@@ -265,6 +265,11 @@ nav {
 	padding-bottom: 1rem;
 	position: relative;
 
+	&.placeholder {
+		padding-bottom: 0;
+		margin-bottom: 1rem;
+	}
+
 	&:hover {
 		.item-name,
 		&:not(:has(.dropdown)) {

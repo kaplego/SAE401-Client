@@ -5,6 +5,7 @@ import { THEME, useThemeStore } from './stores/theme';
 import { Asterisk, Moon, Search, ShoppingCart, Sun, User } from 'lucide-vue-next';
 import { useCategoriesStore } from './stores/api/categories';
 import { useCartStore } from './stores/cart';
+import TextPlaceholder from './components/placeholders/TextPlaceholder.vue';
 
 const navContainer = useTemplateRef('navContainer');
 
@@ -45,6 +46,13 @@ function searchProduct() {
 }
 
 const cart = useCartStore();
+
+const placeholders: number[] = [];
+const placeholderMin = 50;
+const placeholderMax = 150;
+for (let i = 0; i < 8; i++) {
+	placeholders.push(Math.floor(Math.random() * (placeholderMax - placeholderMin)) + placeholderMin);
+}
 </script>
 
 <template>
@@ -102,29 +110,39 @@ const cart = useCartStore();
 
 	<nav id="navigationProduits">
 		<div class="container">
-			<template v-for="category in categories.list" v-bind:key="category.idcategorie">
-				<template v-if="category.idcategorieParent === null">
-					<div class="item" v-if="category.categorieEnfanteNavigation.length > 0">
-						<RouterLink :to="`/category/${category.idcategorie}`" class="item-name">{{
-							category.nomcategorie
-						}}</RouterLink>
-						<div class="dropdown dropdown-columns">
-							<div class="column">
-								<RouterLink
-									:to="`/category/${children.idcategorie}`"
-									class="column-item"
-									v-for="children in category.categorieEnfanteNavigation"
-									v-bind:key="children.idcategorie"
-								>
-									{{ children.nomcategorie }}
-								</RouterLink>
+			<template v-if="categories.list !== null">
+				<template v-for="category in categories.list" v-bind:key="category.idcategorie">
+					<template v-if="category.idcategorieParent === null">
+						<div class="item" v-if="category.categorieEnfanteNavigation.length > 0">
+							<RouterLink :to="`/category/${category.idcategorie}`" class="item-name">{{
+								category.nomcategorie
+							}}</RouterLink>
+							<div class="dropdown dropdown-columns">
+								<div class="column">
+									<RouterLink
+										:to="`/category/${children.idcategorie}`"
+										class="column-item"
+										v-for="children in category.categorieEnfanteNavigation"
+										v-bind:key="children.idcategorie"
+									>
+										{{ children.nomcategorie }}
+									</RouterLink>
+								</div>
 							</div>
 						</div>
-					</div>
-					<RouterLink :to="`/category/${category.idcategorie}`" class="item" v-else>{{
-						category.nomcategorie
-					}}</RouterLink>
+						<RouterLink :to="`/category/${category.idcategorie}`" class="item" v-else>{{
+							category.nomcategorie
+						}}</RouterLink>
+					</template>
 				</template>
+			</template>
+			<template v-else>
+				<TextPlaceholder
+					class="item"
+					v-for="placeholder in placeholders"
+					v-bind:key="placeholder"
+					:width="`${placeholder}px`"
+				/>
 			</template>
 		</div>
 	</nav>
