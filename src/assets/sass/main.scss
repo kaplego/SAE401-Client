@@ -460,6 +460,7 @@ body.theme-darkdim {
 		background-color: var(--t-background1);
 		padding: 0 4px;
 		cursor: text;
+		user-select: none;
 	}
 
 	.input {

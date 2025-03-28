@@ -2,32 +2,36 @@
 import { ArrowLeft } from 'lucide-vue-next';
 import { ref } from 'vue';
 
-defineProps<{
-	width?: number;
-	height?: number;
+const props = defineProps<{
+	width?: `${number}${'%' | 'px'}`;
+	title?: string;
+	onClose?: () => unknown;
 }>();
 
 const pwindow = ref<HTMLDivElement>();
 const pwindowcontent = ref<HTMLDivElement>();
 
 function hideMenu() {
-	if (pwindow.value)
-		pwindow.value.style.display = 'none';
+	props.onClose?.();
 }
 </script>
 
 <template>
-	<div ref="pwindow" class="popup-window-background" @click="(ev) => {
-		if (ev.target && !pwindowcontent?.contains(ev.target as HTMLElement))
-			hideMenu();
-	}">
-		<div
-			:style="`width: ${width ?? 50}%; height: ${height ?? 50}%; top: ${(100 - (height ?? 50)) / 2}%; left: ${(100 - (width ?? 50)) / 2}%`"
-			class="popup-window"
-			ref="pwindowcontent"
-		>
-			<div style="height: 100%;">
+	<div
+		ref="pwindow"
+		class="popup-background"
+		@click="
+			(ev) => {
+				if (ev.target && !pwindowcontent?.contains(ev.target as HTMLElement)) hideMenu();
+			}
+		"
+	>
+		<div class="popup-window" ref="pwindowcontent" :style="`width: clamp(150px, ${width ?? '500px'}, calc(100% - 2rem));`">
+			<div class="popup-header">
 				<div class="popup-window-back" @click="hideMenu()"><ArrowLeft /> Retour</div>
+				<p class="popup-title" v-if="title != null">{{ title }}</p>
+			</div>
+			<div class="popup-content">
 				<slot></slot>
 			</div>
 		</div>
@@ -35,7 +39,7 @@ function hideMenu() {
 </template>
 
 <style scoped lang="scss">
-.popup-window-background {
+.popup-background {
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -44,28 +48,67 @@ function hideMenu() {
 	background-color: var(--c-blackAlpha-500);
 	z-index: 10000;
 }
+
 .popup-window {
 	position: fixed;
-	// width: 50%;
-	// height: 50%;
-	// display: none;
-	background-color: var(--t-background1);
-	// top: 25%;
-	// left: 25%;
-	// border: solid;
-	// border-color: var(--t-border1);
-	border-radius: 1rem;
-	padding: 1rem 2rem;
-}
-.popup-window-back {
-	display: flex;
-	align-items: center;
-	height: max-content;
-	cursor: pointer;
-	user-select: none;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	transform-origin: center center;
+	overflow: hidden;
+	max-height: calc(100% - 2rem);
 
-	.lucide {
-		height: 1em;
+	.popup-header {
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
+		background-color: var(--t-background2);
+		border-radius: 1rem 1rem 0 0;
+		padding: 0.5rem 1rem;
+
+		.popup-window-back {
+			display: flex;
+			align-items: center;
+			height: max-content;
+			cursor: pointer;
+			user-select: none;
+			width: max-content;
+			padding: 0.25rem 0.5rem;
+			border-radius: 4px;
+
+			.lucide {
+				height: 1em;
+			}
+
+			&:hover {
+				background-color: var(--c-blackAlpha-100);
+			}
+		}
+
+		.popup-title {
+			font-weight: bold;
+			font-size: 1.1rem;
+		}
+	}
+
+	.popup-content {
+		// width: 50%;
+		// height: 50%;
+		// display: none;
+		background-color: var(--t-background1);
+		// top: 25%;
+		// left: 25%;
+		// border: solid;
+		// border-color: var(--t-border1);
+		border-radius: 0 0 1rem 1rem;
+		padding: 1rem 2rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+
+		.popup-confirm {
+			margin-left: auto;
+		}
 	}
 }
 </style>
