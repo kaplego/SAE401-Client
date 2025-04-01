@@ -38,7 +38,7 @@ function hideMenu() {
 	</div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .popup-background {
 	position: fixed;
 	top: 0;
@@ -92,14 +92,7 @@ function hideMenu() {
 	}
 
 	.popup-content {
-		// width: 50%;
-		// height: 50%;
-		// display: none;
 		background-color: var(--t-background1);
-		// top: 25%;
-		// left: 25%;
-		// border: solid;
-		// border-color: var(--t-border1);
 		border-radius: 0 0 1rem 1rem;
 		padding: 1rem 2rem;
 		display: flex;

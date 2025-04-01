@@ -37,14 +37,34 @@ export const useLoggedInStore = defineStore('loggedin', () => {
 		clientId.value = null;
 	}
 
-	async function removeBankCard(id: ID) {
+	function getCreditCard(numero: string) {
+		if (!client.value) return null;
+		return (
+			client.value.cartesNavigation.find(
+				(carte) => carte.numcartebancaire.replace(/ /g, '') === numero.replace(/ /g, ''),
+			) ?? null
+		);
+	}
+
+	async function removeCreditCard(id: ID) {
 		if (!client.value) return false;
 		const ok = await API.cartes.delete(id);
-		console.log(ok);
-
 		if (ok) client.value.cartesNavigation = client.value.cartesNavigation.filter((c) => c.idcartebancaire !== id);
 		return ok;
 	}
 
-	return { JWT, isLoggedIn, login, logout, client, clientReady, removeBankCard };
+	async function addCreditCard(
+		card: Omit<CarteBancaire, 'idcartebancaire' | 'clientNavigation' | 'paiementsNavigation' | 'dateenregistement'>,
+	) {
+		if (!client.value) return false;
+		const ok = await API.cartes.create(card);
+		if (ok)
+			client.value.cartesNavigation.push({
+				...card,
+				idcartebancaire: 0,
+			} as CarteBancaire);
+		return ok;
+	}
+
+	return { JWT, isLoggedIn, login, logout, client, clientReady, getCreditCard, removeCreditCard, addCreditCard };
 });

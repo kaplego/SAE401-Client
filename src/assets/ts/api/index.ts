@@ -61,6 +61,15 @@ class APIManager {
 				axios.get(`${this.endpoint}/cartebancaire/GetAllCarteBancaireByClient/${idclient}`, AuthHeader(jwt)),
 			);
 		},
+		create: (
+			carte: Omit<
+				CarteBancaire,
+				'idcartebancaire' | 'clientNavigation' | 'paiementsNavigation' | 'dateenregistement'
+			>,
+		): Promise<boolean> => {
+			const jwt = localStorage.getItem('jwt');
+			return boolData(() => axios.post(`${this.endpoint}/cartebancaire`, carte, AuthHeader(jwt)));
+		},
 		delete: (idcarte: ID): Promise<boolean> => {
 			const jwt = localStorage.getItem('jwt');
 			return boolData(() => axios.delete(`${this.endpoint}/cartebancaire/${idcarte}`, AuthHeader(jwt)));

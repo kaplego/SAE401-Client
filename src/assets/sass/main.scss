@@ -574,6 +574,20 @@ body.theme-darkdim {
 	width: 1em;
 }
 
+.form-error {
+	color: var(--c-red-500);
+}
+
+.flex-row {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+
+	& > * {
+		flex: 1;
+	}
+}
+
 @mixin tooltip-base($content) {
 	position: relative;
 	z-index: 1000;

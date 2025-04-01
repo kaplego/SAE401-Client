@@ -11,6 +11,9 @@ defineProps<{
 	required?: boolean;
 	type?: InputTypeHTMLAttribute;
 	pattern?: string;
+	min?: number;
+	max?: number;
+	hint?: string;
 }>();
 </script>
 
@@ -23,9 +26,12 @@ defineProps<{
 			:name="name"
 			:id="id ?? name"
 			:value="value"
-			:placeholder="placeholder ?? ' '"
+			:placeholder="!placeholder || placeholder.length === 0 ? ' ' : placeholder"
 			:required="required"
 			:pattern="pattern"
+			:min="min"
+			:max="max"
 		/>
+		<p class="hint" v-if="hint">{{ hint }}</p>
 	</div>
 </template>

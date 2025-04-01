@@ -3,7 +3,7 @@ import CarteBancaire from '@/components/CarteBancaire.vue';
 import InputControl from '@/components/inputs/InputControl.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import StyledButton from '@/components/StyledButton.vue';
-import PopupWindow from '@/components/windows/BasePopupWindow.vue';
+import FormPopupWindow from '@/components/windows/FormPopupWindow.vue';
 import { useLoggedInStore } from '@/stores/login';
 import { ArrowLeft } from 'lucide-vue-next';
 import { ref, watchEffect } from 'vue';
@@ -19,6 +19,35 @@ watchEffect(() => {
 });
 
 const popup = ref<boolean>(false);
+const popupError = ref<string | null>(null);
+const isPopupLoading = ref<boolean>(false);
+function addCard(event: SubmitEvent) {
+	if (!login.client) return (popup.value = false);
+	isPopupLoading.value = true;
+	popupError.value = null;
+
+	const data = new FormData(event.target as HTMLFormElement);
+
+	if (login.getCreditCard(data.get('number') as string)) {
+		isPopupLoading.value = false;
+		popupError.value = 'La carte est déjà associée au compte.';
+		return;
+	}
+
+	login
+		.addCreditCard({
+			idclient: login.client.idclient,
+			nomcartebancaire: data.get('name') as string,
+			titulairecartebancaire: data.get('titulaire') as string,
+			numcartebancaire: data.get('number') as string,
+			dateexpirationcarte: new Date(+(data.get('exp-year') as string), +(data.get('exp-month') as string) - 1),
+		})
+		.then((ok) => {
+			isPopupLoading.value = false;
+			popupError.value = null;
+			if (ok) popup.value = false;
+		});
+}
 </script>
 
 <template>
@@ -39,10 +68,46 @@ const popup = ref<boolean>(false);
 		</template>
 		<LoadingSpinner v-else />
 	</main>
-	<PopupWindow v-if="popup" :onClose="() => (popup = false)" title="Ajouter une carte bancaire">
+	<FormPopupWindow
+		v-if="popup"
+		:onClose="(value) => value ?? (popup = false)"
+		title="Ajouter une carte bancaire"
+		:buttons="[
+			{
+				label: 'Enregistrer',
+				style: 'primary',
+				value: 'save',
+				type: 'submit',
+			},
+		]"
+		:is-loading="isPopupLoading"
+		@submit="
+			(event) => {
+				event.preventDefault();
+				addCard(event as SubmitEvent);
+			}
+		"
+	>
+		<InputControl label="Libellé de la carte" name="name" />
 		<InputControl label="Titulaire de la carte" name="titulaire" required />
-		<button class="button popup-confirm">Enregistrer</button>
-	</PopupWindow>
+		<InputControl
+			label="Numéro de carte"
+			name="number"
+			required
+			pattern="^(\d{4} \d{4} \d{4} \d{4})|(\d{4}\d{4}\d{4}\d{4})$"
+		/>
+		<div class="flex-row">
+			<InputControl label="Mois d'expiration" name="exp-month" required type="number" :min="1" :max="12" />
+			<InputControl
+				label="Année d'expiration"
+				name="exp-year"
+				required
+				type="number"
+				:min="new Date().getFullYear()"
+			/>
+		</div>
+		<p class="form-error" v-if="popupError">{{ popupError }}</p>
+	</FormPopupWindow>
 </template>
 
 <style lang="scss" scoped>

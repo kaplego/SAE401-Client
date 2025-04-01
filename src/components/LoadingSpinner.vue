@@ -13,11 +13,11 @@
 	justify-content: center;
 
 	&.loading-sm .loading-spinner {
-		height: 15px;
+		height: 1em;
 	}
 
 	&.loading-lg .loading-spinner {
-		height: 40px;
+		height: 2em;
 	}
 }
 </style>

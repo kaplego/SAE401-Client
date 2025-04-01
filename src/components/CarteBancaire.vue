@@ -26,7 +26,7 @@ const login = useLoggedInStore();
 
 async function remove() {
 	isLoading.value = true;
-	await login.removeBankCard(props.card.idcartebancaire);
+	await login.removeCreditCard(props.card.idcartebancaire);
 	isLoading.value = false;
 }
 const popupDelete = ref<boolean>(false);
@@ -50,7 +50,7 @@ const popupDelete = ref<boolean>(false);
 					<TriangleAlert v-else />
 				</div>
 				<p class="label">{{ card.nomcartebancaire ?? 'Aucun libellé' }}</p>
-				<p class="name">Lou Magnenat</p>
+				<p class="name">{{ card.titulairecartebancaire }}</p>
 			</div>
 			<div class="back">
 				<p class="date">
@@ -100,7 +100,8 @@ const popupDelete = ref<boolean>(false);
 				value: 'confirm',
 			},
 		]"
-	/>
+		><h2>Êtes-vous sûr(e) de vouloir supprimer cette carte bancaire ?</h2></PopupWindow
+	>
 </template>
 
 <style lang="scss">

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Ref } from 'vue';
 import StyledButton from '../StyledButton.vue';
 import PopupWindow from './BasePopupWindow.vue';
 
@@ -10,12 +11,15 @@ interface Button {
 
 const props = defineProps<{
 	buttons: Button[];
+	isLoading?: boolean;
+	formRef?: Ref<HTMLFormElement>;
 	onClose: (value: string | null) => unknown;
 }>();
 
 if (props.buttons.length === 0) throw new Error('Doit avoir minimum 1 bouton.');
 
 function close(value: string | null) {
+	if (props.isLoading) return;
 	props.onClose(value);
 }
 </script>
@@ -29,17 +33,10 @@ function close(value: string | null) {
 				v-bind:key="button.value"
 				:button-style="button.style"
 				@click="() => close(button.value)"
-				>{{ button.label }}</StyledButton
+				:is-loading="isLoading"
 			>
+				{{ button.label }}
+			</StyledButton>
 		</div>
 	</PopupWindow>
 </template>
-
-<style scoped lang="scss">
-.popup-buttons {
-	display: flex;
-	flex-direction: row;
-	gap: 1rem;
-	margin-left: auto;
-}
-</style>
