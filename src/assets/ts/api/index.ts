@@ -163,6 +163,6 @@ class APIManager {
 	};
 }
 
-const API = new APIManager('https://api.miliboo.lou-magnenat.tech/api');
+const API = new APIManager(`${process.env.API_ENDPOINT}/api`);
 
 export default API;
