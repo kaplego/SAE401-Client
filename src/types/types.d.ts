@@ -55,6 +55,7 @@ declare type CarteBancaire = {
 	idcartebancaire: number;
 	idclient: number;
 	nomcartebancaire: string | null;
+	titulairecartebancaire: string;
 	dateenregistement: Date;
 	numcartebancaire: string;
 	dateexpirationcarte: Date;
@@ -380,3 +381,4 @@ declare type Ville = {
 };
 
 declare type ID = string | number;
+declare type ButtonStyle = 'primary' | 'secondary' | 'danger' | 'warning' | 'success';

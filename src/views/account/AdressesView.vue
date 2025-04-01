@@ -3,7 +3,7 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { useLoggedInStore } from '@/stores/login';
 import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
-import PopupWindow from '@/components/PopupWindow.vue';
+import PopupWindow from '@/components/windows/BasePopupWindow.vue';
 import InputControl from '@/components/inputs/InputControl.vue';
 import { ArrowLeft } from 'lucide-vue-next';
 

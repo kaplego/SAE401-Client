@@ -2,7 +2,8 @@
 import CarteBancaire from '@/components/CarteBancaire.vue';
 import InputControl from '@/components/inputs/InputControl.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
-import PopupWindow from '@/components/PopupWindow.vue';
+import StyledButton from '@/components/StyledButton.vue';
+import PopupWindow from '@/components/windows/BasePopupWindow.vue';
 import { useLoggedInStore } from '@/stores/login';
 import { ArrowLeft } from 'lucide-vue-next';
 import { ref, watchEffect } from 'vue';
@@ -26,7 +27,7 @@ const popup = ref<boolean>(false);
 			<RouterLink to="/account" class="button-text"><ArrowLeft /> Retour</RouterLink>
 			<h1>Mes informations bancaires</h1>
 			<p>Appuiez sur une carte pour voir ses informations.</p>
-			<button class="button button-sm" @click="popup = true">Ajouter une carte bancaire</button>
+			<StyledButton buttonSize="sm" @click="popup = true">Ajouter une carte bancaire</StyledButton>
 			<div class="grille-cartes">
 				<CarteBancaire
 					v-for="card in login.client.cartesNavigation"

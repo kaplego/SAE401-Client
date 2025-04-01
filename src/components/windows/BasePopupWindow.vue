@@ -106,7 +106,10 @@ function hideMenu() {
 		flex-direction: column;
 		gap: 1rem;
 
-		.popup-confirm {
+		.popup-buttons {
+			display: flex;
+			flex-direction: row;
+			gap: 1rem;
 			margin-left: auto;
 		}
 	}

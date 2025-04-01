@@ -4,6 +4,7 @@ import { useLoggedInStore } from '@/stores/login';
 import { OctagonX, Trash, TriangleAlert } from 'lucide-vue-next';
 import { ref } from 'vue';
 import LoadingSpinner from './LoadingSpinner.vue';
+import PopupWindow from './windows/PopupWindow.vue';
 const props = defineProps<{
 	card: CarteBancaire;
 	deletable?: boolean;
@@ -23,13 +24,12 @@ const expirationDiff = expiration.valueOf() - now.valueOf();
 const expirationStatus = expirationDiff < 0 ? 'expired' : expirationDiff < CARD_EXPIRATION_WARNING ? 'soon' : null;
 const login = useLoggedInStore();
 
-async function remove(event: MouseEvent) {
+async function remove() {
 	isLoading.value = true;
-	event.preventDefault();
-	event.stopPropagation();
-	await login.removeBankCard(props.card.idcartebancaire)
+	await login.removeBankCard(props.card.idcartebancaire);
 	isLoading.value = false;
 }
+const popupDelete = ref<boolean>(false);
 </script>
 
 <template>
@@ -70,14 +70,37 @@ async function remove(event: MouseEvent) {
 		</div>
 		<button
 			class="delete"
+			type="button"
 			v-if="deletable && !isLoading"
-			@click="remove"
+			@click="() => (popupDelete = true)"
 			data-tooltip="Retirer la carte de mon compte"
 		>
 			<Trash />
 		</button>
 		<LoadingSpinner v-if="isLoading" />
 	</div>
+	<PopupWindow
+		v-if="popupDelete"
+		title="Confirmer la suppression"
+		@close="
+			(value) => {
+				popupDelete = false;
+				if (value === 'confirm') remove();
+			}
+		"
+		:buttons="[
+			{
+				label: 'Annuler',
+				style: 'secondary',
+				value: 'cancel',
+			},
+			{
+				label: 'Confirmer',
+				style: 'danger',
+				value: 'confirm',
+			},
+		]"
+	/>
 </template>
 
 <style lang="scss">

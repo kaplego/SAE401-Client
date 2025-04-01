@@ -397,9 +397,7 @@ body.theme-darkdim {
 	animation: spinner 1s linear 0s infinite normal forwards;
 }
 
-.button {
-	background-color: var(--t-background3-accent);
-	color: white;
+@mixin button() {
 	padding: 0.5rem 1rem;
 	border-radius: 4px;
 	cursor: pointer;
@@ -411,13 +409,17 @@ body.theme-darkdim {
 	text-decoration: none;
 
 	&:hover:not(:disabled) {
-		background-color: var(--t-background2-accent);
+		opacity: 0.75;
 	}
 
 	&:disabled {
 		opacity: 0.5;
 		cursor: not-allowed;
 	}
+}
+
+.button {
+	@include button();
 
 	&.button-sm {
 		padding: 0.3rem 0.6rem;
@@ -430,6 +432,31 @@ body.theme-darkdim {
 		font-size: 1.1rem;
 		border-radius: 5px;
 	}
+}
+
+.button-primary {
+	background-color: var(--t-background3-accent);
+	color: white;
+}
+
+.button-secondary {
+	background-color: var(--t-background5);
+	color: white;
+}
+
+.button-danger {
+	background-color: var(--c-red-500);
+	color: white;
+}
+
+.button-warning {
+	background-color: var(--c-yellow-500);
+	color: white;
+}
+
+.button-success {
+	background-color: var(--c-green-500);
+	color: white;
 }
 
 .button-text {
