@@ -16,11 +16,14 @@ watchEffect(() => {
 	if (login.clientReady && login.client === null) router.push('/login');
 });
 
-const cardsExpiration = computed<['warning' | 'error', number]>(() => {
-	if (login.client === null) return ['warning', 0];
+const cardsExpiration = computed<{
+	expired: CarteBancaire[];
+	expiring: CarteBancaire[];
+}>(() => {
+	if (login.client === null) return { expired: [], expiring: [] };
 
-	let status: 'warning' | 'error' = 'warning',
-		count = 0;
+	const expired: CarteBancaire[] = [],
+		expiring: CarteBancaire[] = [];
 	const now = new Date();
 	now.setDate(0);
 	now.setHours(0, 0, 0, 0);
@@ -30,13 +33,14 @@ const cardsExpiration = computed<['warning' | 'error', number]>(() => {
 		expiration.setDate(0);
 		expiration.setHours(0, 0, 0, 0);
 		const expirationDiff = expiration.valueOf() - now.valueOf();
-		if (expirationDiff < CARD_EXPIRATION_WARNING) {
-			count++;
-			if (expirationDiff < 0) status = 'error';
+		if (expirationDiff < 0) {
+			expired.push(card);
+		} else if (expirationDiff < CARD_EXPIRATION_WARNING) {
+			expiring.push(card);
 		}
 	});
 
-	return [status, count];
+	return { expired, expiring };
 });
 </script>
 
@@ -67,11 +71,21 @@ const cardsExpiration = computed<['warning' | 'error', number]>(() => {
 				<CardAccount
 					title="Informations bancaires"
 					:subtitle="`Vous avez ${login.client.cartesNavigation.length} carte${login.client.cartesNavigation.length === 1 ? '' : 's'} bancaire.`"
+					:error="
+						cardsExpiration.expired.length > 0
+							? `${cardsExpiration.expired.length} ${cardsExpiration.expired.length === 1 ? 'carte est expirée.' : 'cartes sont expirées.'}`
+							: undefined
+					"
+					:warning="
+						cardsExpiration.expiring.length > 0
+							? `${cardsExpiration.expiring.length} ${cardsExpiration.expiring.length === 1 ? 'carte arrive à expiration.' : 'cartes arrivent à expiration.'}`
+							: undefined
+					"
 					link="/account/bank-details"
 				>
-					<div v-if="cardsExpiration[1] > 0" :class="`badge ${cardsExpiration[0]}`">
+					<!-- <div v-if="cardsExpiration[1] > 0" :class="`badge ${cardsExpiration[0]}`">
 						{{ cardsExpiration[1] }}
-					</div>
+					</div> -->
 					<Landmark :stroke-width="1.5" />
 				</CardAccount>
 				<CardAccount

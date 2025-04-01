@@ -21,7 +21,7 @@ const buttonProps = computed(() => {
 		v-bind="buttonProps"
 		:disabled="isLoading || buttonProps.disabled"
 		:type="type"
-		:class="`button button-${buttonStyle ?? 'secondary'} button-${buttonSize ?? 'md'}`"
+		:class="`button button-${buttonStyle ?? 'primary'} button-${buttonSize ?? 'md'}`"
 	>
 		<div class="loading-spinner" style="height: 1.5em" v-if="isLoading"></div>
 		<slot v-else></slot>

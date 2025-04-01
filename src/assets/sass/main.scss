@@ -420,6 +420,8 @@ body.theme-darkdim {
 
 .button {
 	@include button();
+	background-color: var(--t-background3-accent);
+	color: white;
 
 	&.button-sm {
 		padding: 0.3rem 0.6rem;
@@ -434,13 +436,8 @@ body.theme-darkdim {
 	}
 }
 
-.button-primary {
-	background-color: var(--t-background3-accent);
-	color: white;
-}
-
 .button-secondary {
-	background-color: var(--t-background5);
+	background-color: var(--t-background4);
 	color: white;
 }
 

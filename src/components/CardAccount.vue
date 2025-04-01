@@ -4,6 +4,8 @@ import { OctagonAlert } from 'lucide-vue-next';
 defineProps<{
 	title: string;
 	subtitle: string;
+	error?: string;
+	warning?: string;
 	link: string;
 }>();
 </script>
@@ -16,6 +18,8 @@ defineProps<{
 			</slot>
 			<h2 class="title">{{ title }}</h2>
 			<p class="subtitle">{{ subtitle }}</p>
+			<p class="error" v-if="error">{{ error }}</p>
+			<p class="warning" v-if="warning">{{ warning }}</p>
 		</div>
 	</RouterLink>
 </template>
@@ -34,6 +38,7 @@ defineProps<{
 	flex-direction: column;
 	padding: 1rem;
 	transition: all 100ms;
+	height: 100%;
 
 	&:hover {
 		background-color: var(--t-background1-accent);
@@ -79,13 +84,20 @@ defineProps<{
 		opacity: 0.4;
 	}
 
-	.lucide {
+	.error {
+		color: var(--c-red-500);
+	}
+
+	.warning {
+		color: var(--c-yellow-500);
+	}
+
+	& > .lucide {
 		position: absolute;
 		opacity: 0.1;
 		height: 3rem;
 		width: 3rem;
-		top: 50%;
-		transform: translateY(-50%);
+		top: 1rem;
 		right: 0.5rem;
 	}
 }
