@@ -10,6 +10,7 @@ const category = ref<Categorie>();
 const router = useRouter();
 
 watchEffect(() => {
+	list.value = null;
 	const idCategory = router.currentRoute.value.params.id as string;
 	API.products.byCategorie(idCategory).then((produits) => (list.value = produits));
 	const categories = useCategoriesStore();
