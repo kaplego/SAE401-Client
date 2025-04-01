@@ -163,6 +163,9 @@ class APIManager {
 	};
 }
 
+console.log(process.env);
+
+
 const API = new APIManager(`${process.env.API_ENDPOINT}/api`);
 
 export default API;
