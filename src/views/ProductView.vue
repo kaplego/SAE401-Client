@@ -5,14 +5,26 @@ import router from '@/router';
 import { ref } from 'vue';
 import API from '@/assets/ts/api';
 import { Star } from 'lucide-vue-next';
+import CarouselImage from '@/components/CarouselImage.vue';
 const isLoading = useLoadingStore();
 isLoading.switchLoading(false);
 const product = ref<Produit | null>(null);
+const images: string[] = [];
 
 API.products.get(useRouter().currentRoute.value.params.id as string).then((p) => {
 	if (!p) router.push('/');
 	product.value = p;
+	p?.colorationsNavigation.forEach(coloration => {
+		coloration.photocolsNavigation.forEach(photocol => {
+			images.push(photocol.photoNavigation.sourcephoto);
+		})
+	});
 });
+
+
+
+
+
 </script>
 
 <template>
@@ -23,10 +35,13 @@ API.products.get(useRouter().currentRoute.value.params.id as string).then((p) =>
 				<img src="https://placehold.co/800x800/PNG" :alt="product.nomproduit" class="photo" />
 				<img src="https://placehold.co/800x800/PNG" :alt="product.nomproduit" class="photo" />
 				<img src="https://placehold.co/800x800/PNG" :alt="product.nomproduit" class="photo" /> -->
-				<template v-for="coloration in product.colorationsNavigation">
+
+				<!-- <template v-for="coloration in product.colorationsNavigation">
 					<img v-for="photocol in coloration.photocolsNavigation" :src='`/img/img/${photocol.photoNavigation.sourcephoto}`' alt="" v-bind:key="photocol.idphoto">
 				</template>
-				<img :src='`/img/img/${product.colorationsNavigation[0].photocolsNavigation[0].photoNavigation.sourcephoto}`' alt="">
+				<img :src='`/img/img/${product.colorationsNavigation[0].photocolsNavigation[0].photoNavigation.sourcephoto}`' alt=""> -->
+
+				<CarouselImage :images="images"/>
 
 				<div class="information-card">
 					<h1>{{ product.nomproduit }}</h1>
