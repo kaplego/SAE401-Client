@@ -48,17 +48,52 @@ const AuthHeader = (jwt: string | null) => ({
 });
 
 class APIManager {
-	public readonly endpoint: string;
+	public readonly $endpoint: string;
 
 	constructor(endpoint: string) {
-		this.endpoint = endpoint;
+		this.$endpoint = endpoint;
 	}
 
-	public cartes = {
+	public readonly addresses = {
+		create: (
+			adresse: Omit<
+				Adresse,
+				| 'villeNavigation'
+				| 'commandeLivrNavigation'
+				| 'commandeFactNavigation'
+				| 'clientNavigation'
+				| 'departementNavigation'
+				| 'payNavigation'
+			>,
+		): Promise<Adresse | null> => {
+			const jwt = localStorage.getItem('jwt');
+			return dataOrNull(() => axios.post(`${this.$endpoint}/adresse`, adresse, AuthHeader(jwt)));
+		},
+		update: (
+			adresse: Omit<
+				Adresse,
+				| 'villeNavigation'
+				| 'commandeLivrNavigation'
+				| 'commandeFactNavigation'
+				| 'clientNavigation'
+				| 'departementNavigation'
+				| 'payNavigation'
+			>,
+		): Promise<boolean> => {
+			const jwt = localStorage.getItem('jwt');
+			return boolData(() => axios.put(`${this.$endpoint}/adresse/${adresse.idadresse}`, adresse, AuthHeader(jwt)));
+		},
+		delete: (idadresse: ID): Promise<boolean> => {
+			const jwt = localStorage.getItem('jwt');
+			return boolData(() => axios.delete(`${this.$endpoint}/adresse/${idadresse}`, AuthHeader(jwt)));
+		},
+	};
+
+	public readonly cartes = {
 		byClient: async (idclient: ID): Promise<CarteBancaire[]> => {
 			const jwt = localStorage.getItem('jwt');
 			return dataOrDefault([], () =>
-				axios.get(`${this.endpoint}/cartebancaire/GetAllCarteBancaireByClient/${idclient}`, AuthHeader(jwt)),
+				axios.get(`${this.$endpoint}/cartebancaire/GetAllCarteBancaireByClient/${idclient}`, AuthHeader(jwt)),
 			);
 		},
 		create: (
@@ -66,22 +101,22 @@ class APIManager {
 				CarteBancaire,
 				'idcartebancaire' | 'clientNavigation' | 'paiementsNavigation' | 'dateenregistement'
 			>,
-		): Promise<boolean> => {
+		): Promise<CarteBancaire | null> => {
 			const jwt = localStorage.getItem('jwt');
-			return boolData(() => axios.post(`${this.endpoint}/cartebancaire`, carte, AuthHeader(jwt)));
+			return dataOrNull(() => axios.post(`${this.$endpoint}/cartebancaire`, carte, AuthHeader(jwt)));
 		},
 		delete: (idcarte: ID): Promise<boolean> => {
 			const jwt = localStorage.getItem('jwt');
-			return boolData(() => axios.delete(`${this.endpoint}/cartebancaire/${idcarte}`, AuthHeader(jwt)));
+			return boolData(() => axios.delete(`${this.$endpoint}/cartebancaire/${idcarte}`, AuthHeader(jwt)));
 		},
 	};
 
-	public categories = {
+	public readonly categories = {
 		list: async (): Promise<Categorie[]> =>
-			dataOrDefault([], () => axios.get(`${this.endpoint}/categorie/GetAllCategorie`)),
+			dataOrDefault([], () => axios.get(`${this.$endpoint}/categorie/GetAllCategorie`)),
 	};
 
-	public clients = {
+	public readonly clients = {
 		login: async (
 			email: string,
 			password: string,
@@ -93,7 +128,7 @@ class APIManager {
 				token: string;
 				client: Client;
 			}>(() =>
-				axios.post(`${this.endpoint}/client/GetClientByLogin`, {
+				axios.post(`${this.$endpoint}/client/GetClientByLogin`, {
 					email,
 					password,
 				}),
@@ -104,7 +139,7 @@ class APIManager {
 		get: async (id: ID): Promise<Client | null> => {
 			const jwt = localStorage.getItem('jwt');
 			const result = await dataOrNull<Client>(() =>
-				axios.get(`${this.endpoint}/client/GetClientById/${id}`, AuthHeader(jwt)),
+				axios.get(`${this.$endpoint}/client/GetClientById/${id}`, AuthHeader(jwt)),
 			);
 			if (result) result.cartesNavigation = await this.cartes.byClient(result.idclient);
 			return result;
@@ -112,34 +147,43 @@ class APIManager {
 		update: async (client: Client): Promise<[true, ''] | [false, unknown]> => {
 			const jwt = localStorage.getItem('jwt');
 			return dataOrError<''>(() =>
-				axios.put(`${this.endpoint}/client/${client.idclient}`, client, AuthHeader(jwt)),
+				axios.put(`${this.$endpoint}/client/${client.idclient}`, client, AuthHeader(jwt)),
 			);
 		},
 		create: async (client: Client): Promise<[true, ''] | [false, unknown]> => {
-			return dataOrError<''>(() => axios.post(`${this.endpoint}/client`, client));
+			return dataOrError<''>(() => axios.post(`${this.$endpoint}/client`, client));
 		},
 	};
 
-	public detailsPanier = {
-		get: async (idproduit: ID, idcouleur: ID, idclient: ID): Promise<DetailPanier | null> =>
-			dataOrNull(() => axios.get(`${this.endpoint}/detailsPanier/${idproduit}/${idcouleur}/${idclient}`)),
+	public readonly departements = {
+		list: async (): Promise<Departement[]> =>
+			dataOrDefault([], () => axios.get(`${this.$endpoint}/departement/getalldepartement`)),
 	};
 
-	public products = {
+	public readonly detailsPanier = {
+		get: async (idproduit: ID, idcouleur: ID, idclient: ID): Promise<DetailPanier | null> =>
+			dataOrNull(() => axios.get(`${this.$endpoint}/detailsPanier/${idproduit}/${idcouleur}/${idclient}`)),
+	};
+
+	public readonly pays = {
+		list: async (): Promise<Pay[]> => dataOrDefault([], () => axios.get(`${this.$endpoint}/pays/getallpays`)),
+	};
+
+	public readonly products = {
 		get: async (id: ID): Promise<Produit | null> =>
-			dataOrNull(() => axios.get(`${this.endpoint}/produit/GetProduitById/${id}`)),
+			dataOrNull(() => axios.get(`${this.$endpoint}/produit/GetProduitById/${id}`)),
 		list: async (): Promise<Produit[]> =>
-			dataOrDefault([], () => axios.get(`${this.endpoint}/produit/GetAllProduit`)),
+			dataOrDefault([], () => axios.get(`${this.$endpoint}/produit/GetAllProduit`)),
 		search: async (query: string): Promise<Produit[]> =>
-			dataOrDefault([], () => axios.get(`${this.endpoint}/produit/GetAllProduitByRecherche/${query}`)),
+			dataOrDefault([], () => axios.get(`${this.$endpoint}/produit/GetAllProduitByRecherche/${query}`)),
 		byRegroupement: async (idregroupement: ID): Promise<Produit[]> =>
 			dataOrDefault([], () =>
-				axios.get(`${this.endpoint}/produit/GetAllProduitByRegroupement/${idregroupement}`),
+				axios.get(`${this.$endpoint}/produit/GetAllProduitByRegroupement/${idregroupement}`),
 			),
 		byCategorie: async (idcategorie: ID): Promise<Produit[]> =>
-			dataOrDefault([], () => axios.get(`${this.endpoint}/produit/GetAllProduitByCategorie/${idcategorie}`)),
+			dataOrDefault([], () => axios.get(`${this.$endpoint}/produit/GetAllProduitByCategorie/${idcategorie}`)),
 		byType: async (idtype: ID): Promise<Produit[]> =>
-			dataOrDefault([], () => axios.get(`${this.endpoint}/produit/GetAllProduitByType/${idtype}`)),
+			dataOrDefault([], () => axios.get(`${this.$endpoint}/produit/GetAllProduitByType/${idtype}`)),
 		create: async (
 			produit: Pick<
 				Produit,
@@ -152,7 +196,7 @@ class APIManager {
 				| 'coutlivraison'
 				| 'nbpaiementmax'
 			>,
-		): Promise<boolean> => boolData(() => axios.post(`${this.endpoint}/produit`, produit)),
+		): Promise<boolean> => boolData(() => axios.post(`${this.$endpoint}/produit`, produit)),
 		update: async (
 			produit: Pick<
 				Produit,
@@ -167,8 +211,12 @@ class APIManager {
 				| 'nbpaiementmax'
 			>,
 		): Promise<Produit | null> =>
-			dataOrNull(() => axios.put(`${this.endpoint}/produit/${produit.idproduit}`, produit)),
-		delete: async (id: ID): Promise<boolean> => boolData(() => axios.delete(`${this.endpoint}/produit/${id}`)),
+			dataOrNull(() => axios.put(`${this.$endpoint}/produit/${produit.idproduit}`, produit)),
+		delete: async (id: ID): Promise<boolean> => boolData(() => axios.delete(`${this.$endpoint}/produit/${id}`)),
+	};
+
+	public readonly villes = {
+		list: async (): Promise<Ville[]> => dataOrDefault([], () => axios.get(`${this.$endpoint}/ville/getallville`)),
 	};
 }
 
