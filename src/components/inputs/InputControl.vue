@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { AutocompleteType, levenshteinDistance } from '@/assets/ts/utils';
 import { Asterisk } from 'lucide-vue-next';
 import type { InputTypeHTMLAttribute } from 'vue';
 
-defineProps<{
+const props = defineProps<{
 	value?: any;
 	name: string;
 	label: string;
@@ -14,7 +15,43 @@ defineProps<{
 	min?: number;
 	max?: number;
 	hint?: string;
+	modelValue?: string;
+	autocomplete?: Autocomplete;
 }>();
+
+const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>();
+
+function onInput(event: Event) {
+	const target = event.target as HTMLInputElement;
+	emit('update:modelValue', target.value);
+}
+function onChange(event: Event) {
+	const target = event.target as HTMLInputElement;
+	target.value = getAutocompletion(target.value);
+	emit('update:modelValue', target.value);
+}
+
+function getAutocompletion(value: string) {
+	if (!props.autocomplete || value === '') return value;
+	switch (props.autocomplete.type) {
+		case AutocompleteType.Exact:
+			const strExact = props.autocomplete.values.find((v) => v.toUpperCase().startsWith(value.toUpperCase()));
+			return strExact ?? value;
+		case AutocompleteType.ExactWithFallback:
+			const strExactFallback = props.autocomplete.values.find((v) =>
+				v.toUpperCase().startsWith(value.toUpperCase()),
+			);
+			if (strExactFallback) return strExactFallback;
+		case AutocompleteType.Near:
+			let nearest: [number, string] | null = null;
+			for (const str of props.autocomplete.values) {
+				const l = levenshteinDistance(value.toUpperCase(), str);
+				if (nearest == null || l < nearest[0]) nearest = [l, str];
+			}
+			return nearest?.[1] ?? value;
+	}
+	return value;
+}
 </script>
 
 <template>
@@ -25,7 +62,9 @@ defineProps<{
 			:type="type ?? 'text'"
 			:name="name"
 			:id="id ?? name"
-			:value="value"
+			:value="modelValue"
+			@input="onInput"
+			@change="onChange"
 			:placeholder="!placeholder || placeholder.length === 0 ? ' ' : placeholder"
 			:required="required"
 			:pattern="pattern"

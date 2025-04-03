@@ -1,39 +1,37 @@
 <script setup lang="ts">
 import { Asterisk } from 'lucide-vue-next';
 
-type Option = {
-	label: string;
-	value: string;
-};
-
-type OptionGroup = {
-	label: string;
-	options: Option[];
-};
-
 defineProps<{
 	name: string;
 	label: string;
 	options:
 		| {
-				groups: false;
+				groupped: false;
 				values: Option[];
 		  }
 		| {
-				groups: true;
+				groupped: true;
 				values: OptionGroup[];
 		  };
 	selected?: any;
 	id?: string;
 	required?: boolean;
+	modelValue?: string;
 }>();
+
+const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>();
+
+function onChange(event: Event) {
+	const target = event.target as HTMLInputElement;
+	emit('update:modelValue', target.value);
+}
 </script>
 
 <template>
 	<div class="select-control">
 		<label class="label" :for="id ?? name">{{ label }} <Asterisk class="required" v-if="required" /></label>
-		<select class="input" :name="name" :id="id ?? name" :required="required">
-			<template v-if="options.groups">
+		<select class="input" :name="name" :id="id ?? name" :required="required" :value="modelValue" @change="onChange">
+			<template v-if="options.groupped">
 				<optgroup v-for="group in options.values" :label="group.label" v-bind:key="group.label">
 					<option
 						v-for="option in group.options"
