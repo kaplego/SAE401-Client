@@ -12,6 +12,8 @@ import { useVillesStore } from '@/stores/api/villes';
 import { usePaysStore } from '@/stores/api/pays';
 import SelectControl from '@/components/inputs/SelectControl.vue';
 import { AutocompleteType } from '@/assets/ts/utils';
+import { useDepartementsStore } from '@/stores/api/departements';
+import API from '@/assets/ts/api';
 
 const router = useRouter();
 const login = useLoggedInStore();
@@ -23,7 +25,7 @@ watchEffect(() => {
 });
 
 const pays = usePaysStore();
-// const departements = useDepartementsStore();
+const departements = useDepartementsStore();
 const villes = useVillesStore();
 
 const popupAdd = usePopup<
@@ -33,14 +35,14 @@ const popupAdd = usePopup<
 		nomadresse: string;
 		numerorue: string;
 		nomrue: string;
-		iddepartement: string;
+		nomdepartement: string;
 		codepostaladresse: string;
 	},
 	boolean
 >(false, {
 	idpays: '',
 	nomville: '',
-	iddepartement: '',
+	nomdepartement: '',
 	nomadresse: '',
 	numerorue: '',
 	nomrue: '',
@@ -56,26 +58,40 @@ function addAddressSubmit(event: SubmitEvent) {
 	popupAdd.isLoading.value = true;
 	popupAdd.error.value = null;
 
-	console.log(popupAdd.model.value);
+	const iddepartement = departements.list.find(
+			(d) =>
+				d.nomdepartement?.toUpperCase() ?? d.iddepartement.toString() === popupAdd.model.value.nomdepartement,
+		)?.iddepartement,
+		codeinsee = villes.list.find(
+			(d) => d.nomville?.toUpperCase() ?? d.codeinsee.toString() === popupAdd.model.value.nomville,
+		)?.codeinsee;
 
-	// const data = new FormData(event.target as HTMLFormElement);
+	if (!iddepartement || !codeinsee) {
+		popupAdd.isLoading.value = false;
+		popupAdd.error.value = 'Le département ou la ville ne sont pas corrects.';
+		return;
+	}
 
-	// API.addresses
-	// 	.create({
-	// 		idclient: login.client.idclient,
-	// 		nomcartebancaire: data.get('name') as string,
-	// 		titulairecartebancaire: data.get('titulaire') as string,
-	// 		numcartebancaire: data.get('number') as string,
-	// 		dateexpirationcarte: new Date(+(data.get('exp-year') as string), +(data.get('exp-month') as string) - 1),
-	// 	})
-	// 	.then(async (cb) => {
-	// 		if (cb) {
-	// 			await login.refresh();
-	// 			popup.value = false;
-	// 		}
-	// 		isPopupLoading.value = false;
-	// 		popupError.value = null;
-	// 	});
+	API.addresses
+		.create({
+			idclient: login.client.idclient,
+			iddepartement,
+			codeinsee,
+			codepostaladresse: popupAdd.model.value.codepostaladresse,
+			nomadresse: popupAdd.model.value.nomadresse,
+			numerorue: popupAdd.model.value.numerorue,
+			nomrue: popupAdd.model.value.nomrue,
+			idpays: +popupAdd.model.value.idpays,
+		})
+		.then(async (cb) => {
+			if (cb) {
+				await login.refresh();
+				popupAdd.isOpen.value = false;
+				popupAdd.error.value = null;
+			} else popupAdd.error.value = "Une erreur s'est produite.";
+
+			popupAdd.isLoading.value = false;
+		});
 }
 </script>
 
@@ -100,6 +116,7 @@ function addAddressSubmit(event: SubmitEvent) {
 						type: 'submit',
 					},
 				]"
+				:is-loading="popupAdd.isLoading.value"
 				@close="(v) => (v !== 'save' ? (popupAdd.isOpen.value = false) : null)"
 				@submit="(e) => addAddressSubmit(e as SubmitEvent)"
 			>
@@ -124,6 +141,16 @@ function addAddressSubmit(event: SubmitEvent) {
 					v-model="popupAdd.model.value.idpays"
 				/>
 				<InputControl
+					name="departement"
+					label="Département"
+					:autocomplete="{
+						type: AutocompleteType.ExactWithFallback,
+						values: departements.list.map((d) => d.nomdepartement ?? d.iddepartement.toString()),
+					}"
+					v-model="popupAdd.model.value.nomdepartement"
+					required
+				/>
+				<InputControl
 					name="ville"
 					label="Ville"
 					:autocomplete="{
@@ -140,6 +167,7 @@ function addAddressSubmit(event: SubmitEvent) {
 					pattern="^\d{5}$"
 					v-model="popupAdd.model.value.codepostaladresse"
 				/>
+				<p class="form-error" v-if="popupAdd.error.value">{{ popupAdd.error.value }}</p>
 			</FormPopupWindow>
 			<!-- EDIT ADRESSE -->
 			<FormPopupWindow

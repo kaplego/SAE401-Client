@@ -50,9 +50,9 @@ function addCard(event: SubmitEvent) {
 			if (cb) {
 				await login.refresh();
 				popup.isOpen.value = false;
-			}
+				popup.error.value = null;
+			} else popup.error.value = "Une erreur s'est produite.";
 			popup.isLoading.value = false;
-			popup.error.value = null;
 		});
 }
 </script>

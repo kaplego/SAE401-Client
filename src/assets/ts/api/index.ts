@@ -58,6 +58,7 @@ class APIManager {
 		create: (
 			adresse: Omit<
 				Adresse,
+				| 'idadresse'
 				| 'villeNavigation'
 				| 'commandeLivrNavigation'
 				| 'commandeFactNavigation'
@@ -67,7 +68,7 @@ class APIManager {
 			>,
 		): Promise<Adresse | null> => {
 			const jwt = localStorage.getItem('jwt');
-			return dataOrNull(() => axios.post(`${this.$endpoint}/adresse`, adresse, AuthHeader(jwt)));
+			return dataOrNull(() => axios.put(`${this.$endpoint}/adresse`, adresse, AuthHeader(jwt)));
 		},
 		update: (
 			adresse: Omit<
