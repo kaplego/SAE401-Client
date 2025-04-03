@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import API from '@/assets/ts/api';
+import usePopup from '@/assets/ts/usePopup';
 import CarteBancaire from '@/components/CarteBancaire.vue';
 import InputControl from '@/components/inputs/InputControl.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
@@ -6,7 +8,7 @@ import StyledButton from '@/components/StyledButton.vue';
 import FormPopupWindow from '@/components/windows/FormPopupWindow.vue';
 import { useLoggedInStore } from '@/stores/login';
 import { ArrowLeft } from 'lucide-vue-next';
-import { ref, watchEffect } from 'vue';
+import { watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -18,34 +20,39 @@ watchEffect(() => {
 	if (login.clientReady && login.client === null) router.push('/login');
 });
 
-const popup = ref<boolean>(false);
-const popupError = ref<string | null>(null);
-const isPopupLoading = ref<boolean>(false);
+const popup = usePopup(false);
 function addCard(event: SubmitEvent) {
-	if (!login.client) return (popup.value = false);
-	isPopupLoading.value = true;
-	popupError.value = null;
+	if (!login.client) return (popup.isOpen.value = false);
+	popup.isLoading.value = true;
+	popup.error.value = null;
 
 	const data = new FormData(event.target as HTMLFormElement);
 
-	if (login.getCreditCard(data.get('number') as string)) {
-		isPopupLoading.value = false;
-		popupError.value = 'La carte est déjà associée au compte.';
+	if (
+		login.client.cartesNavigation.find(
+			(c) => c.numcartebancaire.replace(/ /g, '') === (data.get('number') as string).replace(/ /g, ''),
+		)
+	) {
+		popup.isLoading.value = false;
+		popup.error.value = 'La carte est déjà associée au compte.';
 		return;
 	}
 
-	login
-		.addCreditCard({
+	API.cartes
+		.create({
 			idclient: login.client.idclient,
 			nomcartebancaire: data.get('name') as string,
 			titulairecartebancaire: data.get('titulaire') as string,
 			numcartebancaire: data.get('number') as string,
 			dateexpirationcarte: new Date(+(data.get('exp-year') as string), +(data.get('exp-month') as string) - 1),
 		})
-		.then((ok) => {
-			isPopupLoading.value = false;
-			popupError.value = null;
-			if (ok) popup.value = false;
+		.then(async (cb) => {
+			if (cb) {
+				await login.refresh();
+				popup.isOpen.value = false;
+			}
+			popup.isLoading.value = false;
+			popup.error.value = null;
 		});
 }
 </script>
@@ -56,7 +63,7 @@ function addCard(event: SubmitEvent) {
 			<RouterLink to="/account" class="button-text"><ArrowLeft /> Retour</RouterLink>
 			<h1>Mes informations bancaires</h1>
 			<p>Appuiez sur une carte pour voir ses informations.</p>
-			<StyledButton buttonSize="sm" @click="popup = true">Ajouter une carte bancaire</StyledButton>
+			<StyledButton buttonSize="sm" @click="popup.isOpen.value = true">Ajouter une carte bancaire</StyledButton>
 			<div class="grille-cartes">
 				<CarteBancaire
 					v-for="card in login.client.cartesNavigation"
@@ -70,7 +77,7 @@ function addCard(event: SubmitEvent) {
 	</main>
 	<FormPopupWindow
 		v-if="popup"
-		:onClose="(value) => value ?? (popup = false)"
+		:onClose="(value) => value ?? (popup.isOpen.value = false)"
 		title="Ajouter une carte bancaire"
 		:buttons="[
 			{
@@ -80,7 +87,7 @@ function addCard(event: SubmitEvent) {
 				type: 'submit',
 			},
 		]"
-		:is-loading="isPopupLoading"
+		:is-loading="popup.isLoading.value"
 		@submit="
 			(event) => {
 				event.preventDefault();
@@ -106,7 +113,7 @@ function addCard(event: SubmitEvent) {
 				:min="new Date().getFullYear()"
 			/>
 		</div>
-		<p class="form-error" v-if="popupError">{{ popupError }}</p>
+		<p class="form-error" v-if="popup.error.value">{{ popup.error.value }}</p>
 	</FormPopupWindow>
 </template>
 
@@ -120,9 +127,12 @@ h1 {
 }
 
 .grille-cartes {
+	width: 100%;
+	// overflow: hidden;
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	gap: 3rem;
 	margin-top: 3rem;
+	grid-auto-rows: 1fr;
 }
 </style>

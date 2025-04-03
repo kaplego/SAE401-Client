@@ -5,6 +5,7 @@ import { OctagonX, Trash, TriangleAlert } from 'lucide-vue-next';
 import { ref } from 'vue';
 import LoadingSpinner from './LoadingSpinner.vue';
 import PopupWindow from './windows/PopupWindow.vue';
+import API from '@/assets/ts/api';
 const props = defineProps<{
 	card: CarteBancaire;
 	deletable?: boolean;
@@ -26,7 +27,8 @@ const login = useLoggedInStore();
 
 async function remove() {
 	isLoading.value = true;
-	await login.removeCreditCard(props.card.idcartebancaire);
+	await API.cartes.delete(props.card.idcartebancaire);
+	login.refresh();
 	isLoading.value = false;
 }
 const popupDelete = ref<boolean>(false);

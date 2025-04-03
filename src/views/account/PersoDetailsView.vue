@@ -71,7 +71,7 @@ watchEffect((clean) => {
 					required
 					:selected="login.client.civiliteclient"
 					:options="{
-						groups: false,
+						groupped: false,
 						values: [
 							{
 								label: 'Ne préfère pas répondre',

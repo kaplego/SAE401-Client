@@ -166,7 +166,7 @@ class APIManager {
 	};
 
 	public readonly pays = {
-		list: async (): Promise<Pay[]> => dataOrDefault([], () => axios.get(`${this.$endpoint}/pays/getallpays`)),
+		list: async (): Promise<Pays[]> => dataOrDefault([], () => axios.get(`${this.$endpoint}/pays/getallpays`)),
 	};
 
 	public readonly products = {

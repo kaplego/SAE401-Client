@@ -13,12 +13,7 @@ export const useLoggedInStore = defineStore('loggedin', () => {
 	});
 
 	watchEffect(() => {
-		if (isLoggedIn.value) {
-			API.clients.get(clientId.value!).then((c) => {
-				client.value = c;
-				clientReady.value = true;
-			});
-		} else clientReady.value = true;
+		refresh();
 	});
 
 	function login(jwt: string, clientid: ID) {
@@ -37,34 +32,14 @@ export const useLoggedInStore = defineStore('loggedin', () => {
 		clientId.value = null;
 	}
 
-	function getCreditCard(numero: string) {
-		if (!client.value) return null;
-		return (
-			client.value.cartesNavigation.find(
-				(carte) => carte.numcartebancaire.replace(/ /g, '') === numero.replace(/ /g, ''),
-			) ?? null
-		);
+	async function refresh() {
+		if (isLoggedIn.value) {
+			API.clients.get(clientId.value!).then((c) => {
+				client.value = c;
+				clientReady.value = true;
+			});
+		} else clientReady.value = true;
 	}
 
-	async function removeCreditCard(id: ID) {
-		if (!client.value) return false;
-		const ok = await API.cartes.delete(id);
-		if (ok) client.value.cartesNavigation = client.value.cartesNavigation.filter((c) => c.idcartebancaire !== id);
-		return ok;
-	}
-
-	async function addCreditCard(
-		card: Omit<CarteBancaire, 'idcartebancaire' | 'clientNavigation' | 'paiementsNavigation' | 'dateenregistement'>,
-	) {
-		if (!client.value) return false;
-		const ok = await API.cartes.create(card);
-		if (ok)
-			client.value.cartesNavigation.push({
-				...card,
-				idcartebancaire: 0,
-			} as CarteBancaire);
-		return ok;
-	}
-
-	return { JWT, isLoggedIn, login, logout, client, clientReady, getCreditCard, removeCreditCard, addCreditCard };
+	return { JWT, isLoggedIn, login, logout, client, clientReady, refresh };
 });

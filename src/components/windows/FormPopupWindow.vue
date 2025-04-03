@@ -8,7 +8,7 @@ interface Button {
 	style: ButtonStyle;
 	label: string;
 	value: string;
-	type: JSX.IntrinsicElements['button']['type'];
+	type: 'button' | 'submit' | 'reset';
 }
 
 const props = defineProps<
@@ -40,6 +40,7 @@ function close(value: string | null) {
 					v-for="button in buttons"
 					v-bind:key="button.value"
 					:button-style="button.style"
+					:type="button.type"
 					@click="() => close(button.value)"
 					:is-loading="isLoading"
 				>
