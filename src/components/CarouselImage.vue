@@ -7,60 +7,62 @@ const props = defineProps<{
 	images: string[];
 }>();
 
-const lienImageTop = ref<string>();
-const idImageBottom = ref<number>();
-idImageBottom.value = 0;
-lienImageTop.value = props.images[0];
+const selectedIndex = ref<number>(0);
+// const idImageBottom = ref<number>(0);
 
-function carouselImageClicked(image: string, imageHTML: HTMLImageElement) {
-	lienImageTop.value = image;
-	const smallImagesCarousel: NodeListOf<HTMLImageElement> = document.querySelectorAll('.image-carousel');
-	for (const imageCarousel of smallImagesCarousel) {
-		imageCarousel.style.borderColor = 'var(--c-gray-50)';
-	}
-	imageHTML.style.borderColor = 'var(--c-gray-800)';
-}
+// function carouselImageClicked(image: string) {
+// 	selectedIndex.value = props.images.indexOf(image);
+// 	const smallImagesCarousel: NodeListOf<HTMLImageElement> = document.querySelectorAll('.image-carousel');
+// 	for (const imageCarousel of smallImagesCarousel) {
+// 		imageCarousel.style.borderColor = 'var(--c-gray-50)';
+// 	}
+// 	imageHTML.style.borderColor = 'var(--c-gray-800)';
+// }
 
 function rightButtonClicked() {
-	const indexOfCurrentImage = props.images.indexOf(lienImageTop.value as string);
-	if (indexOfCurrentImage + 1 <= props.images.length - 1) {
-		lienImageTop.value = props.images[indexOfCurrentImage + 1];
-	} else {
-		lienImageTop.value = props.images[0];
-	}
-	const allSmallCarouselImages: NodeListOf<HTMLImageElement> = document.querySelectorAll('.image-carousel');
-	allSmallCarouselImages.forEach((img) => { //TODO faire du joli parsing pour pouvoir highlight le bon bouton
-		// console.log("imagesProduit"+lienImageTop.value.split("imagesProduit")[1]);
-		// console.log("imagesProduit"+img.src.split("imagesProduit")[1]);
-		// if (img.src == lienImageTop.value.split("/img/img/")[1]) {
-		// 	console.log(lienImageTop.value);
-		// 	console.log(img.src);
-		// 	carouselImageClicked(lienImageTop.value?.split('img/img/')[1]!, img);
-		// }
-	});
+	// const indexOfCurrentImage = props.images.indexOf(lienImageTop.value as string);
+	// if (indexOfCurrentImage + 1 <= props.images.length - 1) {
+	// 	lienImageTop.value = props.images[indexOfCurrentImage + 1];
+	// } else {
+	// 	lienImageTop.value = props.images[0];
+	// }
+	// const allSmallCarouselImages: NodeListOf<HTMLImageElement> = document.querySelectorAll('.image-carousel');
+	// allSmallCarouselImages.forEach((img) => {
+	// 	// console.log("LIEN IMAGE : imagesProduit"+lienImageTop.value?.split("imagesProduit")[1]);
+	// 	// console.log("SRC :imagesProduit"+img.src.split("imagesProduit")[1]);
+	// 	console.log("1 : " + img.src.split("imagesProduit")[1]);
+	// 	console.log("2 : " + lienImageTop.value!.split("imagesProduit")[1].replace(/\\/g, "/"));
+
+	// 	if (lienImageTop.value && img.src.split("imagesProduit")[1] == lienImageTop.value!.split("imagesProduit")[1].replace(/\\/g, "/")) {
+	// 		console.log(lienImageTop.value);
+	// 		console.log(img.src);
+	// 		carouselImageClicked(lienImageTop.value.split('img/img/')[1]!, img);
+	// 	}
+	// });
+	selectedIndex.value = (selectedIndex.value + 1) % props.images.length;
 }
 </script>
 
 <template>
 	<div class="carousel-container">
 		<div class="big-image-container">
-			<StyledButton class="button-left" :button-size="'lg'">
+			<StyledButton class="button-left" :button-size="'lg'" @click="selectedIndex = (selectedIndex === 0 ? images.length : selectedIndex) - 1">
 				<ArrowLeft />
 			</StyledButton>
-			<StyledButton class="button-right" :button-size="'lg'" @click="rightButtonClicked()">
+			<StyledButton class="button-right" :button-size="'lg'" @click="selectedIndex = (selectedIndex + 1) % props.images.length">
 				<ArrowRight />
 			</StyledButton>
-			<img :src="`/img/img/${lienImageTop}`" alt="image de meuble" class="image-carousel-top" />
+			<img :src="`/img/img/${images[selectedIndex]}`" alt="image de meuble" class="image-carousel-top" />
 		</div>
 		<div class="carousel-products">
 			<div v-for="image in images" v-bind:key="image">
 				<img
 					:src="`/img/img/${image}`"
 					alt="image de meuble"
-					class="image-carousel"
+					:class="`image-carousel ${selectedIndex === images.indexOf(image) ? 'selected' : ''}`"
 					@click="
 						(ev) => {
-							carouselImageClicked(image, ev.target as HTMLImageElement);
+							selectedIndex = images.indexOf(image);
 						}
 					"
 				/>
@@ -69,7 +71,7 @@ function rightButtonClicked() {
 	</div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .button-left {
 	position: absolute;
 	left: 2rem;
@@ -101,6 +103,11 @@ function rightButtonClicked() {
 	margin: 1rem;
 	border: solid 3px;
 	border-color: var(--c-gray-50);
+	cursor: pointer;
+
+	&.selected {
+		border-color: black;
+	}
 }
 .image-carousel-top {
 	width: 600px;
