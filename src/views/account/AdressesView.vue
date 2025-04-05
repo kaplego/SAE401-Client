@@ -37,7 +37,11 @@ type AdresseModel = {
 	codepostaladresse: string;
 };
 
-function saveAddress(address: AdresseModel, popup: ReturnType<typeof usePopup>, update?: number) {
+function stringOrNull(value: string) {
+	return value.length > 0 ? value : null;
+}
+
+function saveAddress(address: AdresseModel, popup: ReturnType<typeof usePopup>, update: number | null = null) {
 	if (!login.client) return (popup.isOpen.value = false);
 	popup.isLoading.value = true;
 	popup.error.value = null;
@@ -61,12 +65,12 @@ function saveAddress(address: AdresseModel, popup: ReturnType<typeof usePopup>, 
 		iddepartement,
 		codeinsee,
 		codepostaladresse: address.codepostaladresse,
-		nomadresse: address.nomadresse,
-		numerorue: address.numerorue,
+		nomadresse: stringOrNull(address.nomadresse),
+		numerorue: stringOrNull(address.numerorue),
 		nomrue: address.nomrue,
 		idpays: +address.idpays,
 	};
-	(update ? API.addresses.update({ ...addressBody, idadresse: update }) : API.addresses.create(addressBody)).then(
+	(update !== null ? API.addresses.update({ ...addressBody, idadresse: update }) : API.addresses.create(addressBody)).then(
 		async (cb) => {
 			if (cb) {
 				await login.refresh();
@@ -108,15 +112,18 @@ function editAddressSubmit(event: SubmitEvent) {
 	saveAddress(popupEdit.model.value, popupEdit, popupEdit.isOpen.value);
 }
 
-const popupRemove = usePopup<null | number, undefined>(null);
-async function deleteAddressSubmit(event: SubmitEvent) {
-	event.preventDefault();
-	if (!popupRemove.isOpen.value) return;
-	const ok = await API.addresses.delete(popupRemove.isOpen.value);
-	popupRemove.isLoading.value = false;
-	if (ok) popupRemove.isOpen.value = null;
-	else popupRemove.error.value = "Une erreur s'est produite.";
-}
+// const popupRemove = usePopup<null | number, undefined>(null);
+// async function deleteAddressSubmit(event: SubmitEvent) {
+// 	event.preventDefault();
+// 	if (!popupRemove.isOpen.value) return;
+// 	popupRemove.isLoading.value = true;
+
+// 	const ok = await API.addresses.delete(popupRemove.isOpen.value);
+
+// 	popupRemove.isLoading.value = false;
+// 	if (ok) popupRemove.isOpen.value = null;
+// 	else popupRemove.error.value = "Une erreur s'est produite.";
+// }
 </script>
 
 <template>
@@ -263,7 +270,7 @@ async function deleteAddressSubmit(event: SubmitEvent) {
 				/>
 				<p class="form-error" v-if="popupEdit.error.value">{{ popupEdit.error.value }}</p>
 			</FormPopupWindow>
-			<FormPopupWindow
+			<!-- <FormPopupWindow
 				v-if="popupRemove.isOpen.value"
 				title="Confirmer la suppression"
 				:buttons="[
@@ -288,50 +295,56 @@ async function deleteAddressSubmit(event: SubmitEvent) {
 				@submit="(e) => deleteAddressSubmit(e as SubmitEvent)"
 			>
 				<h2>Êtes-vous sûr(e) de vouloir supprimer cette adresse ?</h2>
-			</FormPopupWindow>
+			</FormPopupWindow> -->
 			<h1>Mes adresses</h1>
 
 			<button id="add-address" class="button button-sm" @click="() => (popupAdd.isOpen.value = true)">
 				Ajouter une adresse
 			</button>
-			<div></div>
-			<div class="card-address" v-for="address in login.client.adressesNavigation" v-bind:key="address.idadresse">
-				<div class="title-address">
-					{{ address.nomadresse ?? 'Aucun nom' }}
-				</div>
-				<div>
-					{{ address.numerorue }} {{ address.nomrue }}, {{ address.codepostaladresse }}
-					{{ address.villeNavigation.nomville }}, {{ address.payNavigation.nompays }}
-				</div>
-				<div class="div-button-suppr-modif">
-					<button class="button button-sm button-suppr" @click="popupRemove.isOpen.value = address.idadresse">
-						Supprimer l'adresse
-					</button>
-					<button
-						class="button button-sm button-modif"
-						@click="
-							() => {
-								const dep = departements.list.find((d) => d.iddepartement === address.iddepartement),
-									ville = villes.list.find((v) => v.codeinsee === address.codeinsee);
-								popupEdit.model.value = {
-									nomadresse: address.nomadresse ?? '',
-									numerorue: address.numerorue ?? '',
-									nomrue: address.nomrue,
-									idpays: address.idpays.toString(),
-									nomdepartement: dep?.nomdepartement ?? dep?.iddepartement.toString() ?? '',
-									nomville: ville?.nomville ?? ville?.codeinsee ?? '',
-									codepostaladresse: address.codepostaladresse,
-								};
-								popupEdit.isOpen.value = address.idadresse;
-							}
-						"
-					>
-						Modifier l'adresse
-					</button>
+			<div id="addresses-container">
+				<div
+					class="card-address"
+					v-for="address in login.client.adressesNavigation"
+					v-bind:key="address.idadresse"
+				>
+					<div class="title-address">
+						{{ stringOrNull(address.nomadresse ?? '') ?? 'Aucun nom' }}
+					</div>
+					<div>
+						<p>{{ address.numerorue }} {{ address.nomrue }},</p>
+						<p>{{ address.codepostaladresse }} {{ address.villeNavigation.nomville }},</p>
+						<p>{{ address.payNavigation.nompays }}</p>
+					</div>
+					<div class="buttons-actions">
+						<!-- <button class="button button-sm button-suppr" @click="popupRemove.isOpen.value = address.idadresse">
+							Supprimer l'adresse
+						</button> -->
+						<button
+							class="button button-sm button-modif"
+							@click="
+								() => {
+									const dep = departements.list.find(
+											(d) => d.iddepartement === address.iddepartement,
+										),
+										ville = villes.list.find((v) => v.codeinsee === address.codeinsee);
+									popupEdit.model.value = {
+										nomadresse: address.nomadresse ?? '',
+										numerorue: address.numerorue ?? '',
+										nomrue: address.nomrue,
+										idpays: address.idpays.toString(),
+										nomdepartement: dep?.nomdepartement ?? dep?.iddepartement.toString() ?? '',
+										nomville: ville?.nomville ?? ville?.codeinsee ?? '',
+										codepostaladresse: address.codepostaladresse,
+									};
+									popupEdit.isOpen.value = address.idadresse;
+								}
+							"
+						>
+							Modifier l'adresse
+						</button>
+					</div>
 				</div>
 			</div>
-			<div></div>
-			{{ login.client.adressesNavigation }}
 		</template>
 		<LoadingSpinner v-else />
 	</main>
@@ -341,45 +354,50 @@ async function deleteAddressSubmit(event: SubmitEvent) {
 h1 {
 	margin-bottom: 1rem;
 }
-.card-address {
-	border: solid;
-	padding: 1rem 2rem;
-	display: inline-block;
-	border-color: var(--t-border2);
-	border-radius: 1rem;
-	background-color: var(--t-background1);
-}
-.title-address {
-	font-weight: 1000;
-	margin-bottom: 1em;
-}
-#add-address {
-	margin-bottom: 1em;
-}
-.button-suppr,
-.button-modif {
-	margin-top: 1rem;
-}
-.div-button-suppr-modif {
-	display: flex;
-	flex-direction: row;
-	gap: 1rem;
-}
-.adresse-form-content {
-	margin-top: 1rem;
-	display: flex;
-	flex-direction: column;
-	// align-items: ;
-	justify-content: space-around;
-	height: 100%;
+
+#addresses-container {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
 	gap: 1rem;
 
-	button {
-		margin-left: auto;
+	.card-address {
+		border: solid var(--t-border2);
+		padding: 1rem 2rem;
+		display: inline-block;
+		border-radius: 1rem;
+		background-color: var(--t-background1);
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+
+		.title-address {
+			font-weight: bold;
+			font-size: 1.5em;
+		}
+	}
+
+	.buttons-actions {
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+	}
+
+	.adresse-form-content {
+		margin-top: 1rem;
+		display: flex;
+		flex-direction: column;
+		// align-items: ;
+		justify-content: space-around;
+		height: 100%;
+		gap: 1rem;
+
+		button {
+			margin-left: auto;
+		}
 	}
 }
-#button-add-address-div {
-	display: flex;
-	justify-content: center;
+
+#add-address {
+	margin-bottom: 1em;
 }
 </style>

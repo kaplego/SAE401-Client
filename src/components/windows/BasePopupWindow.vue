@@ -45,8 +45,13 @@ function hideMenu() {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	background-color: var(--c-blackAlpha-500);
+	background-color: var(--c-blackAlpha-100);
 	z-index: 10000;
+	backdrop-filter: blur(4px);
+}
+
+.theme-dark .popup-background {
+	background-color: var(--c-whiteAlpha-200);
 }
 
 .popup-window {
@@ -55,7 +60,7 @@ function hideMenu() {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	transform-origin: center center;
-	overflow: hidden;
+	overflow: hidden auto;
 	max-height: calc(100% - 2rem);
 
 	.popup-header {

@@ -482,6 +482,7 @@ body.theme-darkdim {
 		transform: translateY(-50%);
 		transition: all 100ms;
 		background-color: var(--t-background1);
+		color: var(--t-foreground1);
 		padding: 0 4px;
 		cursor: text;
 		user-select: none;
@@ -495,6 +496,8 @@ body.theme-darkdim {
 		outline: 0px solid var(--c-accent-500);
 		font-size: 1rem;
 		transition: outline 100ms;
+		background-color: var(--t-background1);
+		color: var(--t-foreground1);
 
 		&:focus {
 			border-color: var(--t-border1-accent);
@@ -515,7 +518,7 @@ body.theme-darkdim {
 		.label {
 			top: 0;
 			font-size: 0.9rem;
-			color: rgb(from var(--t-foreground1) r g b / 1);
+			color: var(--t-foreground1-accent);
 		}
 
 		.input::placeholder {
