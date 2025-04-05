@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import StyledButton from '@/components/StyledButton.vue';
 import { ArrowLeft, ArrowRight } from 'lucide-vue-next';
 
@@ -8,21 +8,44 @@ const props = defineProps<{
 }>();
 
 const selectedIndex = ref<number>(0);
+const bottomImagesContainer = ref<HTMLDivElement>();
+const bottomImages = ref<HTMLDivElement[]>([]);
+
+watchEffect(() => {
+	if (
+		bottomImages.value &&
+		selectedIndex.value <= bottomImages.value.length - 1 &&
+		bottomImagesContainer.value
+	) {
+		bottomImagesContainer.value.scrollTo({
+			behavior: 'smooth',
+			left: bottomImages.value[selectedIndex.value].offsetLeft,
+		});
+	}
+});
 </script>
 
 <template>
 	<div class="carousel-container">
 		<div class="big-image-container">
-			<StyledButton class="button-left" :button-size="'lg'" @click="selectedIndex = (selectedIndex === 0 ? images.length : selectedIndex) - 1">
+			<StyledButton
+				class="button-left"
+				:button-size="'lg'"
+				@click="selectedIndex = (selectedIndex === 0 ? images.length : selectedIndex) - 1"
+			>
 				<ArrowLeft />
 			</StyledButton>
-			<StyledButton class="button-right" :button-size="'lg'" @click="selectedIndex = (selectedIndex + 1) % props.images.length">
+			<StyledButton
+				class="button-right"
+				:button-size="'lg'"
+				@click="selectedIndex = (selectedIndex + 1) % props.images.length"
+			>
 				<ArrowRight />
 			</StyledButton>
 			<img :src="`/img/img/${images[selectedIndex]}`" alt="image de meuble" class="image-carousel-top" />
 		</div>
-		<div class="carousel-products">
-			<div v-for="image in images" v-bind:key="image">
+		<div class="carousel-products" ref="bottomImagesContainer">
+			<div v-for="image in images" v-bind:key="image" ref="bottomImages">
 				<img
 					:src="`/img/img/${image}`"
 					alt="image de meuble"
