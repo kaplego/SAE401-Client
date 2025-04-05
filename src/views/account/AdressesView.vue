@@ -129,7 +129,7 @@ function editAddressSubmit(event: SubmitEvent) {
 <template>
 	<main class="container">
 		<RouterLink to="/account" class="button-text"><ArrowLeft /> Retour</RouterLink>
-		<template v-if="login.client !== null">
+		<template v-if="login.client !== null && departements.loaded && villes.loaded">
 			<!-- ADD ADDRESS -->
 			<FormPopupWindow
 				v-if="popupAdd.isOpen.value"
