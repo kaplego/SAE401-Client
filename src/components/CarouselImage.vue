@@ -8,39 +8,6 @@ const props = defineProps<{
 }>();
 
 const selectedIndex = ref<number>(0);
-// const idImageBottom = ref<number>(0);
-
-// function carouselImageClicked(image: string) {
-// 	selectedIndex.value = props.images.indexOf(image);
-// 	const smallImagesCarousel: NodeListOf<HTMLImageElement> = document.querySelectorAll('.image-carousel');
-// 	for (const imageCarousel of smallImagesCarousel) {
-// 		imageCarousel.style.borderColor = 'var(--c-gray-50)';
-// 	}
-// 	imageHTML.style.borderColor = 'var(--c-gray-800)';
-// }
-
-function rightButtonClicked() {
-	// const indexOfCurrentImage = props.images.indexOf(lienImageTop.value as string);
-	// if (indexOfCurrentImage + 1 <= props.images.length - 1) {
-	// 	lienImageTop.value = props.images[indexOfCurrentImage + 1];
-	// } else {
-	// 	lienImageTop.value = props.images[0];
-	// }
-	// const allSmallCarouselImages: NodeListOf<HTMLImageElement> = document.querySelectorAll('.image-carousel');
-	// allSmallCarouselImages.forEach((img) => {
-	// 	// console.log("LIEN IMAGE : imagesProduit"+lienImageTop.value?.split("imagesProduit")[1]);
-	// 	// console.log("SRC :imagesProduit"+img.src.split("imagesProduit")[1]);
-	// 	console.log("1 : " + img.src.split("imagesProduit")[1]);
-	// 	console.log("2 : " + lienImageTop.value!.split("imagesProduit")[1].replace(/\\/g, "/"));
-
-	// 	if (lienImageTop.value && img.src.split("imagesProduit")[1] == lienImageTop.value!.split("imagesProduit")[1].replace(/\\/g, "/")) {
-	// 		console.log(lienImageTop.value);
-	// 		console.log(img.src);
-	// 		carouselImageClicked(lienImageTop.value.split('img/img/')[1]!, img);
-	// 	}
-	// });
-	selectedIndex.value = (selectedIndex.value + 1) % props.images.length;
-}
 </script>
 
 <template>

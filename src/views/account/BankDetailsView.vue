@@ -76,7 +76,7 @@ function addCard(event: SubmitEvent) {
 		<LoadingSpinner v-else />
 	</main>
 	<FormPopupWindow
-		v-if="popup"
+		v-if="popup.isOpen.value"
 		:onClose="(value) => value ?? (popup.isOpen.value = false)"
 		title="Ajouter une carte bancaire"
 		:buttons="[

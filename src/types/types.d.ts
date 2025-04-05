@@ -4,7 +4,7 @@ declare type ButtonStyle = 'primary' | 'secondary' | 'danger' | 'warning' | 'suc
 declare type Autocomplete = {
 	type: AutocompleteType;
 	values: string[];
-}
+};
 
 declare type Option = {
 	label: string;
@@ -13,4 +13,10 @@ declare type Option = {
 declare type OptionGroup = {
 	label: string;
 	options: Option[];
+};
+
+declare type APIResponseError = {
+	status: string;
+	title: string;
+	errors: Record<string, string[]>;
 };

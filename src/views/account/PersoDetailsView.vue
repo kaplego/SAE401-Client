@@ -7,6 +7,8 @@ import { useLoggedInStore } from '@/stores/login';
 import { ArrowLeft } from 'lucide-vue-next';
 import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
+import API from '@/assets/ts/api';
+import StyledButton from '@/components/StyledButton.vue';
 
 const router = useRouter();
 const login = useLoggedInStore();
@@ -14,47 +16,70 @@ const login = useLoggedInStore();
 if (!login.isLoggedIn) router.push('/login');
 
 watchEffect(() => {
-	if (login.clientReady && login.client === null) router.push('/login');
+	if (login.clientReady && login.client === null) login.logout();
 });
 
 const form = ref<HTMLFormElement>();
 // const error = ref<string | null>(null);
 // const isLoading = ref<boolean>(false);
 
-watchEffect((clean) => {
-	if (form.value) {
-		function submitHandler(event: SubmitEvent) {
-			event.preventDefault();
-			event.stopPropagation();
-			const data = new FormData(form.value);
+type ClientModel = {
+	nom: string;
+	prenom: string;
+	civilite: 'H' | 'F' | 'X' | 'null';
+	email: string;
+	telportable: string;
+	telfixe: string;
+};
 
-			const newClient = { ...login.client };
-			newClient.nomclient = data.get('nomclient') as string;
-			newClient.prenomclient = data.get('prenomclient') as string;
-			newClient.civiliteclient = data.get('civiliteclient') as string;
-			if (newClient.civiliteclient === 'null') newClient.civiliteclient = null;
-			newClient.emailclient = data.get('emailclient') as string;
-			newClient.telportableclient = phoneReverseFormat(data.get('telportableclient') as string);
-			newClient.telfixeclient = data.get('telfixeclient') as string;
-			if (newClient.telfixeclient === '') newClient.telfixeclient = null;
-			else newClient.telfixeclient = phoneReverseFormat(newClient.telfixeclient);
-
-			console.log(newClient);
-
-			// API.clients.create(newClient as Client).then((result) => {
-			// 	console.log(result);
-
-			// 	// if (!result) error.value = "L'adresse email ou le mot de passe est incorrect.";
-			// 	// else {
-			// 	// 	login.login(result.token, result.client.idclient);
-			// 	// 	router.replace('/account');
-			// 	// }
-			// });
-		}
-		form.value?.addEventListener('submit', submitHandler);
-		clean(() => form.value?.removeEventListener('submit', submitHandler));
-	}
+const newClient = ref<ClientModel>({
+	nom: '',
+	prenom: '',
+	civilite: 'null',
+	email: '',
+	telportable: '',
+	telfixe: '',
 });
+const error = ref<string | null>(null);
+
+watchEffect(() => {
+	newClient.value = {
+		nom: login.client?.nomclient ?? '',
+		prenom: login.client?.prenomclient ?? '',
+		civilite: login.client?.civiliteclient ?? 'null',
+		email: login.client?.emailclient ?? '',
+		telportable: phoneFormat(login.client?.telportableclient ?? ''),
+		telfixe: phoneFormat(login.client?.telportableclient ?? ''),
+	};
+});
+
+function save(event: Event) {
+	event.preventDefault();
+	event.stopPropagation();
+
+	if (!login.client) return login.logout();
+
+	API.clients
+		.update({
+			idclient: login.client.idclient,
+			nomclient: newClient.value.nom,
+			prenomclient: newClient.value.prenom,
+			emailclient: newClient.value.email,
+			civiliteclient: newClient.value.civilite === 'null' ? null : newClient.value.civilite,
+			telportableclient: phoneReverseFormat(newClient.value.telportable),
+			telfixeclient: newClient.value.telfixe ? phoneReverseFormat(newClient.value.telfixe) : null,
+			newslettermiliboo: login.client.newslettermiliboo,
+			newsletterpartenaires: login.client.newsletterpartenaires,
+			pointfideliteclient: login.client.pointfideliteclient,
+		})
+		.then((res) => {
+			if (res.isSuccess()) {
+				console.log(res.value);
+			} else {
+				error.value = Object.values((res.value as APIResponseError).errors)[0][0] ?? 'Une erreur est survenue.';
+			}
+		});
+}
 </script>
 
 <template>
@@ -62,14 +87,12 @@ watchEffect((clean) => {
 		<template v-if="login.client !== null">
 			<RouterLink to="/account" class="button-text"><ArrowLeft /> Retour</RouterLink>
 			<h1>Mes informations personnelles</h1>
-			<form ref="form" class="grille-infos">
-				<InputControl label="Nom" name="nomclient" :value="login.client.nomclient" required />
-				<InputControl label="Prénom" name="prenomclient" :value="login.client.prenomclient" required />
+			<form ref="form" class="grille-infos" @submit="save">
+				<InputControl label="Nom" v-model="newClient.nom" required />
+				<InputControl label="Prénom" v-model="newClient.prenom" required />
 				<SelectControl
 					label="Civilité"
-					name="civiliteclient"
 					required
-					:selected="login.client.civiliteclient"
 					:options="{
 						groupped: false,
 						values: [
@@ -79,24 +102,24 @@ watchEffect((clean) => {
 							},
 							{
 								label: 'Homme',
-								value: 'h',
+								value: 'H',
 							},
 							{
 								label: 'Femme',
-								value: 'f',
+								value: 'F',
 							},
 							{
 								label: 'Autre',
-								value: 'x',
+								value: 'X',
 							},
 						],
 					}"
+					v-model="newClient.civilite"
 				/>
-				<InputControl label="Adresse e-mail" name="emailclient" :value="login.client.emailclient" />
+				<InputControl label="Adresse e-mail" type="email" v-model="newClient.email" required />
 				<InputControl
 					label="Téléphone portable"
-					name="telportableclient"
-					:value="phoneFormat(login.client.telportableclient)"
+					v-model="newClient.telportable"
 					type="tel"
 					placeholder="01 23 45 67 89"
 					required
@@ -104,13 +127,15 @@ watchEffect((clean) => {
 				/>
 				<InputControl
 					label="Téléphone fixe"
-					name="telfixeclient"
-					:value="login.client.telfixeclient ? phoneFormat(login.client.telfixeclient) : ''"
+					v-model="newClient.telfixe"
 					type="tel"
 					placeholder="01 23 45 67 89"
 					pattern="^0[0-9]( [0-9]{2}){4}$"
 				/>
-				<input type="submit" value="Enregistrer" class="button" style="grid-column-end: span 2; width: 100%" />
+				<p class="form-error" v-if="error">{{ error }}</p>
+				<StyledButton button-style="primary" type="submit" style="grid-column-end: span 2; width: 100%">
+					Enregistrer
+				</StyledButton>
 			</form>
 		</template>
 		<LoadingSpinner v-else />

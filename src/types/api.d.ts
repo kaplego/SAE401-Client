@@ -80,8 +80,8 @@ declare type Client = {
 	idclient: number;
 	nomclient: string;
 	prenomclient: string;
-	civiliteclient: string | null;
-	emailclient: string | null;
+	civiliteclient: 'H' | 'F' | 'X' | null;
+	emailclient: string;
 	telfixeclient: string | null;
 	telportableclient: string;
 	datecreationcompte: string | Date;

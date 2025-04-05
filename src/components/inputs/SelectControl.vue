@@ -2,7 +2,7 @@
 import { Asterisk } from 'lucide-vue-next';
 
 defineProps<{
-	name: string;
+	name?: string;
 	label: string;
 	options:
 		| {

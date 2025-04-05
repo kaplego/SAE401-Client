@@ -4,8 +4,7 @@ import { Asterisk } from 'lucide-vue-next';
 import type { InputTypeHTMLAttribute } from 'vue';
 
 const props = defineProps<{
-	value?: any;
-	name: string;
+	name?: string;
 	label: string;
 	id?: string;
 	placeholder?: string;

@@ -1,4 +1,5 @@
 import axios, { type AxiosResponse } from 'axios';
+import Result from './result';
 
 async function dataOrNull<T>(cb: () => Promise<AxiosResponse<T>>): Promise<T | null> {
 	try {
@@ -20,14 +21,16 @@ async function dataOrDefault<T, D>(defaultValue: D, cb: () => Promise<AxiosRespo
 	}
 }
 
-async function dataOrError<T, E = any>(cb: () => Promise<AxiosResponse<T>>): Promise<[true, T] | [false, E]> {
-	return new Promise<[true, T] | [false, E]>((r) => {
+async function dataOrError<Success, Error = any>(
+	cb: () => Promise<AxiosResponse<Success>>,
+): Promise<Result<Success, Error>> {
+	return new Promise<Result<Success, Error>>((r) => {
 		cb()
 			.then((res) => {
-				r([true, res.data]);
+				r(Result.success(res.data));
 			})
 			.catch((err) => {
-				r([false, err.data as E]);
+				r(Result.error(err.response.data));
 			});
 	});
 }
@@ -82,7 +85,9 @@ class APIManager {
 			>,
 		): Promise<boolean> => {
 			const jwt = localStorage.getItem('jwt');
-			return boolData(() => axios.put(`${this.$endpoint}/adresse/${adresse.idadresse}`, adresse, AuthHeader(jwt)));
+			return boolData(() =>
+				axios.put(`${this.$endpoint}/adresse/${adresse.idadresse}`, adresse, AuthHeader(jwt)),
+			);
 		},
 		delete: (idadresse: ID): Promise<boolean> => {
 			const jwt = localStorage.getItem('jwt');
@@ -145,14 +150,28 @@ class APIManager {
 			if (result) result.cartesNavigation = await this.cartes.byClient(result.idclient);
 			return result;
 		},
-		update: async (client: Client): Promise<[true, ''] | [false, unknown]> => {
+		create: async (client: Client) => {
+			return dataOrError<''>(() => axios.post(`${this.$endpoint}/client`, client));
+		},
+		update: async (
+			client: Pick<
+				Client,
+				| 'idclient'
+				| 'nomclient'
+				| 'prenomclient'
+				| 'civiliteclient'
+				| 'emailclient'
+				| 'telfixeclient'
+				| 'telportableclient'
+				| 'pointfideliteclient'
+				| 'newslettermiliboo'
+				| 'newsletterpartenaires'
+			>,
+		) => {
 			const jwt = localStorage.getItem('jwt');
-			return dataOrError<''>(() =>
+			return dataOrError<Client, APIResponseError>(() =>
 				axios.put(`${this.$endpoint}/client/${client.idclient}`, client, AuthHeader(jwt)),
 			);
-		},
-		create: async (client: Client): Promise<[true, ''] | [false, unknown]> => {
-			return dataOrError<''>(() => axios.post(`${this.$endpoint}/client`, client));
 		},
 	};
 
