@@ -4,6 +4,7 @@
 		"dbaeumer.vscode-eslint",
 		"EditorConfig.EditorConfig",
 		"esbenp.prettier-vscode",
-		"usernamehw.errorlens"
+		"usernamehw.errorlens",
+		"gruntfuggly.todo-tree"
 	]
 }
