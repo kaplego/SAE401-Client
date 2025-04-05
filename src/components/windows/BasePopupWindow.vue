@@ -5,12 +5,14 @@ import { ref } from 'vue';
 const props = defineProps<{
 	width?: `${number}${'%' | 'px'}`;
 	title?: string;
+	/** Exécuté lorsque la popup est fermée */
 	onClose?: () => unknown;
 }>();
 
 const pwindow = ref<HTMLDivElement>();
 const pwindowcontent = ref<HTMLDivElement>();
 
+/** Fermer la popup */
 function hideMenu() {
 	props.onClose?.();
 }
@@ -26,7 +28,11 @@ function hideMenu() {
 			}
 		"
 	>
-		<div class="popup-window" ref="pwindowcontent" :style="`width: clamp(150px, ${width ?? '500px'}, calc(100% - 2rem));`">
+		<div
+			class="popup-window"
+			ref="pwindowcontent"
+			:style="`width: clamp(150px, ${width ?? '500px'}, calc(100% - 2rem));`"
+		>
 			<div class="popup-header">
 				<div class="popup-window-back" @click="hideMenu()"><ArrowLeft /> Retour</div>
 				<p class="popup-title" v-if="title != null">{{ title }}</p>

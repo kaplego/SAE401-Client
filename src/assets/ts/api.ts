@@ -1,6 +1,7 @@
 import axios, { type AxiosResponse } from 'axios';
 import Result from './result';
 
+/** Renvoie les données de la requête, ou null si erreur */
 async function dataOrNull<T>(cb: () => Promise<AxiosResponse<T>>): Promise<T | null> {
 	try {
 		const data = await cb();
@@ -11,6 +12,7 @@ async function dataOrNull<T>(cb: () => Promise<AxiosResponse<T>>): Promise<T | n
 	}
 }
 
+/** Renvoie les données de la requête, ou la valeur par défaut si erreur */
 async function dataOrDefault<T, D>(defaultValue: D, cb: () => Promise<AxiosResponse<T>>): Promise<T | D> {
 	try {
 		const data = await cb();
@@ -21,6 +23,7 @@ async function dataOrDefault<T, D>(defaultValue: D, cb: () => Promise<AxiosRespo
 	}
 }
 
+/** Renvoie une instance de [`Result`](./result.ts) */
 async function dataOrError<Success, Error = any>(
 	cb: () => Promise<AxiosResponse<Success>>,
 ): Promise<Result<Success, Error>> {
@@ -35,6 +38,7 @@ async function dataOrError<Success, Error = any>(
 	});
 }
 
+/** Renvoie un booléen en fonction du succès de la requête */
 async function boolData(cb: () => Promise<AxiosResponse>): Promise<boolean> {
 	try {
 		await cb();
@@ -44,12 +48,14 @@ async function boolData(cb: () => Promise<AxiosResponse>): Promise<boolean> {
 	}
 }
 
+/** Génère l'en-tête d'autorisation JWT */
 const AuthHeader = (jwt: string | null) => ({
 	headers: {
 		Authorization: `Bearer ${jwt}`,
 	},
 });
 
+/** Méthodes de communication avec l'API */
 class APIManager {
 	public readonly $endpoint: string;
 
@@ -181,8 +187,7 @@ class APIManager {
 	};
 
 	public readonly couleurs = {
-		get: async (idcouleur: ID) =>
-			dataOrNull<Couleur>(() => axios.get(`${this.$endpoint}/couleur/${idcouleur}`)),
+		get: async (idcouleur: ID) => dataOrNull<Couleur>(() => axios.get(`${this.$endpoint}/couleur/${idcouleur}`)),
 	};
 
 	public readonly departements = {

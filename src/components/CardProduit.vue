@@ -8,6 +8,7 @@ const props = defineProps({
 	produit: Produit;
 };
 
+// Calculer la coloration la moins chère pour la placer en premier
 const colorationLaMoinsChere = props.produit.colorationsNavigation.reduce(
 	(prev, curr) => ((curr.prixsolde ?? curr.prixvente) < (prev?.prixsolde ?? prev?.prixvente) ? curr : prev),
 	props.produit.colorationsNavigation[0],

@@ -10,6 +10,7 @@ export function stringFormat(str: string, args: Record<string, string>) {
 	return str;
 }
 
+/** Formatter un numéro de téléphone */
 export function phoneFormat(phone: string) {
 	if (!/^33\d{9}$/.test(phone)) return phone;
 
@@ -18,31 +19,36 @@ export function phoneFormat(phone: string) {
 	for (let i = 1; i < 9; i += 2) res.push(`${arr[i]}${arr[i + 1]}`);
 	return res.join(' ');
 }
-
+/** Déformatter un numéro de téléphone */
 export function phoneReverseFormat(formatted: string) {
 	if (/^0[0-9]( [0-9]{2}){4}$/.test(formatted)) return `33${formatted.substring(1).replace(/ /g, '')}`;
 	return formatted;
 }
 
+/** Formatter un numéro de carte bancaire */
 export function cardNumberFormat(card: string) {
 	const arr = card.split('');
 	const res = [];
 	for (let i = 0; i < 16; i += 4) res.push(arr.slice(i, i + 4).join(''));
 	return res.join(' ');
 }
-
+/** Déformatter un numéro de carte bancaire */
 export function cardNumberReverseFormat(formatted: string) {
 	if (/^0[0-9]( [0-9]{2}){4}$/.test(formatted)) return `33${formatted.substring(1).replace(/ /g, '')}`;
 	return formatted;
 }
 
+/** Affiche un avertissement si le temps jusqu'à la date d'expiration de la
+ * carte de crédit est inférieur à ce nombre de millisecondes. */
 export const CARD_EXPIRATION_WARNING = 60 * 24 * 60 * 60 * 1000;
 
 export enum AutocompleteType {
 	Near,
 	Exact,
-	ExactWithFallback
+	ExactWithFallback,
 }
+
+/** Calcule la distance de Levenshtein entre deux chaînes de caractères. */
 export function levenshteinDistance(a: string, b: string): number {
 	const m = a.length;
 	const n = b.length;

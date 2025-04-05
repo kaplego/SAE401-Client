@@ -29,6 +29,8 @@ export const useCartStore = defineStore('cart', () => {
 							quantitepanier: number;
 						}
 					>((r) =>
+						// Récupérer le produit depuis l'API
+						// TODO - À modifier lors de l'ajout des navigations dans coloration
 						API.products.get(item.idproduit).then((resProduit) => {
 							if (!resProduit) return;
 

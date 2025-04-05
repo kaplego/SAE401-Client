@@ -20,14 +20,23 @@ watchEffect(() => {
 	if (login.clientReady && login.client === null) router.push('/login');
 });
 
+// TODO - Utiliser un v-model
 const popup = usePopup(false);
 function addCard(event: SubmitEvent) {
-	if (!login.client) return (popup.isOpen.value = false);
+	if (!login.client) return (popup.status.value = false);
 	popup.isLoading.value = true;
 	popup.error.value = null;
 
 	const data = new FormData(event.target as HTMLFormElement);
 
+	// Vérifier que le nom de carte n'existe pas déjà pour ce compte
+	if (login.client.cartesNavigation.find((c) => c.nomcartebancaire === (data.get('name') as string))) {
+		popup.isLoading.value = false;
+		popup.error.value = 'Une carte existe déjà avec ce nom.';
+		return;
+	}
+
+	// Vérifier que la carte n'existe pas déjà pour ce compte
 	if (
 		login.client.cartesNavigation.find(
 			(c) => c.numcartebancaire.replace(/ /g, '') === (data.get('number') as string).replace(/ /g, ''),
@@ -38,6 +47,7 @@ function addCard(event: SubmitEvent) {
 		return;
 	}
 
+	// Créer la carte dans l'API
 	API.cartes
 		.create({
 			idclient: login.client.idclient,
@@ -49,7 +59,7 @@ function addCard(event: SubmitEvent) {
 		.then(async (cb) => {
 			if (cb) {
 				await login.refresh();
-				popup.isOpen.value = false;
+				popup.status.value = false;
 				popup.error.value = null;
 			} else popup.error.value = "Une erreur s'est produite.";
 			popup.isLoading.value = false;
@@ -63,7 +73,7 @@ function addCard(event: SubmitEvent) {
 			<RouterLink to="/account" class="button-text"><ArrowLeft /> Retour</RouterLink>
 			<h1>Mes informations bancaires</h1>
 			<p>Appuiez sur une carte pour voir ses informations.</p>
-			<StyledButton buttonSize="sm" @click="popup.isOpen.value = true">Ajouter une carte bancaire</StyledButton>
+			<StyledButton buttonSize="sm" @click="popup.status.value = true">Ajouter une carte bancaire</StyledButton>
 			<div class="grille-cartes">
 				<CarteBancaire
 					v-for="card in login.client.cartesNavigation"
@@ -76,8 +86,8 @@ function addCard(event: SubmitEvent) {
 		<LoadingSpinner v-else />
 	</main>
 	<FormPopupWindow
-		v-if="popup.isOpen.value"
-		:onClose="(value) => value ?? (popup.isOpen.value = false)"
+		v-if="popup.status.value"
+		:onClose="(value) => value ?? (popup.status.value = false)"
 		title="Ajouter une carte bancaire"
 		:buttons="[
 			{

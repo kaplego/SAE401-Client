@@ -12,11 +12,8 @@ const bottomImagesContainer = ref<HTMLDivElement>();
 const bottomImages = ref<HTMLDivElement[]>([]);
 
 watchEffect(() => {
-	if (
-		bottomImages.value &&
-		selectedIndex.value <= bottomImages.value.length - 1 &&
-		bottomImagesContainer.value
-	) {
+	// Faire défiler la liste des photos jusqu'à la photo sélectionnée
+	if (bottomImages.value && selectedIndex.value <= bottomImages.value.length - 1 && bottomImagesContainer.value) {
 		bottomImagesContainer.value.scrollTo({
 			behavior: 'smooth',
 			left: bottomImages.value[selectedIndex.value].offsetLeft,

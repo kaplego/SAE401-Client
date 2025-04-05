@@ -16,7 +16,10 @@ const login = useLoggedInStore();
 if (!login.isLoggedIn) router.push('/login');
 
 watchEffect(() => {
-	if (login.clientReady && login.client === null) login.logout();
+	if (login.clientReady && login.client === null) {
+		login.logout();
+		router.push('/login');
+	}
 });
 
 const form = ref<HTMLFormElement>();
@@ -53,12 +56,19 @@ watchEffect(() => {
 	};
 });
 
+/** Sauvegarder les informations personnelles du client */
 function save(event: Event) {
 	event.preventDefault();
 	event.stopPropagation();
 
-	if (!login.client) return login.logout();
+	// Vérifier que le client est toujours connecté
+	if (!login.client) {
+		login.logout();
+		router.push('/login');
+		return;
+	}
 
+	// Modifier le client dans l'API
 	API.clients
 		.update({
 			idclient: login.client.idclient,

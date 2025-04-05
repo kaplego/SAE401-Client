@@ -8,14 +8,17 @@ export const useLoggedInStore = defineStore('loggedin', () => {
 	const client = ref<Client | null>(null);
 	const clientReady = ref<boolean>(false);
 
+	/** Vérifie si l'utilisateur est connecté. */
 	const isLoggedIn = computed(() => {
 		return JWT.value !== null && clientId.value !== null;
 	});
 
+	// Met à jour l'utilisateur (`client`) lors d'un changement.
 	watchEffect(() => {
 		refresh();
 	});
 
+	/** Se connecter avec un JWT et l'ID du client. */
 	function login(jwt: string, clientid: ID) {
 		clientReady.value = false;
 		localStorage.setItem('jwt', jwt);
@@ -24,6 +27,7 @@ export const useLoggedInStore = defineStore('loggedin', () => {
 		clientId.value = localStorage.getItem('clientid');
 	}
 
+	/** Se déconnecter. */
 	function logout() {
 		clientReady.value = false;
 		localStorage.removeItem('jwt');
@@ -32,6 +36,7 @@ export const useLoggedInStore = defineStore('loggedin', () => {
 		clientId.value = null;
 	}
 
+	/** Mettre à jour les données de `client`. */
 	async function refresh() {
 		if (isLoggedIn.value) {
 			API.clients.get(clientId.value!).then((c) => {
