@@ -50,7 +50,7 @@ props.produit.colorationsNavigation.sort((a, b) =>
 	</RouterLink>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .link-produit {
 	text-decoration: none;
 }

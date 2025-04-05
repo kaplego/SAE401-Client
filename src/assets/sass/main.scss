@@ -595,11 +595,8 @@ body.theme-darkdim {
 	&::before {
 		content: $content;
 		position: absolute;
-		bottom: calc(100% + 0.5rem);
 		width: max-content;
 		max-width: 150px;
-		left: 50%;
-		transform: translateX(-50%);
 		background-color: var(--t-background5);
 		z-index: 150;
 		display: none;
@@ -615,8 +612,6 @@ body.theme-darkdim {
 		display: none;
 		height: 8px;
 		width: 8px;
-		left: calc(50% - 4px);
-		bottom: calc(100% + 0.5rem - 4px);
 		transform: rotateZ(45deg);
 		background-color: var(--t-background5);
 		z-index: 149;
@@ -628,8 +623,20 @@ body.theme-darkdim {
 	}
 }
 
-*[data-tooltip] {
+*[data-tooltip],
+*[data-tooltip-top] {
 	@include tooltip-base(attr(data-tooltip));
+
+	&::before {
+		bottom: calc(100% + 0.5rem);
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	&::after {
+		bottom: calc(100% + 0.5rem - 4px);
+		left: calc(50% - 4px);
+	}
 }
 *[data-tooltip-down] {
 	@include tooltip-base(attr(data-tooltip-down));
@@ -637,11 +644,31 @@ body.theme-darkdim {
 	&::before {
 		bottom: unset;
 		top: calc(100% + 0.5rem);
+		left: 50%;
+		transform: translateX(-50%);
 	}
 
 	&::after {
 		bottom: unset;
 		top: calc(100% + 0.5rem - 4px);
+		left: calc(50% - 4px);
+	}
+}
+*[data-tooltip-right] {
+	@include tooltip-base(attr(data-tooltip-right));
+
+	&::before {
+		bottom: unset;
+		top: 50%;
+		transform: translateY(-50%);
+		left: calc(100% + 0.5rem);
+	}
+
+	&::after {
+		bottom: unset;
+		top: 50%;
+		transform: rotateZ(45deg) translateY(-50%);
+		left: calc(100% + 0.5rem - 4px);
 	}
 }
 

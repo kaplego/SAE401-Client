@@ -20,3 +20,5 @@ declare type APIResponseError = {
 	title: string;
 	errors: Record<string, string[]>;
 };
+
+type CartItem = Omit<DetailPanier, 'idclient' | 'clientNavigation' | 'colorationNavigation'>;

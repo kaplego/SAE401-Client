@@ -175,6 +175,16 @@ class APIManager {
 		},
 	};
 
+	public readonly colorations = {
+		get: async (idproduit: ID, idcouleur: ID) =>
+			dataOrNull<Coloration>(() => axios.get(`${this.$endpoint}/coloration/${idproduit}/${idcouleur}`)),
+	};
+
+	public readonly couleurs = {
+		get: async (idcouleur: ID) =>
+			dataOrNull<Couleur>(() => axios.get(`${this.$endpoint}/couleur/${idcouleur}`)),
+	};
+
 	public readonly departements = {
 		list: async (): Promise<Departement[]> =>
 			dataOrDefault([], () => axios.get(`${this.$endpoint}/departement/getalldepartement`)),

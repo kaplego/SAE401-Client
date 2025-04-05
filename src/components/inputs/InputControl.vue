@@ -20,10 +20,13 @@ const props = defineProps<{
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>();
 
+// Mettre à jour le `v-model` lorsque l'utilisateur écrit
 function onInput(event: Event) {
 	const target = event.target as HTMLInputElement;
 	emit('update:modelValue', target.value);
 }
+
+// Effectuer l'autocomplétion lorsque l'utilisateur sort du champ
 function onChange(event: Event) {
 	const target = event.target as HTMLInputElement;
 	target.value = getAutocompletion(target.value);
@@ -33,20 +36,25 @@ function onChange(event: Event) {
 function getAutocompletion(value: string) {
 	if (!props.autocomplete || value === '') return value;
 	switch (props.autocomplete.type) {
+		// Cherche un résultat exact
 		case AutocompleteType.Exact:
 			const strExact = props.autocomplete.values.find((v) => v.toUpperCase().startsWith(value.toUpperCase()));
 			return strExact ?? value;
+		// Cherche un résultat exact s'il existe
 		case AutocompleteType.ExactWithFallback:
 			const strExactFallback = props.autocomplete.values.find((v) =>
 				v.toUpperCase().startsWith(value.toUpperCase()),
 			);
-			if (strExactFallback) return strExactFallback;
+			if (strExactFallback) return strExactFallback; // S'il existe, sinon :
+		// Cherche le résultat le plus proches
 		case AutocompleteType.Near:
 			let nearest: [number, string] | null = null;
 			for (const str of props.autocomplete.values) {
+				// Utilise la distance de Levenshtein
 				const l = levenshteinDistance(value.toUpperCase(), str);
 				if (nearest == null || l < nearest[0]) nearest = [l, str];
 			}
+			// Renvoie le résultat le plus proche
 			return nearest?.[1] ?? value;
 	}
 	return value;
