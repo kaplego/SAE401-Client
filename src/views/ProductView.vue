@@ -10,38 +10,71 @@ const isLoading = useLoadingStore();
 isLoading.switchLoading(false);
 const product = ref<Produit | null>(null);
 const images: string[] = [];
+const idAndColor: { image: string; color: string }[] = [];
+
+const filteredImages = ref<string[]>([]);
+
+const rgb2hex = (rgb: any) =>
+	`#${rgb
+		.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/)
+		.slice(1)
+		.map((n: any) => parseInt(n, 10).toString(16).padStart(2, '0'))
+		.join('')}`;
 
 API.products.get(useRouter().currentRoute.value.params.id as string).then((p) => {
 	if (!p) router.push('/');
 	product.value = p;
-	p?.colorationsNavigation.forEach(coloration => {
-		coloration.photocolsNavigation.forEach(photocol => {
+	p?.colorationsNavigation.forEach((coloration) => {
+		const color = '#' + coloration.couleurNavigation.rgbcouleur;
+
+		coloration.photocolsNavigation.forEach((photocol) => {
 			images.push(photocol.photoNavigation.sourcephoto);
-		})
+			filteredImages.value.push(photocol.photoNavigation.sourcephoto);
+			idAndColor.push({
+				image: photocol.photoNavigation.sourcephoto,
+				color: color,
+			});
+		});
 	});
 });
 
-
-
-
-
+function switch2Color500CestTropCher(div: HTMLDivElement) {
+	const hexColor: string = rgb2hex(div.style.backgroundColor);
+	filteredImages.value = [];
+	idAndColor.forEach((img) => {
+		console.log(img.color);
+		if (img.color == hexColor) {
+			filteredImages.value.push(img.image);
+		}
+	});
+	console.log(filteredImages);
+}
 </script>
 
 <template>
 	<main class="container">
 		<template v-if="product !== null">
 			<div class="illustrations-card">
-				<!-- <img src="https://placehold.co/800x800/PNG" :alt="product.nomproduit" class="photo" />
-				<img src="https://placehold.co/800x800/PNG" :alt="product.nomproduit" class="photo" />
-				<img src="https://placehold.co/800x800/PNG" :alt="product.nomproduit" class="photo" />
-				<img src="https://placehold.co/800x800/PNG" :alt="product.nomproduit" class="photo" /> -->
-
 				<!-- <template v-for="coloration in product.colorationsNavigation">
 					<img v-for="photocol in coloration.photocolsNavigation" :src='`/img/img/${photocol.photoNavigation.sourcephoto}`' alt="" v-bind:key="photocol.idphoto">
 				</template>
 				<img :src='`/img/img/${product.colorationsNavigation[0].photocolsNavigation[0].photoNavigation.sourcephoto}`' alt=""> -->
 
-				<CarouselImage :images="images"/>
+				<CarouselImage :images="filteredImages" />
+
+				<div id="color-selector">
+					<div
+						v-for="coloration of product.colorationsNavigation"
+						v-bind:key="coloration.idcouleur"
+						class="color-dot"
+						:style="`background-color: #${coloration.couleurNavigation.rgbcouleur};`"
+						@click="
+							(ev) => {
+								switch2Color500CestTropCher(ev.target as HTMLDivElement);
+							}
+						"
+					></div>
+				</div>
 
 				<div class="information-card">
 					<h1>{{ product.nomproduit }}</h1>
@@ -79,5 +112,14 @@ API.products.get(useRouter().currentRoute.value.params.id as string).then((p) =>
 }
 .fa.fa-star {
 	font-size: 15px;
+}
+#color-selector {
+	display: flex;
+}
+.color-dot {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	border: solid 1px black;
 }
 </style>

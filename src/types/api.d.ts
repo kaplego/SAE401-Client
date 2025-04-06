@@ -119,7 +119,7 @@ declare type Coloration = {
 	prixvente: number;
 	prixsolde: number | null;
 	quantitestock: number;
-	descriptioncoloration: string;
+	descriptioncoloration: string | null;
 	estvisible: boolean;
 	couleurNavigation: Couleur;
 	photocolsNavigation: PhotoColoration[];
