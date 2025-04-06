@@ -16,6 +16,7 @@ const props = defineProps<{
 	hint?: string;
 	modelValue?: string;
 	autocomplete?: Autocomplete;
+	inputSize?: 'sm' | 'md' | 'lg';
 }>();
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>();
@@ -62,7 +63,7 @@ function getAutocompletion(value: string) {
 </script>
 
 <template>
-	<div class="input-control">
+	<div :class="`input-control input-${inputSize ?? 'md'}`">
 		<label class="label" :for="id ?? name">{{ label }} <Asterisk class="required" v-if="required" /></label>
 		<input
 			class="input"

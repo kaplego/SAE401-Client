@@ -474,6 +474,7 @@ body.theme-darkdim {
 
 @mixin input() {
 	position: relative;
+	--bg: var(--t-background1);
 
 	.label {
 		position: absolute;
@@ -481,7 +482,7 @@ body.theme-darkdim {
 		top: 50%;
 		transform: translateY(-50%);
 		transition: all 100ms;
-		background-color: var(--t-background1);
+		background-color: var(--bg);
 		color: var(--t-foreground1);
 		padding: 0 4px;
 		cursor: text;
@@ -496,7 +497,7 @@ body.theme-darkdim {
 		outline: 0px solid var(--c-accent-500);
 		font-size: 1rem;
 		transition: outline 100ms;
-		background-color: var(--t-background1);
+		background-color: var(--bg);
 		color: var(--t-foreground1);
 
 		&:focus {
@@ -534,6 +535,12 @@ body.theme-darkdim {
 		.input {
 			border-color: var(--c-red-500);
 			outline-color: var(--c-red-500);
+		}
+	}
+
+	&.input-sm {
+		.input {
+			padding: 0.25rem 0.75rem;
 		}
 	}
 }

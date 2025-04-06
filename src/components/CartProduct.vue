@@ -2,17 +2,29 @@
 import { computed, ref } from 'vue';
 import ImagePlaceholder from './placeholders/ImagePlaceholder.vue';
 import ImageHover from './ImageHover.vue';
+import StyledButton from './StyledButton.vue';
+import InputControl from './inputs/InputControl.vue';
+import { useCartStore } from '@/stores/cart';
+import { Minus, Plus } from 'lucide-vue-next';
+import PriceDisplay from './PriceDisplay.vue';
 
 const props = defineProps<{
 	coloration: Coloration;
 	quantite: number;
 }>();
 
+const cart = useCartStore();
+
 // Récupérer les sources des photos
 const photos = computed(() => props.coloration?.photocolsNavigation.map((p) => p.photoNavigation.sourcephoto));
 const isHovered = ref<boolean>(false);
 
-const totalPrice = computed(() => (props.coloration?.prixsolde ?? props.coloration?.prixvente ?? 0) * props.quantite);
+const totalSalePrice = computed(() =>
+	props.coloration.prixsolde ? props.coloration.prixsolde * props.quantite : null,
+);
+const totalBasePrice = computed(() => (props.coloration.prixvente ?? 0) * props.quantite);
+
+const cartQuantity = computed(() => cart.getQuantity(props.coloration.idproduit, props.coloration.idcouleur));
 </script>
 
 <template>
@@ -41,15 +53,50 @@ const totalPrice = computed(() => (props.coloration?.prixsolde ?? props.colorati
 						</template>
 						<template v-else>{{ coloration.prixvente }} €</template>
 					</p>
-					<div
-						class="coloration"
-						:style="`--couleur: #${coloration.couleurNavigation.rgbcouleur};`"
-						:data-tooltip-right="coloration.couleurNavigation.nomcouleur"
-					></div>
+					<div class="coloration">
+						<div class="couleur" :style="`--couleur: #${coloration.couleurNavigation.rgbcouleur};`"></div>
+						<p class="nom">{{ coloration.couleurNavigation.nomcouleur }}</p>
+					</div>
 				</div>
 				<div class="cart-details">
-					<p class="quantity">Quantité : {{ quantite }}</p>
-					<p class="total-price">Prix total : {{ totalPrice.toFixed(2) }} €</p>
+					<div
+						class="cart-quantity"
+						@click="
+							(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+							}
+						"
+					>
+						<StyledButton
+							buttonStyle="primary"
+							button-size="sm"
+							@click="cart.removeFromCart(coloration.idproduit, coloration.idcouleur)"
+						>
+							<Minus />
+						</StyledButton>
+						<InputControl
+							label="Quantité"
+							input-size="sm"
+							:modelValue="cartQuantity.toString()"
+							@update:modelValue="
+								(value) => {
+									if (!Number.isNaN(+value))
+										cart.setQuantity(coloration.idproduit, coloration.idcouleur, +value);
+								}
+							"
+						/>
+						<StyledButton
+							buttonStyle="primary"
+							button-size="sm"
+							@click="cart.addToCart(coloration.idproduit, coloration.idcouleur)"
+						>
+							<Plus />
+						</StyledButton>
+					</div>
+					<p class="total-price">
+						Prix total : <PriceDisplay :selling-price="totalBasePrice" :on-sale-price="totalSalePrice" />
+					</p>
 				</div>
 			</div>
 		</div>
@@ -63,6 +110,17 @@ const totalPrice = computed(() => (props.coloration?.prixsolde ?? props.colorati
 		aspect-ratio: 1;
 		height: 100%;
 		border-radius: 4px;
+	}
+
+	.cart-quantity {
+		.input-control {
+			--bg: var(--t-background2);
+			width: 100px;
+		}
+	}
+
+	&:hover .cart-quantity .input-control {
+		--bg: var(--t-background1-accent);
 	}
 }
 </style>
@@ -127,11 +185,24 @@ const totalPrice = computed(() => (props.coloration?.prixsolde ?? props.colorati
 			}
 
 			.coloration {
-				height: 1.5em;
-				width: 1.5em;
-				border: 1px solid var(--t-foreground1);
-				background-color: var(--couleur);
-				border-radius: 100vw;
+				display: flex;
+				align-items: center;
+				border: 2px solid var(--t-background3);
+				border-radius: 4px;
+				width: max-content;
+
+				.couleur {
+					height: 100%;
+					aspect-ratio: 1;
+					background-color: var(--couleur);
+					border-radius: 2px 0 0 2px;
+				}
+
+				.nom {
+					padding: 0.125rem 0.5rem;
+					background-color: var(--t-background3);
+					border-radius: 0 2px 2px 0;
+				}
 			}
 		}
 
@@ -145,6 +216,11 @@ const totalPrice = computed(() => (props.coloration?.prixsolde ?? props.colorati
 			overflow: hidden;
 			gap: 0.5rem;
 			padding: 0.5rem 1rem;
+
+			.cart-quantity {
+				display: flex;
+				gap: 0.5rem;
+			}
 		}
 	}
 }
