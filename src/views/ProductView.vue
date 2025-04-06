@@ -99,6 +99,11 @@ onMounted(async () => {
 						"
 					></div>
 				</div>
+				Aspect Technique :
+			<br>
+			<div id="technical-aspect">
+			{{ fileText }}
+		</div>
 
 				<StyledButton
 					v-if="!cart.isInCart(product.idproduit, selectedColoration?.idcouleur ?? -1)"
@@ -130,9 +135,7 @@ onMounted(async () => {
 			</div>
 
 			<!-- <p>{{ product }}</p> -->
-			Aspect Technique :
-			<br>
-			{{ fileText }}
+
 		</div>
 
 		<template v-else>
@@ -194,5 +197,8 @@ onMounted(async () => {
 	height: 40px;
 	border-radius: 50%;
 	border: solid 1px black;
+}
+#technical-aspect {
+	 white-space: pre-wrap;
 }
 </style>
