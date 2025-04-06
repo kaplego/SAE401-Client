@@ -2,7 +2,7 @@
 import { useLoadingStore } from '@/stores/loading';
 import { useRouter } from 'vue-router';
 import router from '@/router';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import API from '@/assets/ts/api';
 import { Star } from 'lucide-vue-next';
 import CarouselImage from '@/components/CarouselImage.vue';
@@ -10,6 +10,7 @@ import PriceDisplay from '@/components/PriceDisplay.vue';
 const isLoading = useLoadingStore();
 isLoading.switchLoading(false);
 const product = ref<Produit | null>(null);
+const fileText = ref<string>('');
 
 const selectedColoration = ref<Coloration | null>(null);
 const images = computed(
@@ -20,6 +21,18 @@ API.products.get(useRouter().currentRoute.value.params.id as string).then((p) =>
 	if (!p) router.push('/');
 	product.value = p;
 	selectedColoration.value = product.value!.colorationsNavigation[0];
+});
+onMounted(async () => {
+	try {
+		const response = await fetch('./../../img/files/AspectTechnique/produit' + useRouter().currentRoute.value.params.id + '.txt');
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		fileText.value = await response.text();
+	} catch (error) {
+		console.error('Error fetching the text file:', error);
+		fileText.value = 'Error loading content.';
+	}
 });
 </script>
 
@@ -66,7 +79,11 @@ API.products.get(useRouter().currentRoute.value.params.id as string).then((p) =>
 			</div>
 
 			<!-- <p>{{ product }}</p> -->
+			Aspect Technique :
+			<br>
+			{{ fileText }}
 		</div>
+
 		<template v-else>
 			<div class="loading loading-lg">
 				<div class="loading-spinner"></div>
