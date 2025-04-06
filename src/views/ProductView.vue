@@ -80,8 +80,8 @@ onMounted(async () => {
 					<div id="price">
 						<PriceDisplay
 							v-if="selectedColoration"
-							:sellingPrice="selectedColoration.prixvente"
-							:onSalePrice="selectedColoration.prixsolde"
+							:basePrice="selectedColoration.prixvente"
+							:salePrice="selectedColoration.prixsolde"
 						/>
 					</div>
 				</div>

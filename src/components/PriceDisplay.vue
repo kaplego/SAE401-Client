@@ -1,22 +1,22 @@
 <script setup lang="ts">
 withDefaults(
 	defineProps<{
-		sellingPrice: number;
-		onSalePrice?: number | null;
+		basePrice: number;
+		salePrice?: number | null;
 	}>(),
 	{
-		onSalePrice: null,
+		salePrice: null,
 	},
 );
 </script>
 
 <template>
-	<div class="price" v-if="onSalePrice != null">
-		<div class="onSalePrice">{{ onSalePrice }} €</div>
-		<div class="sellingPrice">{{ sellingPrice }} €</div>
+	<div class="price" v-if="salePrice != null">
+		<div class="onSalePrice">{{ salePrice.toFixed(2) }} €</div>
+		<div class="sellingPrice">{{ basePrice.toFixed(2) }} €</div>
 	</div>
 	<div class="price" v-else>
-		<div class="sellingPrice">{{ sellingPrice }} €</div>
+		<div class="sellingPrice">{{ basePrice.toFixed(2) }} €</div>
 	</div>
 </template>
 
@@ -26,9 +26,7 @@ withDefaults(
 	gap: 0.5rem;
 
 	.sellingPrice {
-		&:not(:has(~ .onSalePrice)) {
-			font-weight: bold;
-		}
+		font-weight: bold;
 	}
 	.onSalePrice {
 		font-weight: bold;
@@ -36,6 +34,8 @@ withDefaults(
 
 		& + .sellingPrice {
 			text-decoration: line-through;
+			opacity: 0.6;
+			font-weight: normal;
 		}
 	}
 }
