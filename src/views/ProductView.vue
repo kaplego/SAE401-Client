@@ -6,13 +6,17 @@ import { ref } from 'vue';
 import API from '@/assets/ts/api';
 import { Star } from 'lucide-vue-next';
 import CarouselImage from '@/components/CarouselImage.vue';
+import PriceDisplay from '@/components/PriceDisplay.vue';
 const isLoading = useLoadingStore();
 isLoading.switchLoading(false);
 const product = ref<Produit | null>(null);
 const images: string[] = [];
-const idAndColor: { image: string; color: string }[] = [];
+const currentColorObj: { image: string; color: string; sellingPrice: number; onSalePrice: number | null; }[] = [];
+const currentSellingPrice = ref<number>();
+const currentOnSalePrice = ref<number | null>();
 
 const filteredImages = ref<string[]>([]);
+
 
 const rgb2hex = (rgb: any) =>
 	`#${rgb
@@ -29,25 +33,35 @@ API.products.get(useRouter().currentRoute.value.params.id as string).then((p) =>
 
 		coloration.photocolsNavigation.forEach((photocol) => {
 			images.push(photocol.photoNavigation.sourcephoto);
-			filteredImages.value.push(photocol.photoNavigation.sourcephoto);
-			idAndColor.push({
+			// filteredImages.value.push(photocol.photoNavigation.sourcephoto);
+			currentColorObj.push({
 				image: photocol.photoNavigation.sourcephoto,
 				color: color,
+				sellingPrice: coloration.prixvente,
+				onSalePrice: coloration.prixsolde,
 			});
 		});
 	});
+}).then(() => {
+	changeItemFromColor(currentColorObj[0].color);
 });
+
+function changeItemFromColor(hexColor: string){
+	filteredImages.value = [];
+	currentColorObj.forEach((obj) => {
+		console.log(obj.color);
+		if (obj.color == hexColor) {
+			filteredImages.value.push(obj.image);
+			currentSellingPrice.value = obj.sellingPrice;
+			currentOnSalePrice.value = obj.onSalePrice;
+		}
+	});
+}
 
 function switch2Color500CestTropCher(div: HTMLDivElement) {
 	const hexColor: string = rgb2hex(div.style.backgroundColor);
-	filteredImages.value = [];
-	idAndColor.forEach((img) => {
-		console.log(img.color);
-		if (img.color == hexColor) {
-			filteredImages.value.push(img.image);
-		}
-	});
-	console.log(filteredImages);
+
+	changeItemFromColor(hexColor);
 }
 </script>
 
@@ -88,7 +102,11 @@ function switch2Color500CestTropCher(div: HTMLDivElement) {
 						<p>({{ product.avisNavigation.length }} avis)</p>
 					</div>
 
-					<!--<div class="color-container" v-for="color.couleurNavigation in product.colorationsNavigation"></div>-->
+
+					<div id="price">
+						<PriceDisplay :sellingPrice="currentSellingPrice" :onSalePrice="currentOnSalePrice"/>
+					</div>
+
 				</div>
 			</div>
 			<div id="description">
