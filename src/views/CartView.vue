@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CardProduitCart from '@/components/CardProduitCart.vue';
+import CartProduct from '@/components/CartProduct.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { useCartStore } from '@/stores/cart';
 
@@ -11,14 +11,11 @@ const cart = useCartStore();
 		<h1>
 			Mon panier <template v-if="cart.count > 0">({{ cart.count }})</template>
 		</h1>
-		<button @click="cart.addToCart(2, 20)">Ajouter</button>
-		<button @click="cart.removeFromCart(2, 20)">Retirer</button>
-		{{ cart.itemsList }}
 		<div id="cart">
 			<div id="cart-list">
 				<LoadingSpinner v-if="cart.isListLoading" />
 				<div class="cart-empty" v-else-if="cart.count === 0">Votre panier est vide.</div>
-				<CardProduitCart
+				<CartProduct
 					v-else
 					v-for="item in cart.list"
 					v-bind:key="`${item.idcouleur}${item.idproduit}`"

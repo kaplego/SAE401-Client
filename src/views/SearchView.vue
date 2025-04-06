@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import API from '@/assets/ts/api';
 import { computed, ref, watchEffect } from 'vue';
-import CardProduit from '@/components/CardProduit.vue';
+import CardProduit from '@/components/ProductCard.vue';
 import { useRouter } from 'vue-router';
 import { Search } from 'lucide-vue-next';
 

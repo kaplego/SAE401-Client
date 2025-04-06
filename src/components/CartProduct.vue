@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import ImagePlaceholder from './placeholders/ImagePlaceholder.vue';
+import ImageHover from './ImageHover.vue';
 
 const props = defineProps<{
 	coloration: Coloration;
@@ -9,17 +10,24 @@ const props = defineProps<{
 
 // Récupérer les sources des photos
 const photos = computed(() => props.coloration?.photocolsNavigation.map((p) => p.photoNavigation.sourcephoto));
+const isHovered = ref<boolean>(false);
 
 const totalPrice = computed(() => (props.coloration?.prixsolde ?? props.coloration?.prixvente ?? 0) * props.quantite);
 </script>
 
 <template>
 	<RouterLink :to="'/produits/' + props.coloration.idproduit" class="link-produit">
-		<div class="card-produit">
+		<div class="card-produit" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
+			<ImageHover
+				v-if="photos.length > 1"
+				:force-is-hovered="isHovered"
+				:primary-src="`/img/img/${photos[0]}`"
+				:hovered-src="`/img/img/${photos[1]}`"
+			/>
 			<ImagePlaceholder
-				class="photo"
+				v-else
 				:image-props="{
-					src: photos?.[0] ? `/img/img/${photos[0]}` : 'https://placehold.co/800x800/PNG',
+					src: photos.length === 1 ? `/img/img/${photos[0]}` : 'https://placehold.co/800x800/PNG?text=Photo',
 					alt: coloration.produitNavigation.nomproduit,
 				}"
 			/>
