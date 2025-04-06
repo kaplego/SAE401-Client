@@ -12,13 +12,14 @@ const bottomImagesContainer = ref<HTMLDivElement>();
 const bottomImages = ref<HTMLDivElement[]>([]);
 
 watchEffect(() => {
+	const image = bottomImages.value.find((v) => v.getAttribute('data-index') === selectedIndex.value.toString());
+	if (!image) return;
+
 	// Faire défiler la liste des photos jusqu'à la photo sélectionnée
-	if (bottomImages.value && selectedIndex.value <= bottomImages.value.length - 1 && bottomImagesContainer.value) {
-		bottomImagesContainer.value.scrollTo({
-			behavior: 'smooth',
-			left: bottomImages.value[selectedIndex.value].offsetLeft,
-		});
-	}
+	bottomImagesContainer.value?.scrollTo({
+		behavior: 'smooth',
+		left: image.offsetLeft,
+	});
 });
 </script>
 
@@ -28,10 +29,11 @@ watchEffect(() => {
 			<StyledButton
 				class="button-left"
 				:button-size="'lg'"
-				@click="selectedIndex = (selectedIndex === 0 ? images.length : selectedIndex) - 1"
+				@click="selectedIndex = (selectedIndex <= 0 ? images.length : selectedIndex) - 1"
 			>
 				<ArrowLeft />
 			</StyledButton>
+			<img :src="`/img/img/${images[selectedIndex]}`" alt="image de meuble" class="image-carousel-top" />
 			<StyledButton
 				class="button-right"
 				:button-size="'lg'"
@@ -39,19 +41,14 @@ watchEffect(() => {
 			>
 				<ArrowRight />
 			</StyledButton>
-			<img :src="`/img/img/${images[selectedIndex]}`" alt="image de meuble" class="image-carousel-top" />
 		</div>
 		<div class="carousel-products" ref="bottomImagesContainer">
-			<div v-for="image in images" v-bind:key="image" ref="bottomImages">
+			<div v-for="image in images" v-bind:key="image" ref="bottomImages" :data-index="images.indexOf(image)">
 				<img
 					:src="`/img/img/${image}`"
 					alt="image de meuble"
 					:class="`image-carousel ${selectedIndex === images.indexOf(image) ? 'selected' : ''}`"
-					@click="
-						(ev) => {
-							selectedIndex = images.indexOf(image);
-						}
-					"
+					@click="selectedIndex = images.indexOf(image)"
 				/>
 			</div>
 		</div>
@@ -59,63 +56,66 @@ watchEffect(() => {
 </template>
 
 <style scoped lang="scss">
-.button-left {
-	position: absolute;
-	left: 2rem;
-	top: 50%;
-	transform: translateY(-50%);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-.button-right {
-	position: absolute;
-	right: 2rem;
-	top: 50%;
-	transform: translateY(-50%);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-.carousel-products {
-	display: flex;
-	flex-direction: row;
-	overflow: auto;
-	background-color: var(--c-gray-50);
-	width: 100%;
-}
-.image-carousel {
-	width: 200px;
-	height: 200px;
-	margin: 1rem;
-	border: solid 3px;
-	border-color: var(--c-gray-50);
-	cursor: pointer;
-
-	&.selected {
-		border-color: black;
-	}
-}
-.image-carousel-top {
-	width: 600px;
-	height: 600px;
-	margin: 1rem;
-}
 .carousel-container {
 	position: relative;
-	padding: 0px 10px 10px 10px;
-	background-color: var(--c-gray-300);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-}
-.big-image-container {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	padding-top: 10px;
+	max-width: 100%;
+	overflow: hidden;
+
+	.big-image-container {
+		position: relative;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		padding-top: 10px;
+		aspect-ratio: 1;
+
+		.image-carousel-top {
+			width: clamp(100px, 600px, 100%);
+			aspect-ratio: 1;
+			margin: 1rem;
+		}
+
+		.button {
+			position: absolute;
+			bottom: 1rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&.button-left {
+				left: 2rem;
+			}
+
+			&.button-right {
+				right: 2rem;
+			}
+		}
+	}
+	.carousel-products {
+		display: flex;
+		flex-direction: row;
+		overflow: auto;
+		background-color: var(--c-gray-50);
+		width: 100%;
+		border-radius: 8px;
+
+		.image-carousel {
+			width: 200px;
+			height: 200px;
+			margin: 1rem;
+			border: solid 3px;
+			border-color: var(--c-gray-50);
+			cursor: pointer;
+			border-radius: 4px;
+
+			&.selected {
+				border-color: var(--t-border1-accent);
+			}
+		}
+	}
 }
 </style>

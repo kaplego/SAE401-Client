@@ -2,7 +2,7 @@
 import { useLoadingStore } from '@/stores/loading';
 import { useRouter } from 'vue-router';
 import router from '@/router';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import API from '@/assets/ts/api';
 import { Star } from 'lucide-vue-next';
 import CarouselImage from '@/components/CarouselImage.vue';
@@ -10,86 +10,25 @@ import PriceDisplay from '@/components/PriceDisplay.vue';
 const isLoading = useLoadingStore();
 isLoading.switchLoading(false);
 const product = ref<Produit | null>(null);
-const images: string[] = [];
-const currentColorObj: { image: string; color: string; sellingPrice: number; onSalePrice: number | null; }[] = [];
-const currentSellingPrice = ref<number>();
-const currentOnSalePrice = ref<number | undefined | null>();
 
-const filteredImages = ref<string[]>([]);
-
-
-const rgb2hex = (rgb: any) =>
-	`#${rgb
-		.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/)
-		.slice(1)
-		.map((n: any) => parseInt(n, 10).toString(16).padStart(2, '0'))
-		.join('')}`;
+const selectedColoration = ref<Coloration | null>(null);
+const images = computed(
+	() => selectedColoration.value?.photocolsNavigation.map((p) => p.photoNavigation.sourcephoto) ?? null,
+);
 
 API.products.get(useRouter().currentRoute.value.params.id as string).then((p) => {
 	if (!p) router.push('/');
 	product.value = p;
-	p?.colorationsNavigation.forEach((coloration) => {
-		const color = '#' + coloration.couleurNavigation.rgbcouleur;
-
-		coloration.photocolsNavigation.forEach((photocol) => {
-			images.push(photocol.photoNavigation.sourcephoto);
-			// filteredImages.value.push(photocol.photoNavigation.sourcephoto);
-			currentColorObj.push({
-				image: photocol.photoNavigation.sourcephoto,
-				color: color,
-				sellingPrice: coloration.prixvente,
-				onSalePrice: coloration.prixsolde,
-			});
-		});
-	});
-}).then(() => {
-	changeItemFromColor(currentColorObj[0].color);
+	selectedColoration.value = product.value!.colorationsNavigation[0];
 });
-
-function changeItemFromColor(hexColor: string){
-	filteredImages.value = [];
-	currentColorObj.forEach((obj) => {
-		console.log(obj.color);
-		if (obj.color == hexColor) {
-			filteredImages.value.push(obj.image);
-			currentSellingPrice.value = obj.sellingPrice;
-			currentOnSalePrice.value = obj.onSalePrice;
-		}
-	});
-}
-
-function switch2Color500CestTropCher(div: HTMLDivElement) {
-	const hexColor: string = rgb2hex(div.style.backgroundColor);
-
-	changeItemFromColor(hexColor);
-}
 </script>
 
 <template>
 	<main class="container">
-		<template v-if="product !== null">
-			<div class="illustrations-card">
-				<!-- <template v-for="coloration in product.colorationsNavigation">
-					<img v-for="photocol in coloration.photocolsNavigation" :src='`/img/img/${photocol.photoNavigation.sourcephoto}`' alt="" v-bind:key="photocol.idphoto">
-				</template>
-				<img :src='`/img/img/${product.colorationsNavigation[0].photocolsNavigation[0].photoNavigation.sourcephoto}`' alt=""> -->
-
-				<CarouselImage :images="filteredImages" />
-
-				<div id="color-selector">
-					<div
-						v-for="coloration of product.colorationsNavigation"
-						v-bind:key="coloration.idcouleur"
-						class="color-dot"
-						:style="`background-color: #${coloration.couleurNavigation.rgbcouleur};`"
-						@click="
-							(ev) => {
-								switch2Color500CestTropCher(ev.target as HTMLDivElement);
-							}
-						"
-					></div>
-				</div>
-
+		<div id="product" v-if="product !== null">
+			<CarouselImage class="carousel" v-if="images" :images="images" />
+			<div class="v-separator"></div>
+			<div id="description">
 				<div class="information-card">
 					<h1>{{ product.nomproduit }}</h1>
 					<a href="#description">Description détaillée</a>
@@ -102,19 +41,32 @@ function switch2Color500CestTropCher(div: HTMLDivElement) {
 						<p>({{ product.avisNavigation.length }} avis)</p>
 					</div>
 
-
 					<div id="price">
-						<PriceDisplay :sellingPrice="currentSellingPrice!" :onSalePrice="currentOnSalePrice"/>
+						<PriceDisplay
+							v-if="selectedColoration"
+							:sellingPrice="selectedColoration.prixvente"
+							:onSalePrice="selectedColoration.prixsolde"
+						/>
 					</div>
+				</div>
 
+				<div id="color-selector">
+					<div
+						v-for="coloration of product.colorationsNavigation"
+						v-bind:key="coloration.idcouleur"
+						class="color-dot"
+						:style="`background-color: #${coloration.couleurNavigation.rgbcouleur};`"
+						@click="
+							() => {
+								selectedColoration = coloration;
+							}
+						"
+					></div>
 				</div>
 			</div>
-			<div id="description">
-				<p></p>
-			</div>
 
-			<p>{{ product }}</p>
-		</template>
+			<!-- <p>{{ product }}</p> -->
+		</div>
 		<template v-else>
 			<div class="loading loading-lg">
 				<div class="loading-spinner"></div>
@@ -122,7 +74,24 @@ function switch2Color500CestTropCher(div: HTMLDivElement) {
 		</template>
 	</main>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
+#product {
+	display: grid;
+	grid-template-columns: 1fr 1px 1fr;
+	gap: 1rem;
+
+	.carousel {
+		width: 100%;
+		max-width: 100%;
+		overflow: hidden;
+	}
+
+	.v-separator {
+		height: 100%;
+		width: 100%;
+		background-color: var(--t-background3);
+	}
+}
 .star-container {
 	padding: 0;
 	display: flex;
