@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue';
+import ImageHover from './ImageHover.vue';
+import ImagePlaceholder from './placeholders/ImagePlaceholder.vue';
+
 const props = defineProps({
 	produit: {
 		type: Object,
@@ -14,6 +18,10 @@ const colorationLaMoinsChere = props.produit.colorationsNavigation.reduce(
 	props.produit.colorationsNavigation[0],
 );
 
+// Récupérer les sources des photos
+const photos = computed(() => colorationLaMoinsChere.photocolsNavigation.map((p) => p.photoNavigation.sourcephoto));
+const isHovered = ref<boolean>(false);
+
 props.produit.colorationsNavigation.sort((a, b) =>
 	a == colorationLaMoinsChere ? -1 : b == colorationLaMoinsChere ? 1 : 0,
 );
@@ -21,11 +29,23 @@ props.produit.colorationsNavigation.sort((a, b) =>
 
 <template>
 	<RouterLink :to="'/produits/' + props.produit.idproduit" class="link-produit">
-		<div class="card-produit">
+		<div class="card-produit" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
 			<div class="banniere-soldes-container">
 				<div class="banniere-soldes" v-if="colorationLaMoinsChere?.prixsolde !== null">Soldes</div>
 			</div>
-			<img src="https://placehold.co/800x800/PNG" :alt="props.produit.nomproduit" class="photo" />
+			<ImageHover
+				v-if="photos.length > 1"
+				:force-is-hovered="isHovered"
+				:primary-src="`/img/img/${photos[0]}`"
+				:hovered-src="`/img/img/${photos[1]}`"
+			/>
+			<ImagePlaceholder
+				v-else
+				:image-props="{
+					src: photos.length === 1 ? `/img/img/${photos[0]}` : 'https://placehold.co/800x800/PNG?text=Photo',
+					alt: produit.nomproduit,
+				}"
+			/>
 			<div class="content">
 				<p class="nom">{{ props.produit.nomproduit }}</p>
 				<div>
@@ -61,7 +81,7 @@ props.produit.colorationsNavigation.sort((a, b) =>
 	background-color: var(--t-background2);
 	border-radius: 8px;
 	width: 100%;
-	border: 2px solid var(--t-background1);
+	border: 2px solid var(--t-background3);
 	cursor: pointer;
 	transition: all 100ms;
 	position: relative;
@@ -99,7 +119,7 @@ props.produit.colorationsNavigation.sort((a, b) =>
 		}
 	}
 
-	.photo {
+	img {
 		aspect-ratio: 1;
 		width: 100%;
 		border-radius: 6px 6px 0 0;

@@ -11,9 +11,6 @@ const cart = useCartStore();
 		<h1>
 			Mon panier <template v-if="cart.count > 0">({{ cart.count }})</template>
 		</h1>
-		<button @click="cart.addToCart(2, 20)">Ajouter</button>
-		<button @click="cart.removeFromCart(2, 20)">Retirer</button>
-		{{ cart.itemsList }}
 		<div id="cart">
 			<div id="cart-list">
 				<LoadingSpinner v-if="cart.isListLoading" />

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import ImagePlaceholder from './placeholders/ImagePlaceholder.vue';
+import ImageHover from './ImageHover.vue';
 
 const props = defineProps<{
 	coloration: Coloration;
@@ -16,10 +17,15 @@ const totalPrice = computed(() => (props.coloration?.prixsolde ?? props.colorati
 <template>
 	<RouterLink :to="'/produits/' + props.coloration.idproduit" class="link-produit">
 		<div class="card-produit">
+			<ImageHover
+				v-if="photos.length > 1"
+				:primary-src="`/img/img/${photos[0]}`"
+				:hovered-src="`/img/img/${photos[1]}`"
+			/>
 			<ImagePlaceholder
-				class="photo"
+				v-else
 				:image-props="{
-					src: photos?.[0] ? `/img/img/${photos[0]}` : 'https://placehold.co/800x800/PNG',
+					src: photos.length === 1 ? `/img/img/${photos[0]}` : 'https://placehold.co/800x800/PNG?text=Photo',
 					alt: coloration.produitNavigation.nomproduit,
 				}"
 			/>
