@@ -11,10 +11,13 @@ const props = defineProps<{
 	deletable?: boolean;
 }>();
 
+/** Définit si la carte bancaire est retournée */
 const shown = ref<boolean>(false);
+/** Définit si la carte bancaire est en train de charger */
 const isLoading = ref<boolean>(false);
 const cardElement = ref<HTMLDivElement>();
 
+// Calculer le statut d'expiration
 const now = new Date();
 now.setDate(0);
 now.setHours(0, 0, 0, 0);
@@ -22,9 +25,15 @@ const expiration = new Date(props.card.dateexpirationcarte);
 expiration.setDate(0);
 expiration.setHours(0, 0, 0, 0);
 const expirationDiff = expiration.valueOf() - now.valueOf();
-const expirationStatus = expirationDiff < 0 ? 'expired' : expirationDiff < CARD_EXPIRATION_WARNING ? 'soon' : null;
+/** Statut d'expiration :
+ *
+ * * `"expired"` si elle est expirée
+ * * `"expiring"` si elle expire prochainement
+ * * `null` sinon */
+const expirationStatus = expirationDiff < 0 ? 'expired' : expirationDiff < CARD_EXPIRATION_WARNING ? 'expiring' : null;
 const login = useLoggedInStore();
 
+/** Supprimer la carte bancaire */
 async function remove() {
 	isLoading.value = true;
 	await API.cartes.delete(props.card.idcartebancaire);
@@ -102,8 +111,9 @@ const popupDelete = ref<boolean>(false);
 				value: 'confirm',
 			},
 		]"
-		><h2>Êtes-vous sûr(e) de vouloir supprimer cette carte bancaire ?</h2></PopupWindow
 	>
+		<h2>Êtes-vous sûr(e) de vouloir supprimer cette carte bancaire ?</h2>
+	</PopupWindow>
 </template>
 
 <style lang="scss">
@@ -165,7 +175,7 @@ const popupDelete = ref<boolean>(false);
 					color: white;
 				}
 
-				&.soon {
+				&.expiring {
 					background-color: var(--c-yellow-500);
 					color: white;
 				}
@@ -208,7 +218,7 @@ const popupDelete = ref<boolean>(false);
 					color: var(--c-red-500);
 				}
 
-				&.soon {
+				&.expiring {
 					color: var(--c-yellow-500);
 				}
 			}

@@ -21,6 +21,7 @@ defineProps<{
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>();
 
+// Mettre à jour le `v-model` lorsque l'utilisateur sélectionne une option
 function onChange(event: Event) {
 	const target = event.target as HTMLInputElement;
 	emit('update:modelValue', target.value);

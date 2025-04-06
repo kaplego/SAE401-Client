@@ -41,8 +41,9 @@ function stringOrNull(value: string) {
 	return value.length > 0 ? value : null;
 }
 
+/** Fonction pour créer ou modifier une adresse. */
 function saveAddress(address: AdresseModel, popup: ReturnType<typeof usePopup>, update: number | null = null) {
-	if (!login.client) return (popup.isOpen.value = false);
+	if (!login.client) return (popup.status.value = false);
 	popup.isLoading.value = true;
 	popup.error.value = null;
 
@@ -70,19 +71,21 @@ function saveAddress(address: AdresseModel, popup: ReturnType<typeof usePopup>, 
 		nomrue: address.nomrue,
 		idpays: +address.idpays,
 	};
-	(update !== null ? API.addresses.update({ ...addressBody, idadresse: update }) : API.addresses.create(addressBody)).then(
-		async (cb) => {
-			if (cb) {
-				await login.refresh();
-				popup.isOpen.value = false;
-				popup.error.value = null;
-			} else popup.error.value = "Une erreur s'est produite.";
+	(update !== null
+		? API.addresses.update({ ...addressBody, idadresse: update })
+		: API.addresses.create(addressBody)
+	).then(async (cb) => {
+		if (cb) {
+			await login.refresh();
+			popup.status.value = false;
+			popup.error.value = null;
+		} else popup.error.value = "Une erreur s'est produite.";
 
-			popup.isLoading.value = false;
-		},
-	);
+		popup.isLoading.value = false;
+	});
 }
 
+// Popup de création d'adresse
 const popupAdd = usePopup(false, {
 	idpays: '',
 	nomville: '',
@@ -97,6 +100,7 @@ function addAddressSubmit(event: SubmitEvent) {
 	saveAddress(popupAdd.model.value, popupAdd);
 }
 
+// Popup de modification d'adresse
 const popupEdit = usePopup<null | number, AdresseModel>(null, {
 	idpays: '',
 	nomville: '',
@@ -108,22 +112,9 @@ const popupEdit = usePopup<null | number, AdresseModel>(null, {
 });
 function editAddressSubmit(event: SubmitEvent) {
 	event.preventDefault();
-	if (!popupEdit.isOpen.value) return;
-	saveAddress(popupEdit.model.value, popupEdit, popupEdit.isOpen.value);
+	if (!popupEdit.status.value) return;
+	saveAddress(popupEdit.model.value, popupEdit, popupEdit.status.value);
 }
-
-// const popupRemove = usePopup<null | number, undefined>(null);
-// async function deleteAddressSubmit(event: SubmitEvent) {
-// 	event.preventDefault();
-// 	if (!popupRemove.isOpen.value) return;
-// 	popupRemove.isLoading.value = true;
-
-// 	const ok = await API.addresses.delete(popupRemove.isOpen.value);
-
-// 	popupRemove.isLoading.value = false;
-// 	if (ok) popupRemove.isOpen.value = null;
-// 	else popupRemove.error.value = "Une erreur s'est produite.";
-// }
 </script>
 
 <template>
@@ -132,7 +123,7 @@ function editAddressSubmit(event: SubmitEvent) {
 		<template v-if="login.client !== null && departements.loaded && villes.loaded">
 			<!-- ADD ADDRESS -->
 			<FormPopupWindow
-				v-if="popupAdd.isOpen.value"
+				v-if="popupAdd.status.value"
 				:buttons="[
 					{
 						label: 'Annuler',
@@ -148,7 +139,7 @@ function editAddressSubmit(event: SubmitEvent) {
 					},
 				]"
 				:is-loading="popupAdd.isLoading.value"
-				@close="(v) => (v !== 'save' ? (popupAdd.isOpen.value = false) : null)"
+				@close="(v) => (v !== 'save' ? (popupAdd.status.value = false) : null)"
 				@submit="(e) => addAddressSubmit(e as SubmitEvent)"
 			>
 				<InputControl name="nomadresse" label="Nom de l'adresse" v-model="popupAdd.model.value.nomadresse" />
@@ -202,7 +193,7 @@ function editAddressSubmit(event: SubmitEvent) {
 			</FormPopupWindow>
 			<!-- EDIT ADRESSE -->
 			<FormPopupWindow
-				v-if="popupEdit.isOpen.value"
+				v-if="popupEdit.status.value"
 				:buttons="[
 					{
 						label: 'Annuler',
@@ -218,7 +209,7 @@ function editAddressSubmit(event: SubmitEvent) {
 					},
 				]"
 				:is-loading="popupEdit.isLoading.value"
-				@close="(v) => (v !== 'save' ? (popupEdit.isOpen.value = null) : null)"
+				@close="(v) => (v !== 'save' ? (popupEdit.status.value = null) : null)"
 				@submit="(e) => editAddressSubmit(e as SubmitEvent)"
 			>
 				<InputControl name="nomadresse" label="Nom de l'adresse" v-model="popupEdit.model.value.nomadresse" />
@@ -298,7 +289,7 @@ function editAddressSubmit(event: SubmitEvent) {
 			</FormPopupWindow> -->
 			<h1>Mes adresses</h1>
 
-			<button id="add-address" class="button button-sm" @click="() => (popupAdd.isOpen.value = true)">
+			<button id="add-address" class="button button-sm" @click="() => (popupAdd.status.value = true)">
 				Ajouter une adresse
 			</button>
 			<div id="addresses-container">
@@ -336,7 +327,7 @@ function editAddressSubmit(event: SubmitEvent) {
 										nomville: ville?.nomville ?? ville?.codeinsee ?? '',
 										codepostaladresse: address.codepostaladresse,
 									};
-									popupEdit.isOpen.value = address.idadresse;
+									popupEdit.status.value = address.idadresse;
 								}
 							"
 						>

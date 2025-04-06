@@ -122,6 +122,7 @@ declare type Coloration = {
 	descriptioncoloration: string | null;
 	estvisible: boolean;
 	couleurNavigation: Couleur;
+	produitNavigation: Produit;
 	photocolsNavigation: PhotoColoration[];
 	detailRegroupementNavigation: DetailRegroupement[];
 };

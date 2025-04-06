@@ -13,11 +13,15 @@ const props = defineProps<{
 	buttons: Button[];
 	isLoading?: boolean;
 	formRef?: Ref<HTMLFormElement>;
+	/** Exécuté lorsque l'utilisateur clique sur un bouton ou ferme la popup */
 	onClose: (value: string | null) => unknown;
 }>();
 
+// Vérifier qu'il y a au moins un bouton
 if (props.buttons.length === 0) throw new Error('Doit avoir minimum 1 bouton.');
 
+/** Renvoie au parent une information quand un bouton est pressé,
+ * ou si la popup a été fermée */
 function close(value: string | null) {
 	if (props.isLoading) return;
 	props.onClose(value);

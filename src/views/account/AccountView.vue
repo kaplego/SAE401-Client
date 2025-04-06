@@ -13,9 +13,14 @@ const login = useLoggedInStore();
 if (!login.isLoggedIn) router.push('/login');
 
 watchEffect(() => {
-	if (login.clientReady && login.client === null) router.push('/login');
+	if (login.clientReady && login.client === null) {
+		login.logout();
+		router.push('/login');
+	}
 });
 
+// Vérifier le statut de chaque carte bancaire
+// afin d'afficher un message sur la tableau de bord du compte
 const cardsExpiration = computed<{
 	expired: CarteBancaire[];
 	expiring: CarteBancaire[];
@@ -33,6 +38,8 @@ const cardsExpiration = computed<{
 		expiration.setDate(0);
 		expiration.setHours(0, 0, 0, 0);
 		const expirationDiff = expiration.valueOf() - now.valueOf();
+		// Si la carte est expirée ou expire prochainement,
+		// l'ajouter à la liste correspondate
 		if (expirationDiff < 0) {
 			expired.push(card);
 		} else if (expirationDiff < CARD_EXPIRATION_WARNING) {
@@ -83,9 +90,6 @@ const cardsExpiration = computed<{
 					"
 					link="/account/bank-details"
 				>
-					<!-- <div v-if="cardsExpiration[1] > 0" :class="`badge ${cardsExpiration[0]}`">
-						{{ cardsExpiration[1] }}
-					</div> -->
 					<Landmark :stroke-width="1.5" />
 				</CardAccount>
 				<CardAccount

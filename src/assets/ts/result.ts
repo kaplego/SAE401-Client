@@ -3,6 +3,7 @@ enum ResultType {
 	Error,
 }
 
+/** Classe de résultat */
 export default class Result<SuccessType, ErrorType, Status extends ResultType = ResultType> {
 	private _status: Status;
 	private _value: Status extends typeof ResultType.Success ? SuccessType : ErrorType;

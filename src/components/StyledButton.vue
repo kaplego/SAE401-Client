@@ -10,6 +10,7 @@ const props = defineProps<
 	} & /* @vue-ignore */ JSX.IntrinsicElements['button']
 >();
 
+// Récupérer les propriétés par défaut du bouton
 const buttonProps = computed(() => {
 	const { buttonStyle: _buttonStyle, buttonSize: _buttonSize, ...rest } = props;
 	return rest;
