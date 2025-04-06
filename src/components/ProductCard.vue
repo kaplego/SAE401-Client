@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import ImageHover from './ImageHover.vue';
 import ImagePlaceholder from './placeholders/ImagePlaceholder.vue';
-import PriceDisplay from './PriceDisplay.vue';
+import PriceDisplay from './product/PriceDisplay.vue';
 
 const props = defineProps({
 	produit: {

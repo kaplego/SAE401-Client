@@ -6,7 +6,8 @@ import StyledButton from './StyledButton.vue';
 import InputControl from './inputs/InputControl.vue';
 import { useCartStore } from '@/stores/cart';
 import { Minus, Plus } from 'lucide-vue-next';
-import PriceDisplay from './PriceDisplay.vue';
+import PriceDisplay from './product/PriceDisplay.vue';
+import ColorDisplay from './product/ColorDisplay.vue';
 
 const props = defineProps<{
 	coloration: Coloration;
@@ -53,10 +54,7 @@ const cartQuantity = computed(() => cart.getQuantity(props.coloration.idproduit,
 						</template>
 						<template v-else>{{ coloration.prixvente }} €</template>
 					</p>
-					<div class="coloration">
-						<div class="couleur" :style="`--couleur: #${coloration.couleurNavigation.rgbcouleur};`"></div>
-						<p class="nom">{{ coloration.couleurNavigation.nomcouleur }}</p>
-					</div>
+					<ColorDisplay :color="coloration.couleurNavigation" />
 				</div>
 				<div class="cart-details">
 					<div
@@ -181,27 +179,6 @@ const cartQuantity = computed(() => cart.getQuantity(props.coloration.idproduit,
 					text-decoration: line-through;
 					font-weight: normal;
 					color: var(--t-foreground3);
-				}
-			}
-
-			.coloration {
-				display: flex;
-				align-items: center;
-				border: 2px solid var(--t-background3);
-				border-radius: 4px;
-				width: max-content;
-
-				.couleur {
-					height: 100%;
-					aspect-ratio: 1;
-					background-color: var(--couleur);
-					border-radius: 2px 0 0 2px;
-				}
-
-				.nom {
-					padding: 0.125rem 0.5rem;
-					background-color: var(--t-background3);
-					border-radius: 0 2px 2px 0;
 				}
 			}
 		}

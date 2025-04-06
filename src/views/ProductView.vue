@@ -6,10 +6,11 @@ import { computed, ref, onMounted } from 'vue';
 import API from '@/assets/ts/api';
 import { Minus, Plus, Star } from 'lucide-vue-next';
 import CarouselImage from '@/components/CarouselImage.vue';
-import PriceDisplay from '@/components/PriceDisplay.vue';
+import PriceDisplay from '@/components/product/PriceDisplay.vue';
 import StyledButton from '@/components/StyledButton.vue';
 import { useCartStore } from '@/stores/cart';
 import InputControl from '@/components/inputs/InputControl.vue';
+import ColorDisplay from '@/components/product/ColorDisplay.vue';
 const isLoading = useLoadingStore();
 isLoading.switchLoading(false);
 
@@ -69,14 +70,13 @@ onMounted(async () => {
 			<div id="details-produit">
 				<div class="information-card">
 					<h1>{{ product.nomproduit }}</h1>
-					<a href="#description">Description détaillée</a>
-					<div class="star-container">
-						<span class="fa fa-star checked"><Star /></span>
-						<span class="fa fa-star checked"><Star /></span>
-						<span class="fa fa-star checked"><Star /></span>
-						<span class="fa fa-star"><Star /></span>
-						<span class="fa fa-star"><Star /></span>
-						<p>({{ product.avisNavigation.length }} avis)</p>
+					<div class="avis-produit">
+						<Star fill="currentColor" />
+						<Star fill="currentColor" />
+						<Star fill="currentColor" />
+						<Star />
+						<Star />
+						<p class="avis-nombre">({{ product.avisNavigation.length }} avis)</p>
 					</div>
 
 					<div id="price">
@@ -89,24 +89,16 @@ onMounted(async () => {
 				</div>
 
 				<div id="color-selector">
-					<div
+					<ColorDisplay
 						v-for="coloration of product.colorationsNavigation"
 						v-bind:key="coloration.idcouleur"
-						class="color-dot"
-						:style="`background-color: #${coloration.couleurNavigation.rgbcouleur};`"
-						@click="
-							() => {
-								selectedColoration = coloration;
-							}
-						"
-					></div>
+						:color="coloration.couleurNavigation"
+						size="40px"
+						@click="selectedColoration = coloration"
+						clickable
+						:selected="selectedColoration === coloration"
+					/>
 				</div>
-				Aspect Technique :
-				<br />
-				<div id="technical-aspect">
-					{{ fileText }}
-				</div>
-				<p id="description">{{ selectedColoration?.descriptioncoloration }}</p>
 
 				<StyledButton
 					v-if="!cart.isInCart(product.idproduit, selectedColoration?.idcouleur ?? -1)"
@@ -133,6 +125,12 @@ onMounted(async () => {
 						<Plus />
 					</StyledButton>
 				</div>
+
+				<p>Aspect Technique :</p>
+				<div id="technical-aspect">
+					{{ fileText }}
+				</div>
+				<p id="description">{{ selectedColoration?.descriptioncoloration }}</p>
 			</div>
 
 			<!-- <p>{{ product }}</p> -->
@@ -169,8 +167,12 @@ onMounted(async () => {
 		gap: 1rem;
 
 		.information-card {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+
 			h1 {
-				margin-bottom: 1rem;
+				margin-bottom: 0;
 			}
 		}
 
@@ -180,10 +182,14 @@ onMounted(async () => {
 		}
 	}
 }
-.star-container {
+.avis-produit {
 	padding: 0;
 	display: flex;
 	align-items: center;
+
+	.avis-nombre {
+		margin-left: 0.5rem;
+	}
 }
 .fa.fa-star {
 	font-size: 15px;
@@ -195,8 +201,13 @@ onMounted(async () => {
 .color-dot {
 	width: 40px;
 	height: 40px;
-	border-radius: 50%;
+	border-radius: 40px;
 	border: solid 1px black;
+	transition: all 100ms;
+
+	&.selected {
+		border-radius: 6px;
+	}
 }
 #technical-aspect {
 	white-space: pre-wrap;
