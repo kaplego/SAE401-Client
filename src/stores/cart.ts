@@ -84,10 +84,8 @@ export const useCartStore = defineStore('cart', () => {
 			const newCart = [];
 			// Supprimer les produits avec une quantité <= 0
 			for (const item of itemsList.value) {
-				if (item.idcouleur === idcouleur && item.idproduit === idproduit) {
-					item.quantitepanier--;
-				}
-				if (item.quantitepanier <= 1) continue;
+				if (item.idcouleur === idcouleur && item.idproduit === idproduit) item.quantitepanier--;
+				if (item.quantitepanier <= 0) continue;
 				newCart.push(item);
 			}
 			itemsList.value = newCart;
