@@ -1,7 +1,7 @@
 <script setup lang="ts">
 withDefaults(defineProps<{
 	sellingPrice: number;
-	onSalePrice: number | null;
+	onSalePrice: number | undefined | null;
 }>(), {
 	onSalePrice: null
 });

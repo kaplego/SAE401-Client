@@ -13,7 +13,7 @@ const product = ref<Produit | null>(null);
 const images: string[] = [];
 const currentColorObj: { image: string; color: string; sellingPrice: number; onSalePrice: number | null; }[] = [];
 const currentSellingPrice = ref<number>();
-const currentOnSalePrice = ref<number | null>();
+const currentOnSalePrice = ref<number | undefined | null>();
 
 const filteredImages = ref<string[]>([]);
 
@@ -104,7 +104,7 @@ function switch2Color500CestTropCher(div: HTMLDivElement) {
 
 
 					<div id="price">
-						<PriceDisplay :sellingPrice="currentSellingPrice" :onSalePrice="currentOnSalePrice"/>
+						<PriceDisplay :sellingPrice="currentSellingPrice!" :onSalePrice="currentOnSalePrice"/>
 					</div>
 
 				</div>
