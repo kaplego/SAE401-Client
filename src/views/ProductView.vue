@@ -47,7 +47,9 @@ API.products.get(useRouter().currentRoute.value.params.id as string).then((p) =>
 });
 onMounted(async () => {
 	try {
-		const response = await fetch('./../../img/files/AspectTechnique/produit' + useRouter().currentRoute.value.params.id + '.txt');
+		const response = await fetch(
+			'./../../img/files/AspectTechnique/produit' + useRouter().currentRoute.value.params.id + '.txt',
+		);
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
 		}
@@ -100,10 +102,11 @@ onMounted(async () => {
 					></div>
 				</div>
 				Aspect Technique :
-			<br>
-			<div id="technical-aspect">
-			{{ fileText }}
-		</div>
+				<br />
+				<div id="technical-aspect">
+					{{ fileText }}
+				</div>
+				<p id="description">{{ selectedColoration?.descriptioncoloration }}</p>
 
 				<StyledButton
 					v-if="!cart.isInCart(product.idproduit, selectedColoration?.idcouleur ?? -1)"
@@ -130,12 +133,9 @@ onMounted(async () => {
 						<Plus />
 					</StyledButton>
 				</div>
-
-				<p id="description"></p>
 			</div>
 
 			<!-- <p>{{ product }}</p> -->
-
 		</div>
 
 		<template v-else>
@@ -199,6 +199,6 @@ onMounted(async () => {
 	border: solid 1px black;
 }
 #technical-aspect {
-	 white-space: pre-wrap;
+	white-space: pre-wrap;
 }
 </style>
