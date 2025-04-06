@@ -77,21 +77,22 @@ watchEffect(() => {
 			width: clamp(100px, 600px, 100%);
 			aspect-ratio: 1;
 			margin: 1rem;
+			border-radius: 8px;
 		}
 
 		.button {
 			position: absolute;
-			bottom: 1rem;
+			bottom: 1.5rem;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 
 			&.button-left {
-				left: 2rem;
+				left: 0.75rem;
 			}
 
 			&.button-right {
-				right: 2rem;
+				right: 0.75rem;
 			}
 		}
 	}
@@ -99,7 +100,7 @@ watchEffect(() => {
 		display: flex;
 		flex-direction: row;
 		overflow: auto;
-		background-color: var(--c-gray-50);
+		background-color: var(--t-background2);
 		width: 100%;
 		border-radius: 8px;
 
@@ -107,13 +108,12 @@ watchEffect(() => {
 			width: 200px;
 			height: 200px;
 			margin: 1rem;
-			border: solid 3px;
-			border-color: var(--c-gray-50);
+			border: solid 4px transparent;
 			cursor: pointer;
-			border-radius: 4px;
+			border-radius: 6px;
 
 			&.selected {
-				border-color: var(--t-border1-accent);
+				border-color: var(--t-border2-accent);
 			}
 		}
 	}
