@@ -114,6 +114,11 @@ export const useCartStore = defineStore('cart', () => {
 		return getQuantity(idproduit, idcouleur) > 0;
 	}
 
+	function clear() {
+		itemsList.value = [];
+		localStorage.setItem('cart', '[]');
+	}
+
 	function save() {}
 
 	// Calculer la quantité totale et le prix total
@@ -122,5 +127,5 @@ export const useCartStore = defineStore('cart', () => {
 		list.value.reduce((prev, curr) => prev + curr.quantitepanier * (curr.prixsolde ?? curr.prixvente), 0),
 	);
 
-	return { list, itemsList, isListLoading, count, price, addToCart, setQuantity, removeFromCart, getQuantity, isInCart, save };
+	return { list, itemsList, isListLoading, count, price, addToCart, setQuantity, removeFromCart, getQuantity, isInCart, clear, save };
 });

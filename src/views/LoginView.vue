@@ -8,7 +8,9 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const login = useLoggedInStore();
 
-if (login.isLoggedIn) router.push('/account');
+const redirection = router.currentRoute.value.query.redirect?.toString() ?? '/account';
+
+if (login.isLoggedIn) router.push(redirection);
 
 const form = ref<HTMLFormElement>();
 const error = ref<string | null>(null);
@@ -29,7 +31,7 @@ watchEffect((clean) => {
 					if (!result) error.value = "L'adresse email ou le mot de passe est incorrect.";
 					else {
 						login.login(result.token, result.client.idclient);
-						router.replace('/account');
+						router.replace(redirection);
 					}
 				});
 			}

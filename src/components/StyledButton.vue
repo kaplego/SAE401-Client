@@ -7,6 +7,7 @@ const props = defineProps<
 		buttonStyle?: ButtonStyle;
 		buttonSize?: 'sm' | 'md' | 'lg';
 		isLoading?: boolean;
+		to?: string;
 	} & /* @vue-ignore */ JSX.IntrinsicElements['button']
 >();
 
@@ -18,13 +19,14 @@ const buttonProps = computed(() => {
 </script>
 
 <template>
-	<button
+	<component
+		v-bind:is="to ? 'RouterLink' : 'button'"
 		v-bind="buttonProps"
 		:disabled="isLoading || buttonProps.disabled"
 		:type="type"
-		:class="`button button-${buttonStyle ?? 'primary'} button-${buttonSize ?? 'md'}`"
+		:class="`button button-${buttonStyle ?? 'primary'} button-${buttonSize ?? 'md'} ${buttonProps.disabled ? 'disabled' : ''}`"
 	>
 		<div class="loading-spinner" style="height: 1.5em" v-if="isLoading"></div>
 		<slot v-else></slot>
-	</button>
+	</component>
 </template>

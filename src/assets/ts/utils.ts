@@ -38,6 +38,10 @@ export function cardNumberReverseFormat(formatted: string) {
 	return formatted;
 }
 
+export function finalPrice(basePrice: number, salePrice?: number | null, quantity: number = 1) {
+	return (salePrice ?? basePrice) * quantity;
+}
+
 /** Affiche un avertissement si le temps jusqu'à la date d'expiration de la
  * carte de crédit est inférieur à ce nombre de millisecondes. */
 export const CARD_EXPIRATION_WARNING = 60 * 24 * 60 * 60 * 1000;

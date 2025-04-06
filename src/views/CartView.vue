@@ -1,9 +1,17 @@
 <script setup lang="ts">
+import usePopup from '@/assets/ts/usePopup';
+import { finalPrice } from '@/assets/ts/utils';
 import CartProduct from '@/components/CartProduct.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import StyledButton from '@/components/StyledButton.vue';
+import PopupWindow from '@/components/windows/PopupWindow.vue';
 import { useCartStore } from '@/stores/cart';
+import { useLoggedInStore } from '@/stores/login';
 
 const cart = useCartStore();
+const login = useLoggedInStore();
+
+const confirmClear = usePopup(false);
 </script>
 
 <template>
@@ -27,10 +35,78 @@ const cart = useCartStore();
 			<div id="cart-details">
 				<p>Résumé du panier</p>
 				<div class="separator"></div>
+				<template v-for="item in cart.list" v-bind:key="`${item.idcouleur}${item.idproduit}`">
+					<p class="one-item-price">
+						{{ finalPrice(item.prixvente, item.prixsolde).toFixed(2).padEnd(8, '&nbsp;') }} &times;
+						{{ item.quantitepanier }}
+						<span class="total">
+							&equals;
+							{{
+								finalPrice(item.prixvente, item.prixsolde, item.quantitepanier)
+									.toFixed(2)
+									.padStart(9, '&nbsp;')
+							}}
+							€
+						</span>
+					</p>
+				</template>
+				<p v-if="cart.count === 0">Votre panier est vide</p>
+				<div class="separator"></div>
 				<p>Prix total : {{ cart.price.toFixed(2) }} €</p>
+				<div class="separator"></div>
+				<div class="buttons-container">
+					<StyledButton
+						v-if="cart.count > 0"
+						button-size="sm"
+						style="width: 100%"
+						@click="confirmClear.status.value = true"
+					>
+						Vider mon panier
+					</StyledButton>
+					<StyledButton
+						v-if="!login.isLoggedIn"
+						to="/login?redirect=/cart"
+						button-size="sm"
+						style="width: 100%"
+					>
+						Me connecter
+					</StyledButton>
+					<StyledButton
+						v-else
+						:to="cart.count === 0 ? undefined : '/payment'"
+						button-size="sm"
+						style="width: 100%"
+						:disabled="cart.count === 0"
+					>
+						Payer
+					</StyledButton>
+				</div>
 			</div>
 		</div>
 	</main>
+	<PopupWindow
+		v-if="confirmClear.status.value"
+		:buttons="[
+			{
+				label: 'Annuler',
+				style: 'secondary',
+				value: 'cancel',
+			},
+			{
+				label: 'Confirmer',
+				style: 'danger',
+				value: 'confirm',
+			},
+		]"
+		@close="
+			(v) => {
+				if (v === 'confirm') cart.clear();
+				confirmClear.status.value = false;
+			}
+		"
+	>
+		<h2>Êtes-vous sûr(e) de vouloir vider votre panier ?</h2>
+	</PopupWindow>
 </template>
 
 <style lang="scss" scoped>
@@ -118,6 +194,18 @@ const cart = useCartStore();
 			width: 100%;
 			background-color: var(--c-blackAlpha-200);
 			margin: 1rem 0;
+		}
+
+		.one-item-price {
+			display: flex;
+			.total {
+				margin-left: auto;
+			}
+		}
+
+		.buttons-container {
+			display: flex;
+			gap: 1rem;
 		}
 	}
 }
