@@ -64,7 +64,6 @@ export const useCartStore = defineStore('cart', () => {
 	});
 
 	function addToCart(idproduit: number, idcouleur: number) {
-		console.log('Add');
 		const citem = itemsList.value.find((i) => i.idcouleur === idcouleur && i.idproduit === idproduit);
 		if (citem)
 			// Si le produit existe déjà dans le panier, alors augmenter sa quantité
@@ -93,6 +92,28 @@ export const useCartStore = defineStore('cart', () => {
 		}
 	}
 
+	function setQuantity(idproduit: number, idcouleur: number, quantitepanier: number) {
+		const citem = itemsList.value.find((i) => i.idcouleur === idcouleur && i.idproduit === idproduit);
+		if (citem)
+			// Si le produit existe déjà dans le panier, alors augmenter sa quantité
+			itemsList.value = itemsList.value.map((i) => ({
+				...i,
+				quantitepanier:
+					i.idcouleur === idcouleur && i.idproduit === idproduit ? quantitepanier : i.quantitepanier,
+			}));
+		// Sinon l'ajouter dans le panier
+		else itemsList.value = [...itemsList.value, { idcouleur, idproduit, quantitepanier }];
+		localStorage.setItem('cart', JSON.stringify(itemsList.value));
+	}
+
+	function getQuantity(idproduit: number, idcouleur: number) {
+		return itemsList.value.find((i) => i.idcouleur === idcouleur && i.idproduit === idproduit)?.quantitepanier ?? 0;
+	}
+
+	function isInCart(idproduit: number, idcouleur: number) {
+		return getQuantity(idproduit, idcouleur) > 0;
+	}
+
 	function save() {}
 
 	// Calculer la quantité totale et le prix total
@@ -101,5 +122,5 @@ export const useCartStore = defineStore('cart', () => {
 		list.value.reduce((prev, curr) => prev + curr.quantitepanier * (curr.prixsolde ?? curr.prixvente), 0),
 	);
 
-	return { list, itemsList, isListLoading, count, price, addToCart, removeFromCart, save };
+	return { list, itemsList, isListLoading, count, price, addToCart, setQuantity, removeFromCart, getQuantity, isInCart, save };
 });
