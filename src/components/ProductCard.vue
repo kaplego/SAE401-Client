@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import ImageHover from './ImageHover.vue';
 import ImagePlaceholder from './placeholders/ImagePlaceholder.vue';
+import PriceDisplay from './PriceDisplay.vue';
 
 const props = defineProps({
 	produit: {
@@ -49,13 +50,11 @@ props.produit.colorationsNavigation.sort((a, b) =>
 			<div class="content">
 				<p class="nom">{{ props.produit.nomproduit }}</p>
 				<div>
-					<p class="prix">
-						<template v-if="colorationLaMoinsChere?.prixsolde !== null">
-							<span class="prixsolde">{{ colorationLaMoinsChere.prixsolde }} €</span>
-							<span class="prixvente-solde">{{ colorationLaMoinsChere.prixvente }} €</span>
-						</template>
-						<template v-else>{{ colorationLaMoinsChere?.prixvente }} €</template>
-					</p>
+					<PriceDisplay
+						class="prix"
+						:base-price="colorationLaMoinsChere.prixvente"
+						:sale-price="colorationLaMoinsChere.prixsolde"
+					/>
 					<div class="colorations">
 						<div
 							class="coloration"

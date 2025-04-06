@@ -95,7 +95,7 @@ const cartQuantity = computed(() => cart.getQuantity(props.coloration.idproduit,
 						</StyledButton>
 					</div>
 					<p class="total-price">
-						Prix total : <PriceDisplay :selling-price="totalBasePrice" :on-sale-price="totalSalePrice" />
+						Prix total : <PriceDisplay :basePrice="totalBasePrice" :salePrice="totalSalePrice" />
 					</p>
 				</div>
 			</div>
