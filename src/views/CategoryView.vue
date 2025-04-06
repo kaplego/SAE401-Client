@@ -2,7 +2,7 @@
 import { useCategoriesStore } from '@/stores/api/categories';
 import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
-import CardProduit from '@/components/CardProduit.vue';
+import CardProduit from '@/components/ProductCard.vue';
 import API from '@/assets/ts/api';
 
 const list = ref<Produit[] | null>(null);
