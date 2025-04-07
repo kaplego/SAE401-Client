@@ -366,12 +366,12 @@ body.theme-dark {
 
 body.theme-darkdim {
 	* {
-		background-color: orange !important;
-		background: url(https://satisfactory.wiki.gg/images/c/c3/Satisfactory_logo_full_color_square.png?e4b0eb);
+		background: url(https://static1.srcdn.com/wordpress/wp-content/uploads/2021/02/Rick-Astley-Never-Gonna-Give-You-Up-Remastered-Header.jpg);
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: cover;
 		background-position: center center;
 		border-color: green !important;
+		outline-color: orange !important;
 		color: blue !important;
 		font-weight: 900 !important;
 		text-transform: uppercase;
