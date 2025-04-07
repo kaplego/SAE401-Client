@@ -270,7 +270,8 @@ nav {
 		margin-bottom: 1rem;
 	}
 
-	&:hover {
+	&:hover,
+	&:focus-within {
 		.item-name,
 		&:not(:has(.dropdown)) {
 			color: var(--c-accent-500);

@@ -12,6 +12,7 @@ import PersoDetailsView from '@/views/account/PersoDetailsView.vue';
 import AdressesView from '@/views/account/AdressesView.vue';
 import BankDetailsView from '@/views/account/BankDetailsView.vue';
 import PaymentView from '@/views/cart/PaymentView.vue';
+import OrdersView from '@/views/account/OrdersView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,6 +55,11 @@ const router = createRouter({
 					path: '/account/addresses',
 					name: 'account_addresses',
 					component: AdressesView,
+				},
+				{
+					path: '/account/orders',
+					name: 'account_orders',
+					component: OrdersView,
 				},
 				{
 					path: '/login',
