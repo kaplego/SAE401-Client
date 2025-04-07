@@ -40,9 +40,9 @@ function searchProduct(event: SubmitEvent) {
 		</template>
 	</main>
 	<main class="container empty" v-else>
-		<h1>Rechercher un produit</h1>
+		<h1><label for="searchinput">Rechercher un produit</label></h1>
 		<form :onsubmit="searchProduct" id="searchbar">
-			<input type="text" placeholder="Chaise, canapé, ..." v-model="searchQuery" />
+			<input id="searchinput" type="text" placeholder="Chaise, canapé, ..." v-model="searchQuery" />
 			<button type="submit"><Search /></button>
 		</form>
 	</main>

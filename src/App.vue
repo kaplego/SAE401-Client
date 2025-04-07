@@ -6,6 +6,7 @@ import { Asterisk, Moon, Search, ShoppingCart, Sun, User } from 'lucide-vue-next
 import { useCategoriesStore } from './stores/api/categories';
 import { useCartStore } from './stores/cart';
 import TextPlaceholder from './components/placeholders/TextPlaceholder.vue';
+import InputControl from './components/inputs/InputControl.vue';
 
 const navContainer = useTemplateRef('navContainer');
 
@@ -40,8 +41,8 @@ watchEffect(() => {
 	idCategory.value = router.currentRoute.value.params.id as string;
 });
 
+const searchQuery = ref<string>('');
 function searchProduct() {
-	const searchQuery: HTMLInputElement = document.querySelector('#searchbar')!;
 	router.push('/search?q=' + encodeURIComponent(searchQuery.value));
 }
 
@@ -64,11 +65,11 @@ for (let i = 0; i < 8; i++) {
 		<div class="container">
 			<img src="/logo.svg" alt="Miliboo" class="logo" />
 			<div id="recherche">
-				<input
+				<InputControl
 					id="searchbar"
-					type="text"
-					placeholder="Rechercher un produit..."
+					label="Rechercher un produit"
 					v-on:keydown.enter="searchProduct()"
+					v-model="searchQuery"
 				/>
 				<button @click="searchProduct()">
 					<Search />
