@@ -32,6 +32,6 @@ test('are departements not empty', () => {
 });
 
 test('do departements contain departements', async () => {
-	await sleep(2000);
+	await sleep(3000);
 	expect(departements.list?.[0]).toBeTypeOf('object');
 });

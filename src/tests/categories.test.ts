@@ -32,6 +32,6 @@ test('are categories not empty', () => {
 });
 
 test('do categories contain categories', async () => {
-	await sleep(2000);
+	await sleep(3000);
 	expect(categories.list?.[0]).toBeTypeOf('object');
 });

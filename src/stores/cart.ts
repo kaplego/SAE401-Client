@@ -3,7 +3,9 @@ import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 
 export const useCartStore = defineStore('cart', () => {
-	const itemsList = ref<CartItem[]>(JSON.parse(localStorage.getItem('cart') ?? '[]'));
+	const itemsList = ref<CartItem[]>(
+		JSON.parse(typeof localStorage === 'undefined' ? '[]' : (localStorage.getItem('cart') ?? '[]')),
+	);
 
 	const list = ref<
 		(Coloration & {
@@ -74,7 +76,9 @@ export const useCartStore = defineStore('cart', () => {
 			}));
 		// Sinon l'ajouter dans le panier
 		else itemsList.value = [...itemsList.value, { idcouleur, idproduit, quantitepanier: 1 }];
-		localStorage.setItem('cart', JSON.stringify(itemsList.value));
+		if (typeof localStorage !== 'undefined') {
+			localStorage.setItem('cart', JSON.stringify(itemsList.value));
+		}
 	}
 
 	function removeFromCart(idproduit: number, idcouleur: number) {
@@ -88,8 +92,12 @@ export const useCartStore = defineStore('cart', () => {
 				newCart.push(item);
 			}
 			itemsList.value = newCart;
-			localStorage.setItem('cart', JSON.stringify(itemsList.value));
+			if (typeof localStorage !== 'undefined') {
+				localStorage.setItem('cart', JSON.stringify(itemsList.value));
+			}
+			return true;
 		}
+		return false;
 	}
 
 	function setQuantity(idproduit: number, idcouleur: number, quantitepanier: number) {
@@ -103,7 +111,9 @@ export const useCartStore = defineStore('cart', () => {
 			}));
 		// Sinon l'ajouter dans le panier
 		else itemsList.value = [...itemsList.value, { idcouleur, idproduit, quantitepanier }];
-		localStorage.setItem('cart', JSON.stringify(itemsList.value));
+		if (typeof localStorage !== 'undefined') {
+			localStorage.setItem('cart', JSON.stringify(itemsList.value));
+		}
 	}
 
 	function getQuantity(idproduit: number, idcouleur: number) {
@@ -127,5 +137,18 @@ export const useCartStore = defineStore('cart', () => {
 		list.value.reduce((prev, curr) => prev + curr.quantitepanier * (curr.prixsolde ?? curr.prixvente), 0),
 	);
 
-	return { list, itemsList, isListLoading, count, price, addToCart, setQuantity, removeFromCart, getQuantity, isInCart, clear, save };
+	return {
+		list,
+		itemsList,
+		isListLoading,
+		count,
+		price,
+		addToCart,
+		setQuantity,
+		removeFromCart,
+		getQuantity,
+		isInCart,
+		clear,
+		save,
+	};
 });

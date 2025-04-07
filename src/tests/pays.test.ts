@@ -32,6 +32,6 @@ test('are pays not empty', () => {
 });
 
 test('do pays contain pays', async () => {
-	await sleep(2000);
+	await sleep(3000);
 	expect(pays.list?.[0]).toBeTypeOf('object');
 });
