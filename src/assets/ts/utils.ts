@@ -59,7 +59,7 @@ export function cardNumberFormat(card: string) {
  * ```
  */
 export function cardNumberReverseFormat(formatted: string) {
-	if (/^\d{4}( \d{4}){3}$/.test(formatted)) return `33${formatted.substring(1).replace(/ /g, '')}`;
+	if (/^\d{4}( \d{4}){3}$/.test(formatted)) return `${formatted.replace(/ /g, '')}`;
 	return formatted;
 }
 
