@@ -32,18 +32,10 @@ export const useCartStore = defineStore('cart', () => {
 						}
 					>((r) =>
 						// Récupérer le produit depuis l'API
-						// TODO - À modifier lors de l'ajout des navigations dans coloration
-						API.products.get(item.idproduit).then((resProduit) => {
-							if (!resProduit) return;
+						API.colorations.get(item.idproduit, item.idcouleur).then((res) => {
+							console.log(res);
 
-							const coloration = resProduit.colorationsNavigation.find(
-								(c) => c.idcouleur === item.idcouleur,
-							);
-							if (!coloration) return;
-
-							const { colorationsNavigation: _, ...produitNav } = resProduit;
-							coloration.produitNavigation = produitNav as Produit;
-							r({ ...coloration, quantitepanier: item.quantitepanier });
+							if (res) r({ ...res, quantitepanier: item.quantitepanier });
 						}),
 					);
 				}

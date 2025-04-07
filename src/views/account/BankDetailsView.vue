@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import API from '@/assets/ts/api';
 import usePopup from '@/assets/ts/usePopup';
+import { cardNumberReverseFormat } from '@/assets/ts/utils';
 import CarteBancaire from '@/components/CarteBancaire.vue';
 import InputControl from '@/components/inputs/InputControl.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
@@ -20,17 +21,29 @@ watchEffect(() => {
 	if (login.clientReady && login.client === null) router.push('/login');
 });
 
-// TODO - Utiliser un v-model
-const popup = usePopup(false);
-function addCard(event: SubmitEvent) {
+const popup = usePopup<
+	boolean,
+	{
+		nom: string;
+		titulaire: string;
+		numero: string;
+		expyear: string;
+		expmonth: string;
+	}
+>(false, {
+	nom: '',
+	titulaire: '',
+	numero: '',
+	expyear: '',
+	expmonth: '',
+});
+function addCard() {
 	if (!login.client) return (popup.status.value = false);
 	popup.isLoading.value = true;
 	popup.error.value = null;
 
-	const data = new FormData(event.target as HTMLFormElement);
-
 	// Vérifier que le nom de carte n'existe pas déjà pour ce compte
-	if (login.client.cartesNavigation.find((c) => c.nomcartebancaire === (data.get('name') as string))) {
+	if (login.client.cartesNavigation.find((c) => c.nomcartebancaire === popup.model.value.nom)) {
 		popup.isLoading.value = false;
 		popup.error.value = 'Une carte existe déjà avec ce nom.';
 		return;
@@ -39,7 +52,7 @@ function addCard(event: SubmitEvent) {
 	// Vérifier que la carte n'existe pas déjà pour ce compte
 	if (
 		login.client.cartesNavigation.find(
-			(c) => c.numcartebancaire.replace(/ /g, '') === (data.get('number') as string).replace(/ /g, ''),
+			(c) => c.numcartebancaire.replace(/ /g, '') === popup.model.value.numero.replace(/ /g, ''),
 		)
 	) {
 		popup.isLoading.value = false;
@@ -51,10 +64,10 @@ function addCard(event: SubmitEvent) {
 	API.cartes
 		.create({
 			idclient: login.client.idclient,
-			nomcartebancaire: data.get('name') as string,
-			titulairecartebancaire: data.get('titulaire') as string,
-			numcartebancaire: data.get('number') as string,
-			dateexpirationcarte: new Date(+(data.get('exp-year') as string), +(data.get('exp-month') as string) - 1),
+			nomcartebancaire: popup.model.value.nom,
+			titulairecartebancaire: popup.model.value.titulaire,
+			numcartebancaire: cardNumberReverseFormat(popup.model.value.numero),
+			dateexpirationcarte: new Date(+popup.model.value.expyear, +popup.model.value.expmonth - 1),
 		})
 		.then(async (cb) => {
 			if (cb) {
@@ -101,26 +114,36 @@ function addCard(event: SubmitEvent) {
 		@submit="
 			(event) => {
 				event.preventDefault();
-				addCard(event as SubmitEvent);
+				addCard();
 			}
 		"
 	>
-		<InputControl label="Libellé de la carte" name="name" />
-		<InputControl label="Titulaire de la carte" name="titulaire" required />
+		<InputControl label="Libellé de la carte" name="name" v-model="popup.model.value.nom" />
+		<InputControl label="Titulaire de la carte" name="titulaire" required v-model="popup.model.value.titulaire" />
 		<InputControl
 			label="Numéro de carte"
 			name="number"
 			required
 			pattern="^(\d{4} \d{4} \d{4} \d{4})|(\d{4}\d{4}\d{4}\d{4})$"
+			v-model="popup.model.value.numero"
 		/>
 		<div class="flex-row">
-			<InputControl label="Mois d'expiration" name="exp-month" required type="number" :min="1" :max="12" />
+			<InputControl
+				label="Mois d'expiration"
+				name="expmonth"
+				required
+				type="number"
+				:min="1"
+				:max="12"
+				v-model="popup.model.value.expmonth"
+			/>
 			<InputControl
 				label="Année d'expiration"
-				name="exp-year"
+				name="expyear"
 				required
 				type="number"
 				:min="new Date().getFullYear()"
+				v-model="popup.model.value.expyear"
 			/>
 		</div>
 		<p class="form-error" v-if="popup.error.value">{{ popup.error.value }}</p>
