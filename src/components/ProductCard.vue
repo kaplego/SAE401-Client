@@ -20,7 +20,16 @@ const colorationLaMoinsChere = props.produit.colorationsNavigation.reduce(
 );
 
 // Récupérer les sources des photos
-const photos = computed(() => colorationLaMoinsChere.photocolsNavigation.map((p) => p.photoNavigation.sourcephoto));
+const photos = computed(() =>
+	colorationLaMoinsChere.photocolsNavigation.reduce(
+		(prev, curr) => {
+			prev[0].push(curr.photoNavigation.sourcephoto);
+			prev[1].push(curr.photoNavigation.descriptionphoto ?? `Photo ${curr.photoNavigation.idphoto}`);
+			return prev;
+		},
+		[[], []] as [string[], string[]],
+	),
+);
 const isHovered = ref<boolean>(false);
 
 props.produit.colorationsNavigation.sort((a, b) =>
@@ -37,14 +46,19 @@ props.produit.colorationsNavigation.sort((a, b) =>
 			<ImageHover
 				v-if="photos.length > 1"
 				:force-is-hovered="isHovered"
-				:primary-src="`/img/img/${photos[0]}`"
-				:hovered-src="`/img/img/${photos[1]}`"
+				:primary-src="`/img/img/${photos[0][0]}`"
+				:primary-alt="photos[1][0]"
+				:hovered-src="`/img/img/${photos[0][1]}`"
+				:hovered-alt="photos[1][1]"
 			/>
 			<ImagePlaceholder
 				v-else
 				:image-props="{
-					src: photos.length === 1 ? `/img/img/${photos[0]}` : 'https://placehold.co/800x800/PNG?text=Photo',
-					alt: produit.nomproduit,
+					src:
+						photos[0].length === 1
+							? `/img/img/${photos[0][0]}`
+							: 'https://placehold.co/800x800/PNG?text=Photo',
+					alt: photos[1].length === 1 ? `/img/img/${photos[1][0]}` : produit.nomproduit,
 				}"
 			/>
 			<div class="content">

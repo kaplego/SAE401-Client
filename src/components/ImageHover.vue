@@ -5,7 +5,9 @@ import type { JSX } from 'vue/jsx-runtime';
 const props = defineProps<
 	{
 		primarySrc: string;
+		primaryAlt?: string;
 		hoveredSrc: string;
+		hoveredAlt?: string;
 		forceIsHovered?: boolean;
 	} & /* @vue-ignore */ Exclude<JSX.IntrinsicElements['img'], 'src'>
 >();
@@ -24,8 +26,9 @@ const isHovered = ref<boolean>(props.forceIsHovered ?? false);
 		v-bind="imageProps"
 		@mouseleave="isHovered = false"
 		:src="hoveredSrc"
+		:alt="hoveredAlt"
 	/>
-	<img v-else v-bind="imageProps" @mouseenter="isHovered = true" :src="primarySrc" />
+	<img v-else v-bind="imageProps" @mouseenter="isHovered = true" :src="primarySrc" :alt="primaryAlt" />
 </template>
 
 <style lang="scss" scoped></style>

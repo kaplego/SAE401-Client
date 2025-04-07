@@ -20,7 +20,15 @@ const fileText = ref<string>('');
 
 const selectedColoration = ref<Coloration | null>(null);
 const images = computed(
-	() => selectedColoration.value?.photocolsNavigation.map((p) => p.photoNavigation.sourcephoto) ?? null,
+	() =>
+		selectedColoration.value?.photocolsNavigation.reduce(
+			(prev, curr) => {
+				prev[0].push(curr.photoNavigation.sourcephoto);
+				prev[1].push(curr.photoNavigation.descriptionphoto ?? `Photo ${curr.photoNavigation.idphoto}`);
+				return prev;
+			},
+			[[], []] as [string[], string[]],
+		) ?? null,
 );
 
 const cartQuantity = computed(() =>
@@ -65,7 +73,7 @@ onMounted(async () => {
 <template>
 	<main class="container">
 		<div id="product" v-if="product !== null">
-			<CarouselImage class="carousel" v-if="images" :images="images" />
+			<CarouselImage class="carousel" v-if="images" :images="images[0]" :alts="images[1]" />
 			<div class="v-separator"></div>
 			<div id="details-produit">
 				<div class="information-card">

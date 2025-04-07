@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-vue-next';
 
 const props = defineProps<{
 	images: string[];
+	alts?: string[];
 }>();
 
 const selectedIndex = ref<number>(0);
@@ -33,7 +34,7 @@ watchEffect(() => {
 			>
 				<ArrowLeft />
 			</StyledButton>
-			<img :src="`/img/img/${images[selectedIndex]}`" alt="image de meuble" class="image-carousel-top" />
+			<img :src="`/img/img/${images[selectedIndex]}`" :alt="alts?.[selectedIndex]" class="image-carousel-top" />
 			<StyledButton
 				class="button-right"
 				:button-size="'lg'"
@@ -46,7 +47,7 @@ watchEffect(() => {
 			<div v-for="image in images" v-bind:key="image" ref="bottomImages" :data-index="images.indexOf(image)">
 				<img
 					:src="`/img/img/${image}`"
-					alt="image de meuble"
+					:alt="alts?.[images.indexOf(image)]"
 					:class="`image-carousel ${selectedIndex === images.indexOf(image) ? 'selected' : ''}`"
 					@click="selectedIndex = images.indexOf(image)"
 				/>
