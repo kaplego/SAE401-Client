@@ -3,14 +3,15 @@ export default function isInEnum<T extends object>(e: T, value: unknown): value 
 	return values.includes(value);
 }
 
-export function stringFormat(str: string, args: Record<string, string>) {
-	Object.entries(args).forEach(([key, val]) => {
-		str.replace(`{${key}}`, val);
-	});
-	return str;
-}
-
-/** Formatter un numéro de téléphone */
+/**
+ * Formatter un numéro de téléphone
+ *
+ * @example
+ * ```
+ * const phone = '33123456789';
+ * console.log(phoneFormat(phone)); // => '01 23 45 67 89'
+ * ```
+ */
 export function phoneFormat(phone: string) {
 	if (!/^33\d{9}$/.test(phone)) return phone;
 
@@ -19,25 +20,63 @@ export function phoneFormat(phone: string) {
 	for (let i = 1; i < 9; i += 2) res.push(`${arr[i]}${arr[i + 1]}`);
 	return res.join(' ');
 }
-/** Déformatter un numéro de téléphone */
+/**
+ * Déformatter un numéro de téléphone
+ *
+ * @example
+ * ```
+ * const phone = '01 23 45 67 89';
+ * console.log(phoneReverseFormat(phone)); // => '33123456789'
+ * ```
+ */
 export function phoneReverseFormat(formatted: string) {
-	if (/^0[0-9]( [0-9]{2}){4}$/.test(formatted)) return `33${formatted.substring(1).replace(/ /g, '')}`;
+	if (/^0\d( \d{2}){4}$/.test(formatted)) return `33${formatted.substring(1).replace(/ /g, '')}`;
 	return formatted;
 }
 
-/** Formatter un numéro de carte bancaire */
+/**
+ * Formatter un numéro de carte bancaire
+ *
+ * @example
+ * ```
+ * const card = '1234567812345678';
+ * console.log(cardNumberFormat(card)); // => '1234 5678 1234 5678'
+ * ```
+ */
 export function cardNumberFormat(card: string) {
 	const arr = card.split('');
 	const res = [];
 	for (let i = 0; i < 16; i += 4) res.push(arr.slice(i, i + 4).join(''));
 	return res.join(' ');
 }
-/** Déformatter un numéro de carte bancaire */
+/**
+ * Déformatter un numéro de carte bancaire
+ *
+ * @example
+ * ```
+ * const card = '1234 5678 1234 5678';
+ * console.log(cardNumberReverseFormat(card)); // => '1234567812345678'
+ * ```
+ */
 export function cardNumberReverseFormat(formatted: string) {
-	if (/^0[0-9]( [0-9]{2}){4}$/.test(formatted)) return `33${formatted.substring(1).replace(/ /g, '')}`;
+	if (/^\d{4}( \d{4}){3}$/.test(formatted)) return `33${formatted.substring(1).replace(/ /g, '')}`;
 	return formatted;
 }
 
+/**
+ * Calculer le prix final en fonction du prix de base et du prix en soldes
+ *
+ * @example
+ * ```
+ * const prixDeBase = 30;
+ * console.log(finalPrice(prixDeBase)) // => 30
+ *
+ * const prixEnSolde = 28;
+ *
+ * console.log(finalPrice(prixDeBase, prixEnSolde)) // => 28
+ * console.log(finalPrice(prixDeBase, prixEnSolde, 3)) // => 84
+ * ```
+ */
 export function finalPrice(basePrice: number, salePrice?: number | null, quantity: number = 1) {
 	return (salePrice ?? basePrice) * quantity;
 }
@@ -47,8 +86,12 @@ export function finalPrice(basePrice: number, salePrice?: number | null, quantit
 export const CARD_EXPIRATION_WARNING = 60 * 24 * 60 * 60 * 1000;
 
 export enum AutocompleteType {
+	/** Autocomplète la chaîne par la valeur plus proche */
 	Near,
+	/** Autocomplète la chaîne par la valeur qui commence pareille */
 	Exact,
+	/** Autocomplète la chaîne par la valeur qui commence pareille,
+	 * ou la valeur la plus proche si non trouvée. */
 	ExactWithFallback,
 }
 
