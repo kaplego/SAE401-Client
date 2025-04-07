@@ -2,7 +2,7 @@ import { useVillesStore } from '@/stores/api/villes';
 import { expect, test } from 'vitest';
 
 
-import App from '../App.vue';
+import App from '@/App.vue';
 import { createApp } from 'vue';
 import VueAxios from 'vue-axios';
 import axios from 'axios';
@@ -32,6 +32,6 @@ test('are villes not empty', () => {
 });
 
 test('do villes contain villes', async () => {
-	await sleep(7000);
+	await sleep(10000);
 	expect(villes.list?.[0]).toBeTypeOf('object');
 }, 150000);

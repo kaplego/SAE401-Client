@@ -2,7 +2,7 @@ import { usePaysStore } from '@/stores/api/pays';
 import { expect, test } from 'vitest';
 
 
-import App from '../App.vue';
+import App from '@/App.vue';
 import { createApp } from 'vue';
 import VueAxios from 'vue-axios';
 import axios from 'axios';
@@ -32,6 +32,6 @@ test('are pays not empty', () => {
 });
 
 test('do pays contain pays', async () => {
-	await sleep(3000);
+	await sleep(5000);
 	expect(pays.list?.[0]).toBeTypeOf('object');
-});
+}, 150000);

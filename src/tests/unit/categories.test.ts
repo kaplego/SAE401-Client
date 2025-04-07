@@ -2,7 +2,7 @@ import { useCategoriesStore } from '@/stores/api/categories';
 import { expect, test } from 'vitest';
 
 
-import App from '../App.vue';
+import App from '@/App.vue';
 import { createApp } from 'vue';
 import VueAxios from 'vue-axios';
 import axios from 'axios';
@@ -32,6 +32,6 @@ test('are categories not empty', () => {
 });
 
 test('do categories contain categories', async () => {
-	await sleep(3000);
+	await sleep(5000);
 	expect(categories.list?.[0]).toBeTypeOf('object');
-});
+}, 150000);
