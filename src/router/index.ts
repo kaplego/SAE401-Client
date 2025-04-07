@@ -5,12 +5,13 @@ import NotFoundView from '@/views/NotFoundView.vue';
 import AccountView from '@/views/account/AccountView.vue';
 import ProductView from '@/views/ProductView.vue';
 import CategoryView from '@/views/CategoryView.vue';
-import CartView from '@/views/CartView.vue';
+import CartView from '@/views/cart/CartView.vue';
 import SearchView from '@/views/SearchView.vue';
 import LoginView from '@/views/LoginView.vue';
 import PersoDetailsView from '@/views/account/PersoDetailsView.vue';
 import AdressesView from '@/views/account/AdressesView.vue';
 import BankDetailsView from '@/views/account/BankDetailsView.vue';
+import PaymentView from '@/views/cart/PaymentView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +66,11 @@ const router = createRouter({
 			path: '/cart',
 			name: 'cart',
 			component: CartView,
+		},
+		{
+			path: '/payment',
+			name: 'payment',
+			component: PaymentView,
 		},
 		{
 			path: '/produits/:id',
