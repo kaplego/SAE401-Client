@@ -7,19 +7,17 @@ const login = useLoggedInStore();
 </script>
 
 <template>
-	<main class="container">
-		<h1>Commandes</h1>
-		<template v-if="login.client !== null">
-			<div id="order-list">
-				<OrderCard
-					v-for="order in login.client?.commandesNavigation ?? []"
-					v-bind:key="order.idcommande"
-					:order="order"
-				/>
-			</div>
-		</template>
-		<LoadingSpinner v-else />
-	</main>
+	<h1>Commandes</h1>
+	<template v-if="login.client !== null">
+		<div id="order-list">
+			<OrderCard
+				v-for="order in login.client?.commandesNavigation ?? []"
+				v-bind:key="order.idcommande"
+				:order="order"
+			/>
+		</div>
+	</template>
+	<LoadingSpinner v-else />
 </template>
 
 <style lang="scss" scoped>

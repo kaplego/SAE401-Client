@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const login = useLoggedInStore();
 
-const redirection = router.currentRoute.value.query.redirect?.toString() ?? '/account';
+const redirection = router.currentRoute.value.query.redirect?.toString() ?? '/compte';
 
 if (login.isLoggedIn) router.push(redirection);
 

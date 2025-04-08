@@ -76,7 +76,7 @@ for (let i = 0; i < 8; i++) {
 				</button>
 			</div>
 			<div class="icons">
-				<RouterLink to="/account" data-tooltip-down="Mon compte" class="icon-button"><User /></RouterLink>
+				<RouterLink to="/compte" data-tooltip-down="Mon compte" class="icon-button"><User /></RouterLink>
 				<RouterLink to="/cart" data-tooltip-down="Mon panier" class="icon-button"
 					><div v-if="cart.count > 0" class="badge">
 						<template v-if="cart.count < 100">{{ cart.count }}</template>

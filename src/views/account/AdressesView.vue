@@ -118,150 +118,144 @@ function editAddressSubmit(event: SubmitEvent) {
 </script>
 
 <template>
-	<main class="container">
-		<RouterLink to="/account" class="button-text"><ArrowLeft /> Retour</RouterLink>
-		<template v-if="login.client !== null && departements.loaded && villes.loaded">
-			<!-- ADD ADDRESS -->
-			<FormPopupWindow
-				v-if="popupAdd.status.value"
-				:buttons="[
-					{
-						label: 'Annuler',
-						style: 'secondary',
-						value: 'cancel',
-						type: 'button',
-					},
-					{
-						label: 'Enregistrer',
-						style: 'primary',
-						value: 'save',
-						type: 'submit',
-					},
-				]"
-				:is-loading="popupAdd.isLoading.value"
-				@close="(v) => (v !== 'save' ? (popupAdd.status.value = false) : null)"
-				@submit="(e) => addAddressSubmit(e as SubmitEvent)"
-			>
-				<InputControl name="nomadresse" label="Nom de l'adresse" v-model="popupAdd.model.value.nomadresse" />
-				<InputControl
-					name="numerorue"
-					label="Numéro de la rue"
-					required
-					v-model="popupAdd.model.value.numerorue"
-				/>
-				<InputControl name="nomrue" label="Nom de la rue" required v-model="popupAdd.model.value.nomrue" />
-				<SelectControl
-					name="pays"
-					label="Pays"
-					:options="{
-						groupped: false,
-						values: pays.list.map((p) => ({
-							label: p.nompays,
-							value: p.idpays.toString(),
-						})),
-					}"
-					v-model="popupAdd.model.value.idpays"
-				/>
-				<InputControl
-					name="departement"
-					label="Département"
-					:autocomplete="{
-						type: AutocompleteType.ExactWithFallback,
-						values: departements.list.map((d) => d.nomdepartement ?? d.iddepartement.toString()),
-					}"
-					v-model="popupAdd.model.value.nomdepartement"
-					required
-				/>
-				<InputControl
-					name="ville"
-					label="Ville"
-					:autocomplete="{
-						type: AutocompleteType.ExactWithFallback,
-						values: villes.list.map((v) => v.nomville ?? v.codeinsee),
-					}"
-					v-model="popupAdd.model.value.nomville"
-					required
-				/>
-				<InputControl
-					name="codepostal"
-					label="Code postal de l'adresse"
-					required
-					pattern="^\d{5}$"
-					v-model="popupAdd.model.value.codepostaladresse"
-				/>
-				<p class="form-error" v-if="popupAdd.error.value">{{ popupAdd.error.value }}</p>
-			</FormPopupWindow>
-			<!-- EDIT ADRESSE -->
-			<FormPopupWindow
-				v-if="popupEdit.status.value"
-				:buttons="[
-					{
-						label: 'Annuler',
-						style: 'secondary',
-						value: 'cancel',
-						type: 'button',
-					},
-					{
-						label: 'Enregistrer',
-						style: 'primary',
-						value: 'save',
-						type: 'submit',
-					},
-				]"
-				:is-loading="popupEdit.isLoading.value"
-				@close="(v) => (v !== 'save' ? (popupEdit.status.value = null) : null)"
-				@submit="(e) => editAddressSubmit(e as SubmitEvent)"
-			>
-				<InputControl name="nomadresse" label="Nom de l'adresse" v-model="popupEdit.model.value.nomadresse" />
-				<InputControl
-					name="numerorue"
-					label="Numéro de la rue"
-					required
-					v-model="popupEdit.model.value.numerorue"
-				/>
-				<InputControl name="nomrue" label="Nom de la rue" required v-model="popupEdit.model.value.nomrue" />
-				<SelectControl
-					name="pays"
-					label="Pays"
-					:options="{
-						groupped: false,
-						values: pays.list.map((p) => ({
-							label: p.nompays,
-							value: p.idpays.toString(),
-						})),
-					}"
-					v-model="popupEdit.model.value.idpays"
-				/>
-				<InputControl
-					name="departement"
-					label="Département"
-					:autocomplete="{
-						type: AutocompleteType.ExactWithFallback,
-						values: departements.list.map((d) => d.nomdepartement ?? d.iddepartement.toString()),
-					}"
-					v-model="popupEdit.model.value.nomdepartement"
-					required
-				/>
-				<InputControl
-					name="ville"
-					label="Ville"
-					:autocomplete="{
-						type: AutocompleteType.ExactWithFallback,
-						values: villes.list.map((v) => v.nomville ?? v.codeinsee),
-					}"
-					v-model="popupEdit.model.value.nomville"
-					required
-				/>
-				<InputControl
-					name="codepostal"
-					label="Code postal de l'adresse"
-					required
-					pattern="^\d{5}$"
-					v-model="popupEdit.model.value.codepostaladresse"
-				/>
-				<p class="form-error" v-if="popupEdit.error.value">{{ popupEdit.error.value }}</p>
-			</FormPopupWindow>
-			<!-- <FormPopupWindow
+	<RouterLink to="/compte" class="button-text"><ArrowLeft /> Retour</RouterLink>
+	<template v-if="login.client !== null && departements.loaded && villes.loaded">
+		<!-- ADD ADDRESS -->
+		<FormPopupWindow
+			v-if="popupAdd.status.value"
+			:buttons="[
+				{
+					label: 'Annuler',
+					style: 'secondary',
+					value: 'cancel',
+					type: 'button',
+				},
+				{
+					label: 'Enregistrer',
+					style: 'primary',
+					value: 'save',
+					type: 'submit',
+				},
+			]"
+			:is-loading="popupAdd.isLoading.value"
+			@close="(v) => (v !== 'save' ? (popupAdd.status.value = false) : null)"
+			@submit="(e) => addAddressSubmit(e as SubmitEvent)"
+		>
+			<InputControl name="nomadresse" label="Nom de l'adresse" v-model="popupAdd.model.value.nomadresse" />
+			<InputControl name="numerorue" label="Numéro de la rue" required v-model="popupAdd.model.value.numerorue" />
+			<InputControl name="nomrue" label="Nom de la rue" required v-model="popupAdd.model.value.nomrue" />
+			<SelectControl
+				name="pays"
+				label="Pays"
+				:options="{
+					groupped: false,
+					values: pays.list.map((p) => ({
+						label: p.nompays,
+						value: p.idpays.toString(),
+					})),
+				}"
+				v-model="popupAdd.model.value.idpays"
+			/>
+			<InputControl
+				name="departement"
+				label="Département"
+				:autocomplete="{
+					type: AutocompleteType.ExactWithFallback,
+					values: departements.list.map((d) => d.nomdepartement ?? d.iddepartement.toString()),
+				}"
+				v-model="popupAdd.model.value.nomdepartement"
+				required
+			/>
+			<InputControl
+				name="ville"
+				label="Ville"
+				:autocomplete="{
+					type: AutocompleteType.ExactWithFallback,
+					values: villes.list.map((v) => v.nomville ?? v.codeinsee),
+				}"
+				v-model="popupAdd.model.value.nomville"
+				required
+			/>
+			<InputControl
+				name="codepostal"
+				label="Code postal de l'adresse"
+				required
+				pattern="^\d{5}$"
+				v-model="popupAdd.model.value.codepostaladresse"
+			/>
+			<p class="form-error" v-if="popupAdd.error.value">{{ popupAdd.error.value }}</p>
+		</FormPopupWindow>
+		<!-- EDIT ADRESSE -->
+		<FormPopupWindow
+			v-if="popupEdit.status.value"
+			:buttons="[
+				{
+					label: 'Annuler',
+					style: 'secondary',
+					value: 'cancel',
+					type: 'button',
+				},
+				{
+					label: 'Enregistrer',
+					style: 'primary',
+					value: 'save',
+					type: 'submit',
+				},
+			]"
+			:is-loading="popupEdit.isLoading.value"
+			@close="(v) => (v !== 'save' ? (popupEdit.status.value = null) : null)"
+			@submit="(e) => editAddressSubmit(e as SubmitEvent)"
+		>
+			<InputControl name="nomadresse" label="Nom de l'adresse" v-model="popupEdit.model.value.nomadresse" />
+			<InputControl
+				name="numerorue"
+				label="Numéro de la rue"
+				required
+				v-model="popupEdit.model.value.numerorue"
+			/>
+			<InputControl name="nomrue" label="Nom de la rue" required v-model="popupEdit.model.value.nomrue" />
+			<SelectControl
+				name="pays"
+				label="Pays"
+				:options="{
+					groupped: false,
+					values: pays.list.map((p) => ({
+						label: p.nompays,
+						value: p.idpays.toString(),
+					})),
+				}"
+				v-model="popupEdit.model.value.idpays"
+			/>
+			<InputControl
+				name="departement"
+				label="Département"
+				:autocomplete="{
+					type: AutocompleteType.ExactWithFallback,
+					values: departements.list.map((d) => d.nomdepartement ?? d.iddepartement.toString()),
+				}"
+				v-model="popupEdit.model.value.nomdepartement"
+				required
+			/>
+			<InputControl
+				name="ville"
+				label="Ville"
+				:autocomplete="{
+					type: AutocompleteType.ExactWithFallback,
+					values: villes.list.map((v) => v.nomville ?? v.codeinsee),
+				}"
+				v-model="popupEdit.model.value.nomville"
+				required
+			/>
+			<InputControl
+				name="codepostal"
+				label="Code postal de l'adresse"
+				required
+				pattern="^\d{5}$"
+				v-model="popupEdit.model.value.codepostaladresse"
+			/>
+			<p class="form-error" v-if="popupEdit.error.value">{{ popupEdit.error.value }}</p>
+		</FormPopupWindow>
+		<!-- <FormPopupWindow
 				v-if="popupRemove.isOpen.value"
 				title="Confirmer la suppression"
 				:buttons="[
@@ -287,58 +281,51 @@ function editAddressSubmit(event: SubmitEvent) {
 			>
 				<h2>Êtes-vous sûr(e) de vouloir supprimer cette adresse ?</h2>
 			</FormPopupWindow> -->
-			<h1>Mes adresses</h1>
+		<h1>Mes adresses</h1>
 
-			<button id="add-address" class="button button-sm" @click="() => (popupAdd.status.value = true)">
-				Ajouter une adresse
-			</button>
-			<div id="addresses-container">
-				<div
-					class="card-address"
-					v-for="address in login.client.adressesNavigation"
-					v-bind:key="address.idadresse"
-				>
-					<div class="title-address">
-						{{ stringOrNull(address.nomadresse ?? '') ?? 'Aucun nom' }}
-					</div>
-					<div>
-						<p>{{ address.numerorue }} {{ address.nomrue }},</p>
-						<p>{{ address.codepostaladresse }} {{ address.villeNavigation.nomville }},</p>
-						<p>{{ address.payNavigation.nompays }}</p>
-					</div>
-					<div class="buttons-actions">
-						<!-- <button class="button button-sm button-suppr" @click="popupRemove.isOpen.value = address.idadresse">
+		<button id="add-address" class="button button-sm" @click="() => (popupAdd.status.value = true)">
+			Ajouter une adresse
+		</button>
+		<div id="addresses-container">
+			<div class="card-address" v-for="address in login.client.adressesNavigation" v-bind:key="address.idadresse">
+				<div class="title-address">
+					{{ stringOrNull(address.nomadresse ?? '') ?? 'Aucun nom' }}
+				</div>
+				<div>
+					<p>{{ address.numerorue }} {{ address.nomrue }},</p>
+					<p>{{ address.codepostaladresse }} {{ address.villeNavigation.nomville }},</p>
+					<p>{{ address.payNavigation.nompays }}</p>
+				</div>
+				<div class="buttons-actions">
+					<!-- <button class="button button-sm button-suppr" @click="popupRemove.isOpen.value = address.idadresse">
 							Supprimer l'adresse
 						</button> -->
-						<button
-							class="button button-sm button-modif"
-							@click="
-								() => {
-									const dep = departements.list.find(
-											(d) => d.iddepartement === address.iddepartement,
-										),
-										ville = villes.list.find((v) => v.codeinsee === address.codeinsee);
-									popupEdit.model.value = {
-										nomadresse: address.nomadresse ?? '',
-										numerorue: address.numerorue ?? '',
-										nomrue: address.nomrue,
-										idpays: address.idpays.toString(),
-										nomdepartement: dep?.nomdepartement ?? dep?.iddepartement.toString() ?? '',
-										nomville: ville?.nomville ?? ville?.codeinsee ?? '',
-										codepostaladresse: address.codepostaladresse,
-									};
-									popupEdit.status.value = address.idadresse;
-								}
-							"
-						>
-							Modifier l'adresse
-						</button>
-					</div>
+					<button
+						class="button button-sm button-modif"
+						@click="
+							() => {
+								const dep = departements.list.find((d) => d.iddepartement === address.iddepartement),
+									ville = villes.list.find((v) => v.codeinsee === address.codeinsee);
+								popupEdit.model.value = {
+									nomadresse: address.nomadresse ?? '',
+									numerorue: address.numerorue ?? '',
+									nomrue: address.nomrue,
+									idpays: address.idpays.toString(),
+									nomdepartement: dep?.nomdepartement ?? dep?.iddepartement.toString() ?? '',
+									nomville: ville?.nomville ?? ville?.codeinsee ?? '',
+									codepostaladresse: address.codepostaladresse,
+								};
+								popupEdit.status.value = address.idadresse;
+							}
+						"
+					>
+						Modifier l'adresse
+					</button>
 				</div>
 			</div>
-		</template>
-		<LoadingSpinner v-else />
-	</main>
+		</div>
+	</template>
+	<LoadingSpinner v-else />
 </template>
 
 <style scoped lang="scss">

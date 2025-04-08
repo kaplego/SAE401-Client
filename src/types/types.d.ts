@@ -22,3 +22,20 @@ declare type APIResponseError = {
 };
 
 type CartItem = Omit<DetailPanier, 'idclient' | 'clientNavigation' | 'colorationNavigation'>;
+
+interface BreadcrumbBaseItem {
+	type: 'text' | 'link';
+	label: string;
+	key: string;
+}
+
+interface BreadcrumbLinkItem extends BreadcrumbBaseItem {
+	type: 'link';
+	path: string;
+}
+
+interface BreadcrumbTextItem extends BreadcrumbBaseItem {
+	type: 'text';
+}
+
+type AnyBreadcrumbItem = BreadcrumbLinkItem | BreadcrumbTextItem;

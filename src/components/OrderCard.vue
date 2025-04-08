@@ -13,7 +13,7 @@ const price = computed(
 </script>
 
 <template>
-	<RouterLink class="link-order" :to="`/account/order/${order.idcommande}`">
+	<RouterLink class="link-order" :to="`/compte/order/${order.idcommande}`">
 		<div class="card-order">
 			<div class="order-info">
 				<p class="label"><Hash aria-label="Numéro de commande" /> Numéro de commande</p>

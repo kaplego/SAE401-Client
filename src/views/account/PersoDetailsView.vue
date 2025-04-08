@@ -93,63 +93,61 @@ function save(event: Event) {
 </script>
 
 <template>
-	<main class="container">
-		<template v-if="login.client !== null">
-			<RouterLink to="/account" class="button-text"><ArrowLeft /> Retour</RouterLink>
-			<h1>Mes informations personnelles</h1>
-			<form ref="form" class="grille-infos" @submit="save">
-				<InputControl label="Nom" v-model="newClient.nom" required />
-				<InputControl label="Prénom" v-model="newClient.prenom" required />
-				<SelectControl
-					label="Civilité"
-					required
-					:options="{
-						groupped: false,
-						values: [
-							{
-								label: 'Ne préfère pas répondre',
-								value: 'null',
-							},
-							{
-								label: 'Homme',
-								value: 'H',
-							},
-							{
-								label: 'Femme',
-								value: 'F',
-							},
-							{
-								label: 'Autre',
-								value: 'X',
-							},
-						],
-					}"
-					v-model="newClient.civilite"
-				/>
-				<InputControl label="Adresse e-mail" type="email" v-model="newClient.email" required />
-				<InputControl
-					label="Téléphone portable"
-					v-model="newClient.telportable"
-					type="tel"
-					placeholder="01 23 45 67 89"
-					required
-					pattern="^0[0-9]( [0-9]{2}){4}$"
-				/>
-				<InputControl
-					label="Téléphone fixe"
-					v-model="newClient.telfixe"
-					type="tel"
-					placeholder="01 23 45 67 89"
-					pattern="^0[0-9]( [0-9]{2}){4}$"
-				/>
-				<p class="form-error" v-if="error">{{ error }}</p>
-				<StyledButton button-style="primary" type="submit" style="grid-column-end: span 2; width: 100%">
-					Enregistrer
-				</StyledButton>
-			</form>
-		</template>
-		<LoadingSpinner v-else />
-	</main>
+	<template v-if="login.client !== null">
+		<RouterLink to="/compte" class="button-text"><ArrowLeft /> Retour</RouterLink>
+		<h1>Mes informations personnelles</h1>
+		<form ref="form" class="grille-infos" @submit="save">
+			<InputControl label="Nom" v-model="newClient.nom" required />
+			<InputControl label="Prénom" v-model="newClient.prenom" required />
+			<SelectControl
+				label="Civilité"
+				required
+				:options="{
+					groupped: false,
+					values: [
+						{
+							label: 'Ne préfère pas répondre',
+							value: 'null',
+						},
+						{
+							label: 'Homme',
+							value: 'H',
+						},
+						{
+							label: 'Femme',
+							value: 'F',
+						},
+						{
+							label: 'Autre',
+							value: 'X',
+						},
+					],
+				}"
+				v-model="newClient.civilite"
+			/>
+			<InputControl label="Adresse e-mail" type="email" v-model="newClient.email" required />
+			<InputControl
+				label="Téléphone portable"
+				v-model="newClient.telportable"
+				type="tel"
+				placeholder="01 23 45 67 89"
+				required
+				pattern="^0[0-9]( [0-9]{2}){4}$"
+			/>
+			<InputControl
+				label="Téléphone fixe"
+				v-model="newClient.telfixe"
+				type="tel"
+				placeholder="01 23 45 67 89"
+				pattern="^0[0-9]( [0-9]{2}){4}$"
+			/>
+			<p class="form-error" v-if="error">{{ error }}</p>
+			<StyledButton button-style="primary" type="submit" style="grid-column-end: span 2; width: 100%">
+				Enregistrer
+			</StyledButton>
+		</form>
+	</template>
+	<LoadingSpinner v-else />
 </template>
 
 <style lang="scss" scoped>

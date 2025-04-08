@@ -81,6 +81,62 @@ export function finalPrice(basePrice: number, salePrice?: number | null, quantit
 	return (salePrice ?? basePrice) * quantity;
 }
 
+function pathToLabel(path: string) {
+	return path
+		.split('-')
+		.map((v) => v[0].toUpperCase() + v.substring(1))
+		.join(' ');
+}
+
+/**
+ * Convertit un lien (pathname) en items de breadcrumb
+ *
+ * @example
+ * ```
+ * const pathname = '/test/item/1';
+ * const labels = ['Test', 'Item', 'First'];
+ *
+ * console.log(pathnameToBreadcrumb(pathname, labels));
+ * // => [
+ * // 	{ key: '0', label: 'Test', type: 'link', path: '/test' },
+ * // 	{ key: '1', label: 'Item', type: 'link', path: '/test/item' },
+ * // 	{ key: '2', label: 'First', type: 'text' }
+ * // ]
+ * ```
+ */
+export function pathnameToBreadcrumb(
+	path: string,
+	labels: string[] | null = null,
+	startsAtIndex: number = 0,
+): AnyBreadcrumbItem[] {
+	const segments = path.replace(/^\//, '').split('/');
+	if (segments.length <= startsAtIndex) return [];
+
+	const last = segments.pop()!;
+
+	const items: AnyBreadcrumbItem[] = [];
+
+	segments.reduce((path, segment, index) => {
+		path += `/${segment}`;
+		if (!startsAtIndex || index >= startsAtIndex)
+			items.push({
+				key: index.toString(),
+				label: labels?.[index - (startsAtIndex ?? 0)] ?? pathToLabel(segment),
+				type: 'link',
+				path,
+			});
+		return path;
+	}, '');
+
+	items.push({
+		key: segments.length.toString(),
+		label: labels?.[segments.length - (startsAtIndex ?? 0)] ?? pathToLabel(last),
+		type: 'text',
+	});
+
+	return items;
+}
+
 /** Affiche un avertissement si le temps jusqu'à la date d'expiration de la
  * carte de crédit est inférieur à ce nombre de millisecondes. */
 export const CARD_EXPIRATION_WARNING = 60 * 24 * 60 * 60 * 1000;

@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import AboutView from '@/views/AboutView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
-import AccountView from '@/views/account/AccountView.vue';
+import DashboardView from '@/views/account/DashboardView.vue';
 import ProductView from '@/views/ProductView.vue';
 import CategoryView from '@/views/CategoryView.vue';
 import CartView from '@/views/cart/CartView.vue';
@@ -13,6 +13,7 @@ import AdressesView from '@/views/account/AdressesView.vue';
 import BankDetailsView from '@/views/account/BankDetailsView.vue';
 import PaymentView from '@/views/cart/PaymentView.vue';
 import OrdersView from '@/views/account/OrdersView.vue';
+import AccountView from '@/views/account/AccountView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,40 +34,41 @@ const router = createRouter({
 			component: AboutView,
 		},
 		{
-			path: '/account',
+			path: '/compte',
 			name: 'account',
+			component: AccountView,
 			children: [
 				{
-					path: '/account',
+					path: '/compte',
 					name: 'account_dashboard',
-					component: AccountView,
+					component: DashboardView,
 				},
 				{
-					path: '/account/personnal-details',
+					path: '/compte/informations-personelles',
 					name: 'account_personnal',
 					component: PersoDetailsView,
 				},
 				{
-					path: '/account/bank-details',
+					path: '/compte/informations-bancaires',
 					name: 'account_bank',
 					component: BankDetailsView,
 				},
 				{
-					path: '/account/addresses',
+					path: '/compte/adresses',
 					name: 'account_addresses',
 					component: AdressesView,
 				},
 				{
-					path: '/account/orders',
+					path: '/compte/commandes',
 					name: 'account_orders',
 					component: OrdersView,
 				},
-				{
-					path: '/login',
-					name: 'login',
-					component: LoginView,
-				},
 			],
+		},
+		{
+			path: '/login',
+			name: 'login',
+			component: LoginView,
 		},
 		{
 			path: '/cart',
