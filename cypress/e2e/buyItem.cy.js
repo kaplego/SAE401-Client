@@ -1,4 +1,4 @@
-describe('template spec', () => {
+describe('achetter un meuble', () => {
 	it('passes', () => {
 		cy.visit('http://localhost:5173');
 		cy.get('a').contains('Chaise & tabouret').click();

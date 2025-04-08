@@ -1,4 +1,4 @@
-describe('template spec', () => {
+describe('carte bancaire', () => {
 	it('passes', () => {
 		cy.visit('http://localhost:5173');
 
