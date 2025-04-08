@@ -7,8 +7,8 @@ defineProps<{
 <template>
 	<div class="breadcrumb">
 		<slot></slot>
-		<template v-for="item in items" v-bind:key="item.key">
-			<div class="breadcrumb-separator">/</div>
+		<template v-for="(item, index) in items" v-bind:key="item.key">
+			<div class="breadcrumb-separator" v-if="index > 0">/</div>
 			<RouterLink v-if="item.type === 'link'" :to="(item as BreadcrumbLinkItem).path">
 				{{ item.label }}
 			</RouterLink>

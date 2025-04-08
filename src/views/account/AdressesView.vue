@@ -4,7 +4,6 @@ import { useLoggedInStore } from '@/stores/login';
 import { watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import InputControl from '@/components/inputs/InputControl.vue';
-import { ArrowLeft } from 'lucide-vue-next';
 import FormPopupWindow from '@/components/windows/FormPopupWindow.vue';
 import usePopup from '@/assets/ts/usePopup';
 import { useVillesStore } from '@/stores/api/villes';
@@ -118,7 +117,6 @@ function editAddressSubmit(event: SubmitEvent) {
 </script>
 
 <template>
-	<RouterLink to="/compte" class="button-text"><ArrowLeft /> Retour</RouterLink>
 	<template v-if="login.client !== null && departements.loaded && villes.loaded">
 		<!-- ADD ADDRESS -->
 		<FormPopupWindow
@@ -159,7 +157,7 @@ function editAddressSubmit(event: SubmitEvent) {
 			<InputControl
 				name="departement"
 				label="Département"
-				:autocomplete="{
+				:autocompletion="{
 					type: AutocompleteType.ExactWithFallback,
 					values: departements.list.map((d) => d.nomdepartement ?? d.iddepartement.toString()),
 				}"
@@ -169,7 +167,7 @@ function editAddressSubmit(event: SubmitEvent) {
 			<InputControl
 				name="ville"
 				label="Ville"
-				:autocomplete="{
+				:autocompletion="{
 					type: AutocompleteType.ExactWithFallback,
 					values: villes.list.map((v) => v.nomville ?? v.codeinsee),
 				}"
@@ -229,7 +227,7 @@ function editAddressSubmit(event: SubmitEvent) {
 			<InputControl
 				name="departement"
 				label="Département"
-				:autocomplete="{
+				:autocompletion="{
 					type: AutocompleteType.ExactWithFallback,
 					values: departements.list.map((d) => d.nomdepartement ?? d.iddepartement.toString()),
 				}"
@@ -239,7 +237,7 @@ function editAddressSubmit(event: SubmitEvent) {
 			<InputControl
 				name="ville"
 				label="Ville"
-				:autocomplete="{
+				:autocompletion="{
 					type: AutocompleteType.ExactWithFallback,
 					values: villes.list.map((v) => v.nomville ?? v.codeinsee),
 				}"

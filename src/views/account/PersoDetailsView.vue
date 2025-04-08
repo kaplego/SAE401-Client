@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { phoneReverseFormat, phoneFormat } from '@/assets/ts/utils';
+import { phoneReverseFormat, phoneFormat, phoneInput, phoneKeydown } from '@/assets/ts/utils';
 import InputControl from '@/components/inputs/InputControl.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import SelectControl from '@/components/inputs/SelectControl.vue';
 import { useLoggedInStore } from '@/stores/login';
-import { ArrowLeft } from 'lucide-vue-next';
 import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import API from '@/assets/ts/api';
@@ -94,7 +93,6 @@ function save(event: Event) {
 
 <template>
 	<template v-if="login.client !== null">
-		<RouterLink to="/compte" class="button-text"><ArrowLeft /> Retour</RouterLink>
 		<h1>Mes informations personnelles</h1>
 		<form ref="form" class="grille-infos" @submit="save">
 			<InputControl label="Nom" v-model="newClient.nom" required />
@@ -133,6 +131,8 @@ function save(event: Event) {
 				placeholder="01 23 45 67 89"
 				required
 				pattern="^0[0-9]( [0-9]{2}){4}$"
+				@input="phoneInput"
+				@keydown="phoneKeydown"
 			/>
 			<InputControl
 				label="Téléphone fixe"
@@ -140,6 +140,8 @@ function save(event: Event) {
 				type="tel"
 				placeholder="01 23 45 67 89"
 				pattern="^0[0-9]( [0-9]{2}){4}$"
+				@input="phoneInput"
+				@keydown="phoneKeydown"
 			/>
 			<p class="form-error" v-if="error">{{ error }}</p>
 			<StyledButton button-style="primary" type="submit" style="grid-column-end: span 2; width: 100%">

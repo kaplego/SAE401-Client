@@ -1,5 +1,7 @@
 import axios, { type AxiosResponse } from 'axios';
 import Result from './result';
+import bcrypt from 'bcryptjs';
+import { BCRYPT_ROUNDS } from './utils';
 
 /** Renvoie les données de la requête, ou null si erreur */
 async function dataOrNull<T>(cb: () => Promise<AxiosResponse<T>>): Promise<T | null> {
@@ -156,8 +158,19 @@ class APIManager {
 			if (result) result.cartesNavigation = await this.cartes.byClient(result.idclient);
 			return result;
 		},
-		create: async (client: Client) => {
-			return dataOrError<''>(() => axios.post(`${this.$endpoint}/client`, client));
+		create: async (
+			client: Pick<
+				Client,
+				'nomclient' | 'prenomclient' | 'emailclient' | 'civiliteclient' | 'telportableclient'
+			> & {
+				password: string;
+			},
+		) => {
+			const hash = bcrypt.hashSync(client.password, BCRYPT_ROUNDS);
+			const { password: _, ...clientWithoutMdp } = client;
+			return dataOrError<Client>(() =>
+				axios.post(`${this.$endpoint}/client`, { ...clientWithoutMdp, hashmdp: hash }),
+			);
 		},
 		update: async (
 			client: Pick<

@@ -34,6 +34,33 @@ export function phoneReverseFormat(formatted: string) {
 	return formatted;
 }
 
+/** Ajoute des espaces dans les champs de téléphone */
+export function phoneInput(event: InputEvent) {
+	if (event.target instanceof HTMLInputElement) {
+		if (
+			event.data !== null &&
+			event.target.selectionStart === event.target.value.length &&
+			event.target.value.length > 0 &&
+			event.target.value.length < 14
+		) {
+			const nums = event.target.value.split(' ');
+			if (nums.at(-1)?.length === 3) event.target.value = `${nums.join(' ').slice(0, -1)} ${event.data}`;
+		}
+	}
+}
+
+/** Retire les espaces dans les champs de téléphone */
+export function phoneKeydown(event: KeyboardEvent) {
+	if (
+		event.key === 'Backspace' &&
+		event.target instanceof HTMLInputElement &&
+		event.target.selectionStart === event.target.value.length
+	) {
+		if (event.target.value.lastIndexOf(' ') === event.target.value.length - 2)
+			event.target.value = event.target.value.substring(0, event.target.value.length - 1);
+	}
+}
+
 /**
  * Formatter un numéro de carte bancaire
  *
@@ -140,6 +167,8 @@ export function pathnameToBreadcrumb(
 /** Affiche un avertissement si le temps jusqu'à la date d'expiration de la
  * carte de crédit est inférieur à ce nombre de millisecondes. */
 export const CARD_EXPIRATION_WARNING = 60 * 24 * 60 * 60 * 1000;
+
+export const BCRYPT_ROUNDS = 12;
 
 export enum AutocompleteType {
 	/** Autocomplète la chaîne par la valeur plus proche */

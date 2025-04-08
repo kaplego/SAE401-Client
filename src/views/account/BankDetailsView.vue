@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import API from '@/assets/ts/api';
 import usePopup from '@/assets/ts/usePopup';
-import { cardNumberReverseFormat, pathnameToBreadcrumb } from '@/assets/ts/utils';
-import BreadCrumb from '@/components/BreadCrumb.vue';
+import { cardNumberReverseFormat } from '@/assets/ts/utils';
 import CarteBancaire from '@/components/CarteBancaire.vue';
 import InputControl from '@/components/inputs/InputControl.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import StyledButton from '@/components/StyledButton.vue';
 import FormPopupWindow from '@/components/windows/FormPopupWindow.vue';
 import { useLoggedInStore } from '@/stores/login';
-import { User } from 'lucide-vue-next';
 import { watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -79,15 +77,10 @@ function addCard() {
 			popup.isLoading.value = false;
 		});
 }
-
-console.log(pathnameToBreadcrumb(router.currentRoute.value.path, ['Informations bancaires'], 1));
 </script>
 
 <template>
 	<template v-if="login.client !== null">
-		<BreadCrumb :items="pathnameToBreadcrumb(router.currentRoute.value.path, ['Informations bancaires'], 1)">
-			<RouterLink to="/compte"><User /></RouterLink>
-		</BreadCrumb>
 		<h1>Mes informations bancaires</h1>
 		<p>Appuiez sur une carte pour voir ses informations.</p>
 		<StyledButton buttonSize="sm" @click="popup.status.value = true">Ajouter une carte bancaire</StyledButton>

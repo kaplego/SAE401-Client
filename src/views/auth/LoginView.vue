@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import API from '@/assets/ts/api';
 import InputControl from '@/components/inputs/InputControl.vue';
+import { useDataStore } from '@/stores/data';
 import { useLoggedInStore } from '@/stores/login';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const login = useLoggedInStore();
+const data = useDataStore();
+
+const hasSignedUp = data.get('signup') ?? null;
 
 const redirection = router.currentRoute.value.query.redirect?.toString() ?? '/compte';
 
@@ -39,9 +43,17 @@ function loginHandler(event: Event) {
 
 <template>
 	<form class="auth-frame" @submit="loginHandler">
+		<p class="alert" v-if="hasSignedUp !== null">{{ hasSignedUp }}</p>
 		<h2>Connexion</h2>
-		<InputControl type="email" label="Email" name="email" required v-model="loginData.email" />
-		<InputControl type="password" label="Mot de passe" name="password" required v-model="loginData.password" />
+		<InputControl type="email" label="Email" name="email" required v-model="loginData.email" autocomplete="email" />
+		<InputControl
+			type="password"
+			label="Mot de passe"
+			name="password"
+			required
+			v-model="loginData.password"
+			autocomplete="current-password"
+		/>
 		<button class="button" :disabled="isLoading">
 			<div class="loading-spinner" v-if="isLoading"></div>
 			<template v-else>Se connecter</template>
@@ -49,5 +61,4 @@ function loginHandler(event: Event) {
 	</form>
 </template>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

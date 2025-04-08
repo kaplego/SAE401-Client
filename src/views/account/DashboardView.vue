@@ -115,7 +115,7 @@ const cardsExpiration = computed<{
 			<CardAccount
 				title="Commandes"
 				:subtitle="`Vous avez ${login.client.commandesNavigation.length} commande${login.client.commandesNavigation.length === 1 ? '' : 's'}`"
-				link="/compte/orders"
+				link="/compte/commandes"
 			>
 				<ReceiptText :stroke-width="1.5" />
 			</CardAccount>
