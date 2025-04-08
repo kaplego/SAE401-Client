@@ -27,7 +27,7 @@ function loginHandler(event: Event) {
 	event.stopPropagation();
 
 	isLoading.value = true;
-	API.clients.login(loginData.value.email, loginData.value.email).then((result) => {
+	API.clients.login(loginData.value.email, loginData.value.password).then((result) => {
 		if (!result) loginError.value = "L'adresse email ou le mot de passe est incorrect.";
 		else {
 			login.login(result.token, result.client.idclient);
