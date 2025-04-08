@@ -27,7 +27,7 @@ function loginHandler(event: Event) {
 	event.stopPropagation();
 
 	isLoading.value = true;
-	API.clients.login(loginData.value.email, loginData.value.email).then((result) => {
+	API.clients.login(loginData.value.email, loginData.value.password).then((result) => {
 		if (!result) loginError.value = "L'adresse email ou le mot de passe est incorrect.";
 		else {
 			login.login(result.token, result.client.idclient);
@@ -38,49 +38,16 @@ function loginHandler(event: Event) {
 </script>
 
 <template>
-	<div id="login">
-		<form class="frame" @submit="loginHandler">
-			<h2>Connexion</h2>
-			<InputControl type="email" label="Email" name="email" required />
-			<InputControl type="password" label="Mot de passe" name="password" required />
-			<button class="button" :disabled="isLoading">
-				<div class="loading-spinner" v-if="isLoading"></div>
-				<template v-else>Se connecter</template>
-			</button>
-		</form>
-	</div>
+	<form class="auth-frame" @submit="loginHandler">
+		<h2>Connexion</h2>
+		<InputControl type="email" label="Email" name="email" required v-model="loginData.email" />
+		<InputControl type="password" label="Mot de passe" name="password" required v-model="loginData.password" />
+		<button class="button" :disabled="isLoading">
+			<div class="loading-spinner" v-if="isLoading"></div>
+			<template v-else>Se connecter</template>
+		</button>
+	</form>
 </template>
 
 <style lang="scss" scoped>
-#login {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 4rem;
-	flex-wrap: wrap;
-}
-
-.frame {
-	// background-color: var(--t-background3);
-	border: 2px solid var(--t-background3);
-	padding: 2rem;
-	border-radius: 6px;
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-
-	& > * {
-		width: 100%;
-	}
-
-	h2 {
-		margin-top: 0;
-		text-align: center;
-	}
-
-	.loading-spinner {
-		margin: 0 auto;
-		color: white;
-	}
-}
 </style>

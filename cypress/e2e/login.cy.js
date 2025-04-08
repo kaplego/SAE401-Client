@@ -3,7 +3,7 @@ describe('login', () => {
 		cy.visit('http://localhost:5173');
 
 		cy.get('[href="/compte"]').first().click();
-		cy.url().should('include', '/login');
+		cy.url().should('include', '/auth/connexion');
 
 		cy.get('#email').type('luc-damas@hop.fr');
 		cy.get('#password').type('mdp');

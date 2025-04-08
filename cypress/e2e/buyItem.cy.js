@@ -7,22 +7,31 @@ describe('template spec', () => {
 		cy.get('button').contains('Ajouter au panier').click();
 
 		// 1 item in cart
+		cy.get('#cart-number > .input-control > .input').should('contain.value', 1);
 		cy.get('button:has(svg.lucide-plus-icon)').click();
+		cy.get('#cart-number > .input-control > .input').should('contain.value', 2);
 		cy.get('button:has(svg.lucide-plus-icon)').click();
+		cy.get('#cart-number > .input-control > .input').should('contain.value', 3);
 		cy.get('button:has(svg.lucide-plus-icon)').click();
-
+		cy.get('#cart-number > .input-control > .input').should('contain.value', 4);
 		// 4 items in cart
 
 		cy.get('button:has(svg.lucide-minus-icon)').click();
+		cy.get('#cart-number > .input-control > .input').should('contain.value', 3);
 		// 3 items in cart
 
 		cy.get('[href="/cart"]').click();
 
+		cy.get('.cart-quantity > .input-control > .input').should('contain.value', 3);
+
 		cy.get('button:has(svg.lucide-plus-icon)').click();
+		cy.get('.cart-quantity > .input-control > .input').should('contain.value', 4);
 		// 4 items in cart
 
 		cy.get('button:has(svg.lucide-minus-icon)').click();
+		cy.get('.cart-quantity > .input-control > .input').should('contain.value', 3);
 		cy.get('button:has(svg.lucide-minus-icon)').click();
+		cy.get('.cart-quantity > .input-control > .input').should('contain.value', 2);
 		// 2 items in cart
 
 
