@@ -27,10 +27,11 @@ describe('template spec', () => {
 		cy.get('input#expyear.input').type('2031');
 		cy.get('button.button').contains('Enregistrer').click();
 
-		// cy.contains('div.cb-container', 'Carte de TEST').parent().find('button.delete').click();
-		//TODO fix ça, il faut hover sur la carte avant
-		cy.get('p.label').contains('Carte de TEST').parent().parent().get('button.delete').click();
+
+		cy.get('p.label').contains('Carte de TEST').parent().parent().parent('.cb-container').find('button.delete').click({ force: true});
 		cy.get('button.button').contains('Confirmer').click();
+
+		cy.get('p.label').contains('Carte de TEST').should('not.exist');
 
 	});
 });
