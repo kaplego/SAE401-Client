@@ -11,9 +11,6 @@ importers:
       axios:
         specifier: ^1.8.3
         version: 1.8.3
-      cypress:
-        specifier: ^14.2.1
-        version: 14.2.1
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
@@ -54,6 +51,9 @@ importers:
       '@vue/tsconfig':
         specifier: ^0.7.0
         version: 0.7.0(typescript@5.8.2)(vue@3.5.13(typescript@5.8.2))
+      cypress:
+        specifier: ^14.2.1
+        version: 14.2.1
       eslint:
         specifier: ^9.21.0
         version: 9.22.0(jiti@2.4.2)
