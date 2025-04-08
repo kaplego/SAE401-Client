@@ -2,7 +2,7 @@ describe('login', () => {
 	it('finds the login button', () => {
 		cy.visit('http://localhost:5173');
 
-		cy.get('a.icon-button').first().click();
+		cy.get('[href="/compte"]').first().click();
 		cy.url().should('include', '/login');
 
 		cy.get('#email').type('luc-damas@hop.fr');
