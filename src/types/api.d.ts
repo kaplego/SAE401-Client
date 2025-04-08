@@ -141,7 +141,7 @@ declare type Commande = {
 	instructionlivraison: string | null;
 	adresseFactNavigation: Adresse;
 	detailsCompositionNavigation: CommandeComposition[];
-	detailProduitNavigation: DetailCommande[];
+	detailsProduitNavigation: DetailCommande[];
 	adresseLivrNavigation: Adresse;
 	clientNavigation: Client;
 	codeNavigation: CodePromo | null;

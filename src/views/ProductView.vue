@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useLoadingStore } from '@/stores/loading';
 import { useRouter } from 'vue-router';
-import router from '@/router';
 import { computed, ref, onMounted } from 'vue';
 import API from '@/assets/ts/api';
 import { Minus, Plus, Star } from 'lucide-vue-next';
@@ -17,6 +16,9 @@ isLoading.switchLoading(false);
 const cart = useCartStore();
 const product = ref<Produit | null>(null);
 const fileText = ref<string>('');
+
+const router = useRouter();
+const productId = router.currentRoute.value.params.id as string;
 
 const selectedColoration = ref<Coloration | null>(null);
 const images = computed(
@@ -49,7 +51,7 @@ function setQuantity(quantity: number) {
 	cart.setQuantity(product.value.idproduit, selectedColoration.value.idcouleur, quantity);
 }
 
-API.products.get(useRouter().currentRoute.value.params.id as string).then((p) => {
+API.products.get(productId).then((p) => {
 	if (!p) return router.push('/');
 	product.value = p;
 	selectedColoration.value = product.value!.colorationsNavigation[0];
@@ -57,7 +59,7 @@ API.products.get(useRouter().currentRoute.value.params.id as string).then((p) =>
 onMounted(async () => {
 	try {
 		const response = await fetch(
-			'./../../img/files/AspectTechnique/produit' + useRouter().currentRoute.value.params.id + '.txt',
+			'./../../img/files/AspectTechnique/produit' + productId + '.txt',
 		);
 		if (!response.ok) {
 			throw new Error('Network response was not ok');

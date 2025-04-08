@@ -12,6 +12,7 @@ import ColorDisplay from './product/ColorDisplay.vue';
 const props = defineProps<{
 	coloration: Coloration;
 	quantite: number;
+	editable?: boolean;
 }>();
 
 const cart = useCartStore();
@@ -25,7 +26,9 @@ const totalSalePrice = computed(() =>
 );
 const totalBasePrice = computed(() => (props.coloration.prixvente ?? 0) * props.quantite);
 
-const cartQuantity = computed(() => cart.getQuantity(props.coloration.idproduit, props.coloration.idcouleur));
+const cartQuantity = computed(() =>
+	props.editable ? cart.getQuantity(props.coloration.idproduit, props.coloration.idcouleur) : props.quantite,
+);
 </script>
 
 <template>
@@ -59,8 +62,9 @@ const cartQuantity = computed(() => cart.getQuantity(props.coloration.idproduit,
 				<div class="cart-details">
 					<div
 						class="cart-quantity"
+						v-if="editable"
 						@click="
-							(e) => {
+							(e: Event) => {
 								e.preventDefault();
 								e.stopPropagation();
 							}
@@ -92,6 +96,7 @@ const cartQuantity = computed(() => cart.getQuantity(props.coloration.idproduit,
 							<Plus />
 						</StyledButton>
 					</div>
+					<div v-else>Quantité : {{ cartQuantity }}</div>
 					<p class="total-price">
 						Prix total : <PriceDisplay :basePrice="totalBasePrice" :salePrice="totalSalePrice" />
 					</p>

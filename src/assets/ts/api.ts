@@ -199,6 +199,13 @@ class APIManager {
 			dataOrNull<Coloration>(() => axios.get(`${this.$endpoint}/coloration/${idproduit}/${idcouleur}`)),
 	};
 
+	public readonly commandes = {
+		get: async (id: ID) => {
+			const jwt = localStorage.getItem('jwt');
+			return dataOrNull<Commande>(() => axios.get(`${this.$endpoint}/commande/${id}`, AuthHeader(jwt)));
+		},
+	};
+
 	public readonly couleurs = {
 		get: async (idcouleur: ID) => dataOrNull<Couleur>(() => axios.get(`${this.$endpoint}/couleur/${idcouleur}`)),
 	};

@@ -16,6 +16,7 @@ import OrdersView from '@/views/account/OrdersView.vue';
 import AccountView from '@/views/account/AccountView.vue';
 import AuthView from '@/views/auth/AuthView.vue';
 import SignupView from '@/views/auth/SignupView.vue';
+import OrderDetailsView from '@/views/account/OrderDetailsView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +65,11 @@ const router = createRouter({
 					path: '/compte/commandes',
 					name: 'account_orders',
 					component: OrdersView,
+				},
+				{
+					path: '/compte/commandes/:id',
+					name: 'account_order',
+					component: OrderDetailsView,
 				},
 			],
 		},

@@ -4,14 +4,9 @@ import ImageHover from './ImageHover.vue';
 import ImagePlaceholder from './placeholders/ImagePlaceholder.vue';
 import PriceDisplay from './product/PriceDisplay.vue';
 
-const props = defineProps({
-	produit: {
-		type: Object,
-		required: true,
-	},
-}) as {
+const props = defineProps<{
 	produit: Produit;
-};
+}>();
 
 // Calculer la coloration la moins chère pour la placer en premier
 const colorationLaMoinsChere = props.produit.colorationsNavigation.reduce(
@@ -32,7 +27,7 @@ const photos = computed(() =>
 );
 const isHovered = ref<boolean>(false);
 
-props.produit.colorationsNavigation.sort((a, b) =>
+const colorations = [...props.produit.colorationsNavigation].sort((a, b) =>
 	a == colorationLaMoinsChere ? -1 : b == colorationLaMoinsChere ? 1 : 0,
 );
 </script>
@@ -72,7 +67,7 @@ props.produit.colorationsNavigation.sort((a, b) =>
 					<div class="colorations">
 						<div
 							class="coloration"
-							v-for="coloration in props.produit.colorationsNavigation"
+							v-for="coloration in colorations"
 							v-bind:key="coloration.idcouleur"
 							:style="`--couleur: #${coloration.couleurNavigation.rgbcouleur};`"
 							:data-tooltip="coloration.couleurNavigation.nomcouleur"

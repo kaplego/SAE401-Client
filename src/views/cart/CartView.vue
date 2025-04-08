@@ -29,6 +29,7 @@ const confirmClear = usePopup(false);
 					v-bind:key="`${item.idcouleur}${item.idproduit}`"
 					:coloration="item"
 					:quantite="item.quantitepanier"
+					editable
 				/>
 			</div>
 			<div class="v-separator"></div>
