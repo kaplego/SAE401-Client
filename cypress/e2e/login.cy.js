@@ -10,7 +10,7 @@ describe('login', () => {
 
 		cy.get('button.button').contains('Se connecter').click();
 
-		cy.url().should('include', '/account');
+		cy.url().should('include', '/compte');
 
 	});
 });
