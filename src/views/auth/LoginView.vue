@@ -2,7 +2,7 @@
 import API from '@/assets/ts/api';
 import InputControl from '@/components/inputs/InputControl.vue';
 import { useLoggedInStore } from '@/stores/login';
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -12,39 +12,34 @@ const redirection = router.currentRoute.value.query.redirect?.toString() ?? '/co
 
 if (login.isLoggedIn) router.push(redirection);
 
-const form = ref<HTMLFormElement>();
-const error = ref<string | null>(null);
 const isLoading = ref<boolean>(false);
 
-watchEffect((clean) => {
-	if (form.value) {
-		function submitHandler(event: SubmitEvent) {
-			event.preventDefault();
-			event.stopPropagation();
-			const data = new FormData(form.value);
-			const email = data.get('email'),
-				pass = data.get('password');
-
-			if (typeof email === 'string' && typeof pass === 'string') {
-				isLoading.value = true;
-				API.clients.login(email, pass).then((result) => {
-					if (!result) error.value = "L'adresse email ou le mot de passe est incorrect.";
-					else {
-						login.login(result.token, result.client.idclient);
-						router.replace(redirection);
-					}
-				});
-			}
-		}
-		form.value?.addEventListener('submit', submitHandler);
-		clean(() => form.value?.removeEventListener('submit', submitHandler));
-	}
+const loginData = ref<{
+	email: string;
+	password: string;
+}>({
+	email: '',
+	password: '',
 });
+const loginError = ref<string | null>(null);
+function loginHandler(event: Event) {
+	event.preventDefault();
+	event.stopPropagation();
+
+	isLoading.value = true;
+	API.clients.login(loginData.value.email, loginData.value.email).then((result) => {
+		if (!result) loginError.value = "L'adresse email ou le mot de passe est incorrect.";
+		else {
+			login.login(result.token, result.client.idclient);
+			router.replace(redirection);
+		}
+	});
+}
 </script>
 
 <template>
-	<main class="container">
-		<form ref="form" class="frame">
+	<div id="login">
+		<form class="frame" @submit="loginHandler">
 			<h2>Connexion</h2>
 			<InputControl type="email" label="Email" name="email" required />
 			<InputControl type="password" label="Mot de passe" name="password" required />
@@ -53,15 +48,18 @@ watchEffect((clean) => {
 				<template v-else>Se connecter</template>
 			</button>
 		</form>
-	</main>
+	</div>
 </template>
 
 <style lang="scss" scoped>
-main {
+#login {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	gap: 4rem;
+	flex-wrap: wrap;
 }
+
 .frame {
 	// background-color: var(--t-background3);
 	border: 2px solid var(--t-background3);

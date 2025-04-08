@@ -534,7 +534,7 @@ body.theme-darkdim {
 		}
 	}
 
-	&:has(.input:invalid) {
+	&:has(.input:user-invalid) {
 		.label {
 			color: var(--c-red-500);
 		}

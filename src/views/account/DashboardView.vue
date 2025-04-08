@@ -10,12 +10,12 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const login = useLoggedInStore();
 
-if (!login.isLoggedIn) router.push('/login');
+if (!login.isLoggedIn) router.replace('/auth/connexion');
 
 watchEffect(() => {
 	if (login.clientReady && login.client === null) {
 		login.logout();
-		router.push('/login');
+		router.replace('/auth/connexion');
 	}
 });
 

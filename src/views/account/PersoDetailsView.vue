@@ -13,12 +13,12 @@ import StyledButton from '@/components/StyledButton.vue';
 const router = useRouter();
 const login = useLoggedInStore();
 
-if (!login.isLoggedIn) router.push('/login');
+if (!login.isLoggedIn) router.push('/auth/connexion');
 
 watchEffect(() => {
 	if (login.clientReady && login.client === null) {
 		login.logout();
-		router.push('/login');
+		router.push('/auth/connexion');
 	}
 });
 
@@ -64,7 +64,7 @@ function save(event: Event) {
 	// Vérifier que le client est toujours connecté
 	if (!login.client) {
 		login.logout();
-		router.push('/login');
+		router.push('/auth/connexion');
 		return;
 	}
 
