@@ -17,10 +17,10 @@ import API from '@/assets/ts/api';
 const router = useRouter();
 const login = useLoggedInStore();
 
-if (!login.isLoggedIn) router.push('/login');
+if (!login.isLoggedIn) router.push('/auth/connexion');
 
 watchEffect(() => {
-	if (login.clientReady && login.client === null) router.push('/login');
+	if (login.clientReady && login.client === null) router.push('/auth/connexion');
 });
 
 const pays = usePaysStore();

@@ -7,13 +7,15 @@ import ProductView from '@/views/ProductView.vue';
 import CategoryView from '@/views/CategoryView.vue';
 import CartView from '@/views/cart/CartView.vue';
 import SearchView from '@/views/SearchView.vue';
-import LoginView from '@/views/LoginView.vue';
+import LoginView from '@/views/auth/LoginView.vue';
 import PersoDetailsView from '@/views/account/PersoDetailsView.vue';
 import AdressesView from '@/views/account/AdressesView.vue';
 import BankDetailsView from '@/views/account/BankDetailsView.vue';
 import PaymentView from '@/views/cart/PaymentView.vue';
 import OrdersView from '@/views/account/OrdersView.vue';
 import AccountView from '@/views/account/AccountView.vue';
+import AuthView from '@/views/auth/AuthView.vue';
+import SignupView from '@/views/auth/SignupView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,9 +68,21 @@ const router = createRouter({
 			],
 		},
 		{
-			path: '/login',
+			path: '/auth',
 			name: 'login',
-			component: LoginView,
+			component: AuthView,
+			children: [
+				{
+					path: '/auth/connexion',
+					name: 'auth_login',
+					component: LoginView,
+				},
+				{
+					path: '/auth/inscription',
+					name: 'auth_signup',
+					component: SignupView,
+				},
+			],
 		},
 		{
 			path: '/cart',

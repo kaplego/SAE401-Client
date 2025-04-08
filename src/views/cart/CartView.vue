@@ -65,7 +65,7 @@ const confirmClear = usePopup(false);
 					</StyledButton>
 					<StyledButton
 						v-if="!login.isLoggedIn"
-						to="/login?redirect=/cart"
+						to="/auth/connexion?redirect=/cart"
 						button-size="sm"
 						style="width: 100%"
 					>
