@@ -48,6 +48,21 @@ describe('achetter un meuble', () => {
 
 		cy.url().should('include', '/paiement');
 
+		cy.get('#idadresselivr').select("TEST adresse, ST TRIVIER SUR MOIGNANS");
+		cy.get('#idtransporteur').select("Chronopost");
+		cy.get('#instructionlivraison').type("Ceci est une commande de TEST");
+
+		cy.get('label[for="express"]').last().click();
+		cy.get('#express').should('be.checked');
+		cy.get('label[for="assurance"]').last().click();
+		cy.get('#assurance').should('be.checked');
+		cy.get('select.input').last().select(0);
+
+		cy.get('button.button').contains('Payer').click();
+
+		cy.url().should('include', '/compte/commandes/');
+
+
 		// FIN DU TEST
 
 	});
