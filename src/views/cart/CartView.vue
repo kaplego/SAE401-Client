@@ -74,7 +74,7 @@ const confirmClear = usePopup(false);
 					</StyledButton>
 					<StyledButton
 						v-else
-						:to="cart.count === 0 ? undefined : '/payment'"
+						:to="cart.count === 0 ? undefined : '/paiement'"
 						button-size="sm"
 						style="width: 100%"
 						:disabled="cart.count === 0"

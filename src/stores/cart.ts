@@ -33,9 +33,11 @@ export const useCartStore = defineStore('cart', () => {
 					>((r) =>
 						// Récupérer le produit depuis l'API
 						API.colorations.get(item.idproduit, item.idcouleur).then((res) => {
-							console.log(res);
-
 							if (res) r({ ...res, quantitepanier: item.quantitepanier });
+							else
+								itemsList.value = itemsList.value.filter(
+									(v) => v.idcouleur !== item.idcouleur || v.idproduit !== item.idproduit,
+								);
 						}),
 					);
 				}

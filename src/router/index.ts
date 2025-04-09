@@ -96,7 +96,7 @@ const router = createRouter({
 			component: CartView,
 		},
 		{
-			path: '/payment',
+			path: '/paiement',
 			name: 'payment',
 			component: PaymentView,
 		},

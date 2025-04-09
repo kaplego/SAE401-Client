@@ -108,8 +108,10 @@ const price = computed(
 						order.adresseLivrNavigation.codeinsee
 					}}
 				</p>
+				<p class="bold mt mb">Transporteur</p>
+				<p>{{ order.transporteurNavigation.nomtransporteur }}</p>
 				<template v-if="order.instructionlivraison">
-					<p class="bold mt">Instructions pour la Livraison</p>
+					<p class="bold mt mb">Instructions pour la Livraison</p>
 					<p>{{ order.instructionlivraison }}</p>
 				</template>
 				<div class="separator"></div>

@@ -132,11 +132,13 @@ const cartQuantity = computed(() =>
 .link-produit {
 	text-decoration: none;
 	overflow: hidden;
+	height: 150px;
+	display: block;
 }
 
 .card-produit {
 	width: 100%;
-	height: 150px;
+	height: 100%;
 	max-width: 100%;
 	overflow: hidden;
 	padding: 1rem;

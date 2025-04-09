@@ -543,6 +543,16 @@ body.theme-darkdim {
 		cursor: pointer;
 	}
 
+	&:not(:has(option:checked))::before {
+		content: 'Sélectionnez une option';
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		left: 1rem;
+		opacity: 0.35;
+		pointer-events: none;
+	}
+
 	&:has(.input:user-invalid) {
 		.label {
 			color: var(--c-red-500);
@@ -550,6 +560,11 @@ body.theme-darkdim {
 
 		.input {
 			border-color: var(--c-red-500);
+		}
+
+		&:not(:has(option:checked))::before {
+			color: var(--c-red-500);
+			opacity: 0.75;
 		}
 	}
 }

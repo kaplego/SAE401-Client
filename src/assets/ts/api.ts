@@ -204,6 +204,25 @@ class APIManager {
 			const jwt = localStorage.getItem('jwt');
 			return dataOrNull<Commande>(() => axios.get(`${this.$endpoint}/commande/${id}`, AuthHeader(jwt)));
 		},
+		create: async (
+			data: Omit<
+				Commande,
+				| 'idcommande'
+				| 'datecommande'
+				| 'adresseFactNavigation'
+				| 'detailsCompositionNavigation'
+				| 'detailsProduitNavigation'
+				| 'adresseLivrNavigation'
+				| 'clientNavigation'
+				| 'codeNavigation'
+				| 'statutNavigation'
+				| 'transporteurNavigation'
+				| 'paiementsNavigation'
+			>,
+		) => {
+			const jwt = localStorage.getItem('jwt');
+			return dataOrError<Commande>(() => axios.post(`${this.$endpoint}/commande`, data, AuthHeader(jwt)));
+		},
 	};
 
 	public readonly couleurs = {
@@ -218,6 +237,24 @@ class APIManager {
 	public readonly detailsPanier = {
 		get: async (idproduit: ID, idcouleur: ID, idclient: ID): Promise<DetailPanier | null> =>
 			dataOrNull(() => axios.get(`${this.$endpoint}/detailsPanier/${idproduit}/${idcouleur}/${idclient}`)),
+	};
+
+	public readonly detailsCommande = {
+		create: async (data: Pick<DetailCommande, 'idcommande' | 'idcouleur' | 'idproduit' | 'quantitecommande'>) => {
+			const jwt = localStorage.getItem('jwt');
+			return dataOrError<DetailCommande>(() =>
+				axios.post(`${this.$endpoint}/detailcommande`, data, AuthHeader(jwt)),
+			);
+		},
+	};
+
+	public readonly paiements = {
+		create: async (
+			data: Pick<Paiement, 'idcommande' | 'idtypepaiement' | 'idcartebancaire' | 'montantpaiement'>,
+		) => {
+			const jwt = localStorage.getItem('jwt');
+			return dataOrError<Paiement>(() => axios.post(`${this.$endpoint}/paiement`, data, AuthHeader(jwt)));
+		},
 	};
 
 	public readonly pays = {
@@ -268,6 +305,14 @@ class APIManager {
 		): Promise<Produit | null> =>
 			dataOrNull(() => axios.put(`${this.$endpoint}/produit/${produit.idproduit}`, produit)),
 		delete: async (id: ID): Promise<boolean> => boolData(() => axios.delete(`${this.$endpoint}/produit/${id}`)),
+	};
+
+	public readonly transporteurs = {
+		list: () => dataOrDefault([], () => axios.get(`${this.$endpoint}/transporteur/getalltransporteur`)),
+	};
+
+	public readonly typesPaiement = {
+		list: () => dataOrDefault([], () => axios.get(`${this.$endpoint}/typePaiement/getalltypepaiement`)),
 	};
 
 	public readonly villes = {

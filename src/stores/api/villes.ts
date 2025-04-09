@@ -11,5 +11,9 @@ export const useVillesStore = defineStore('ville', () => {
 		loaded.value = true;
 	});
 
-	return { list, loaded };
+	function find(codeinsee: string) {
+		return loaded.value ? (list.value.find((v) => v.codeinsee === codeinsee) ?? null) : null;
+	}
+
+	return { list, loaded, find };
 });

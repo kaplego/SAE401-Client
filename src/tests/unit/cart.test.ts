@@ -11,10 +11,6 @@ const app = createApp(App);
 app.use(VueAxios, axios);
 app.use(createPinia());
 
-
-
-
-
 test("addToCart/ isInCart fonctionne", () => {
 	useCartStore().addToCart(12, 15);
 	expect(useCartStore().isInCart(12, 15)).toBeTruthy();

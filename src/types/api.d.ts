@@ -133,9 +133,9 @@ declare type Commande = {
 	idadresseLivr: number;
 	idcodepromo: number | null;
 	idadresseFact: number;
-	idstatus: number;
+	idstatut: number;
 	idtransporteur: number;
-	datecommande: Date;
+	datecommande: string;
 	avecassurance: boolean;
 	aveclivraisonexpress: boolean;
 	instructionlivraison: string | null;
