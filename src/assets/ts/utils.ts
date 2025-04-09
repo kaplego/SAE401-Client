@@ -170,7 +170,7 @@ export const CARD_EXPIRATION_WARNING = 60 * 24 * 60 * 60 * 1000;
 
 export const BCRYPT_ROUNDS = 12;
 
-export const TESTS_ASYNC_TIMEOUT = 60000;
+export const TESTS_ASYNC_TIMEOUT = 60_000;
 
 export enum AutocompleteType {
 	/** Autocomplète la chaîne par la valeur plus proche */

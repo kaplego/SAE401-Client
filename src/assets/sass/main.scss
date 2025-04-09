@@ -63,15 +63,6 @@ header {
 					border-radius: 6px 0 0 6px;
 					border: 2px solid var(--t-border1);
 					transition: all 100ms;
-					/*background-color: transparent;
-					color: var(--t-foreground1);
-					outline: none;
-					padding: 0 0.5rem;
-					font-size: 1rem;
-
-					&:focus {
-						background-color: var(--t-background1);
-					}*/
 				}
 			}
 
@@ -246,7 +237,7 @@ nav {
 	}
 
 	&:hover,
-	&:focus-within {
+	&:focus-within:focus-visible {
 		.item-name,
 		&:not(:has(.dropdown)) {
 			color: var(--c-accent-500);

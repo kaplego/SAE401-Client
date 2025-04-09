@@ -7,12 +7,13 @@ defineProps<{
 	error?: string;
 	warning?: string;
 	link: string;
+	wip?: boolean;
 }>();
 </script>
 
 <template>
-	<RouterLink :to="link" class="card-account-link">
-		<div class="card-account">
+	<component :is="wip ? 'div' : 'RouterLink'" :to="link" class="card-account-link">
+		<div :class="`card-account ${wip ? 'disabled' : ''}`">
 			<slot>
 				<OctagonAlert />
 			</slot>
@@ -20,8 +21,12 @@ defineProps<{
 			<p class="subtitle">{{ subtitle }}</p>
 			<p class="error" v-if="error">{{ error }}</p>
 			<p class="warning" v-if="warning">{{ warning }}</p>
+			<template v-if="wip">
+				<div class="wip wip-back"></div>
+				<div class="wip wip-front">Bientôt disponible !</div>
+			</template>
 		</div>
-	</RouterLink>
+	</component>
 </template>
 
 <style lang="scss">
@@ -39,8 +44,14 @@ defineProps<{
 	padding: 1rem;
 	transition: all 100ms;
 	height: 100%;
+	overflow: hidden;
 
-	&:hover {
+	&.disabled {
+		cursor: not-allowed;
+		user-select: none;
+	}
+
+	&:hover:not(.disabled) {
 		background-color: var(--t-background1-accent);
 		border-color: var(--t-border1-accent);
 	}
@@ -99,6 +110,43 @@ defineProps<{
 		width: 3rem;
 		top: 1rem;
 		right: 0.5rem;
+	}
+
+	.wip {
+		position: absolute;
+		transform-origin: center center;
+		top: 50%;
+		left: 50%;
+		height: 1lh;
+		width: 150%;
+		background: repeating-linear-gradient(
+			45deg,
+			rgba(0, 0, 0, 1) 0px,
+			rgba(0, 0, 0, 1) 10px,
+			rgba(255, 216, 0, 1) 10px,
+			rgba(255, 216, 0, 1) 20px
+		);
+		box-shadow: 0 0 3px black;
+
+		&.wip-back {
+			transform: translate(-50%, -50%) rotateZ(15deg);
+		}
+
+		&.wip-front {
+			transform: translate(-50%, -50%) rotateZ(-10deg);
+			text-align: center;
+			font-weight: bold;
+			color: white;
+			text-shadow:
+				2px 2px 0 #000,
+				2px -2px 0 #000,
+				-2px 2px 0 #000,
+				-2px -2px 0 #000,
+				2px 0px 0 #000,
+				0px 2px 0 #000,
+				-2px 0px 0 #000,
+				0px -2px 0 #000;
+		}
 	}
 }
 </style>

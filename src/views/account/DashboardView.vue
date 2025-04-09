@@ -102,6 +102,7 @@ const cardsExpiration = computed<{
 				title="Favoris"
 				:subtitle="`Vous avez ajouté ${login.client.aimesNavigation.length} favoris`"
 				link="/compte/likes"
+				wip
 			>
 				<Heart :stroke-width="1.5" />
 			</CardAccount>
@@ -109,6 +110,7 @@ const cardsExpiration = computed<{
 				title="Avis"
 				:subtitle="`Vous avez posté ${login.client.avisNavigation.length} avis`"
 				link="/compte/avis"
+				wip
 			>
 				<MessageSquareQuote :stroke-width="1.5" />
 			</CardAccount>

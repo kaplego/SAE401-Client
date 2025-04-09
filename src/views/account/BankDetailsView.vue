@@ -156,12 +156,21 @@ h1 {
 }
 
 .grille-cartes {
+	--gap: 3rem;
 	width: 100%;
 	// overflow: hidden;
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
-	gap: 3rem;
+	gap: var(--gap);
 	margin-top: 3rem;
 	grid-auto-rows: 1fr;
+}
+</style>
+
+<style lang="scss">
+.grille-cartes {
+	.cb-container {
+		height: auto;
+	}
 }
 </style>
