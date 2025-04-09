@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import API from '@/assets/ts/api';
-import { finalPrice } from '@/assets/ts/utils';
+import { finalPrice, OrdersSortMode } from '@/assets/ts/utils';
 import { Calendar, ChartNoAxesGantt, Euro, Handshake, Hash, Package, ScrollText, Truck } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 
 const props = defineProps<{
 	order: Commande;
+	sortBy?: OrdersSortMode;
 }>();
 
 const detailsProduit = ref<DetailCommande[]>(props.order.detailsProduitNavigation ?? []);
@@ -18,13 +19,27 @@ const price = computed(
 		) ?? 0,
 );
 
+const sortOrder = computed(() =>
+	props.sortBy === OrdersSortMode.Date
+		? (Date.parse(props.order.datecommande) / 1000).toFixed(0)
+		: +price.value.toFixed(2) * 100,
+);
+
 API.commandes.get(props.order.idcommande).then((res) => {
 	if (res) detailsProduit.value = res.detailsProduitNavigation;
 });
 </script>
 
 <template>
-	<RouterLink class="link-order" :to="`/compte/commandes/${order.idcommande}`">
+	<RouterLink
+		class="link-order"
+		:to="`/compte/commandes/${order.idcommande}`"
+		:style="
+			sortBy
+				? `order: ${sortOrder};`
+				: undefined
+		"
+	>
 		<div class="card-order">
 			<div class="order-info">
 				<p class="label"><Hash aria-label="Numéro de commande" /> Numéro de commande</p>

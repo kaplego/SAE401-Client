@@ -172,6 +172,11 @@ export const BCRYPT_ROUNDS = 12;
 
 export const TESTS_ASYNC_TIMEOUT = 60_000;
 
+export enum OrdersSortMode {
+	Date = 'Date',
+	Price = 'Prix',
+}
+
 export enum AutocompleteType {
 	/** Autocomplète la chaîne par la valeur plus proche */
 	Near,
