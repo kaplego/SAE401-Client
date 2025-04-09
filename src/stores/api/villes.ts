@@ -9,11 +9,17 @@ export const useVillesStore = defineStore('ville', () => {
 	API.villes.list().then((villes) => {
 		list.value = villes;
 		loaded.value = true;
+		events.value.forEach((e) => e());
 	});
 
 	function find(codeinsee: string) {
 		return loaded.value ? (list.value.find((v) => v.codeinsee === codeinsee) ?? null) : null;
 	}
 
-	return { list, loaded, find };
+	const events = ref<(() => unknown)[]>([]);
+	function onLoad(callback: () => unknown) {
+		events.value.push(callback);
+	}
+
+	return { list, loaded, find, onLoad };
 });

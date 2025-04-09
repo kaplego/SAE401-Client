@@ -7,7 +7,13 @@ export const usePaysStore = defineStore('pays', () => {
 
 	API.pays.list().then((pays) => {
 		list.value = pays;
+		events.value.forEach((e) => e());
 	});
 
-	return { list };
+	const events = ref<(() => unknown)[]>([]);
+	function onLoad(callback: () => unknown) {
+		events.value.push(callback);
+	}
+
+	return { list, onLoad };
 });

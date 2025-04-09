@@ -9,7 +9,13 @@ export const useDepartementsStore = defineStore('departements', () => {
 	API.departements.list().then((departements) => {
 		list.value = departements;
 		loaded.value = true;
+		events.value.forEach((e) => e());
 	});
 
-	return { list, loaded };
+	const events = ref<(() => unknown)[]>([]);
+	function onLoad(callback: () => unknown) {
+		events.value.push(callback);
+	}
+
+	return { list, loaded, onLoad };
 });

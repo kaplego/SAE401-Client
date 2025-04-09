@@ -7,7 +7,13 @@ export const useCategoriesStore = defineStore('categories', () => {
 
 	API.categories.list().then((categories) => {
 		list.value = categories;
+		events.value.forEach((e) => e());
 	});
 
-	return { list };
+	const events = ref<(() => unknown)[]>([]);
+	function onLoad(callback: () => unknown) {
+		events.value.push(callback);
+	}
+
+	return { list, onLoad };
 });

@@ -1,25 +1,17 @@
 import { useVillesStore } from '@/stores/api/villes';
 import { expect, test } from 'vitest';
 
-
 import App from '@/App.vue';
 import { createApp } from 'vue';
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 import { createPinia } from 'pinia';
+import { TESTS_ASYNC_TIMEOUT } from '@/assets/ts/utils';
 
 const app = createApp(App);
 
 app.use(VueAxios, axios);
 app.use(createPinia());
-
-function sleep(ms: number = 200) {
-	return new Promise<void>((r) => {
-		setTimeout(() => {
-			r();
-		}, ms);
-	});
-}
 
 const villes = useVillesStore();
 
@@ -32,6 +24,9 @@ test('are villes not empty', () => {
 });
 
 test('do villes contain villes', async () => {
-	await sleep(10000);
-	expect(villes.list?.[0]).toBeTypeOf('object');
-}, 150000);
+	return new Promise((r) => {
+		villes.onLoad(() => {
+			r(expect(villes.list?.[0]).toBeTypeOf('object'));
+		});
+	});
+}, TESTS_ASYNC_TIMEOUT);
