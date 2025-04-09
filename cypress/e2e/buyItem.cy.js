@@ -1,7 +1,7 @@
 describe('achetter un meuble', () => {
 	it('passes', () => {
 		cy.visit('http://localhost:5173');
-		cy.get('a').contains('Chaise & tabouret').click();
+		cy.get('a').contains('Chaise & Tabouret').click();
 		cy.get('.card-produit').first().click();
 
 		cy.get('button').contains('Ajouter au panier').click();
@@ -46,7 +46,7 @@ describe('achetter un meuble', () => {
 
 		cy.get('a.button').contains('Payer').click();
 
-		cy.url().should('include', '/payment');
+		cy.url().should('include', '/paiement');
 
 		// FIN DU TEST
 
