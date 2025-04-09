@@ -167,9 +167,6 @@ header {
 				}
 
 				#theme-track {
-					background-color: var(--t-background3) !important;
-					overflow: hidden;
-
 					&:hover {
 						border-color: var(--c-yellow-300);
 						box-shadow: 0 0 1rem var(--c-yellow-100);
@@ -565,6 +562,16 @@ body.theme-darkdim {
 	> label {
 		cursor: pointer;
 	}
+
+	.switch {
+		.switch-input:checked + .switch-track {
+			background-color: var(--c-green-500);
+		}
+
+		.switch-track {
+			background-color: var(--c-red-500);
+		}
+	}
 }
 
 .switch {
@@ -575,12 +582,8 @@ body.theme-darkdim {
 		position: absolute;
 
 		&:checked {
-			+ .switch-track {
-				background-color: darkcyan;
-
-				.switch-knob {
-					margin-left: calc(46px - 21px);
-				}
+			+ .switch-track .switch-knob {
+				margin-left: calc(46px - 21px);
 			}
 		}
 	}
@@ -596,6 +599,7 @@ body.theme-darkdim {
 		position: relative;
 		display: block;
 		cursor: pointer;
+		overflow: hidden;
 
 		&:hover {
 			border-color: var(--c-accent-500);
