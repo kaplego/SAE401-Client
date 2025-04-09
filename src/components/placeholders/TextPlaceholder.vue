@@ -11,11 +11,15 @@ defineProps<{
 
 <style lang="scss" scoped>
 @keyframes placeholder-loading {
-	from {
+	0% {
 		left: 0%;
 		transform: translateX(-100%);
 	}
-	to {
+	50% {
+		left: 100%;
+		transform: translateX(0%);
+	}
+	100% {
 		left: 100%;
 		transform: translateX(0%);
 	}
@@ -27,6 +31,7 @@ defineProps<{
 	height: 1.25em;
 	display: inline-block;
 	position: relative;
+	overflow: hidden;
 
 	&::before {
 		content: '';
@@ -41,7 +46,7 @@ defineProps<{
 		);
 		left: 0%;
 		transform: translateX(-100%);
-		animation: placeholder-loading 2s ease-out 2s infinite;
+		animation: placeholder-loading 3s ease-out 1.5s infinite;
 	}
 }
 </style>
