@@ -88,12 +88,13 @@ for (let i = 0; i < 8; i++) {
 				<div
 					@click="theme.switchTheme(theme.currentTheme == THEME.Light ? THEME.Dark : THEME.Light)"
 					id="theme-switch"
+					class="switch"
 				>
-					<input type="checkbox" id="theme-cb" :checked="theme.currentTheme === THEME.Dark" />
-					<div id="theme-track">
+					<input class="switch-input" type="checkbox" id="theme-cb" :checked="theme.currentTheme === THEME.Dark" />
+					<div id="theme-track" class="switch-track">
 						<Sun />
 						<Moon />
-						<div id="theme-knob"></div>
+						<div id="theme-knob" class="switch-knob"></div>
 					</div>
 				</div>
 			</div>

@@ -156,34 +156,19 @@ header {
 				margin-left: 1rem;
 
 				#theme-cb {
-					width: 0;
-					height: 0;
-					visibility: hidden;
-					position: absolute;
-
 					&:checked {
 						+ #theme-track {
 							&:hover {
 								border-color: var(--c-blue-300);
 								box-shadow: 0 0 1rem var(--c-blue-600);
 							}
-
-							#theme-knob {
-								margin-left: calc(46px - 21px);
-							}
 						}
 					}
 				}
 
 				#theme-track {
-					width: 50px;
-					height: 25px;
-					background-color: var(--t-background3);
-					border-radius: 100vw;
-					padding: 2px;
-					transition: all 200ms;
-					border: 1px solid var(--c-gray-400);
-					position: relative;
+					background-color: var(--t-background3) !important;
+					overflow: hidden;
 
 					&:hover {
 						border-color: var(--c-yellow-300);
@@ -191,22 +176,12 @@ header {
 					}
 
 					#theme-knob {
-						height: calc(100% - 2 * 2px);
-						aspect-ratio: 1 / 1;
-						background-color: var(--t-background2);
-						border-radius: 100vw;
-						margin-left: 0px;
-						transition: all 300ms ease-out;
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						position: absolute;
-						z-index: 100;
+						box-shadow: 0 0 10px var(--t-background4);
 					}
 
 					.lucide {
 						height: calc(100% - 2 * 4px);
-						margin: 2px;
+						margin: 2px 4px;
 						aspect-ratio: 1 / 1;
 						position: absolute;
 						z-index: 99;
@@ -571,13 +546,73 @@ body.theme-darkdim {
 		cursor: pointer;
 	}
 
-	&:has(.input:invalid) {
+	&:has(.input:user-invalid) {
 		.label {
 			color: var(--c-red-500);
 		}
 
 		.input {
 			border-color: var(--c-red-500);
+		}
+	}
+}
+
+.switch-control {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	> label {
+		cursor: pointer;
+	}
+}
+
+.switch {
+	.switch-input {
+		width: 0;
+		height: 0;
+		visibility: hidden;
+		position: absolute;
+
+		&:checked {
+			+ .switch-track {
+				background-color: darkcyan;
+
+				.switch-knob {
+					margin-left: calc(46px - 21px);
+				}
+			}
+		}
+	}
+
+	.switch-track {
+		width: 50px;
+		height: 25px;
+		background-color: var(--t-background3);
+		border-radius: 100vw;
+		padding: 2px;
+		transition: all 200ms;
+		border: 1px solid var(--c-gray-400);
+		position: relative;
+		display: block;
+		cursor: pointer;
+
+		&:hover {
+			border-color: var(--c-accent-500);
+		}
+
+		.switch-knob {
+			height: calc(100% - 2 * 2px);
+			aspect-ratio: 1 / 1;
+			background-color: var(--t-background2);
+			border-radius: 100vw;
+			margin-left: 0px;
+			transition: all 300ms ease-out;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: absolute;
+			z-index: 100;
 		}
 	}
 }
